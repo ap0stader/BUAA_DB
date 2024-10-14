@@ -1,0 +1,61 @@
+\documentclass{article}
+\PassOptionsToPackage{quiet}{fontspec}
+% 中文支持
+\usepackage{ctex}
+% 数学公式
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% 伪代码
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textsl{Input:}}
+\renewcommand{\algorithmicensure}{\textsl{Output:}}
+% 超链接
+\usepackage[hidelinks, bookmarks=false]{hyperref}
+% 页边距
+\usepackage{geometry}
+\geometry{a4paper,hmargin=1.25in,vmargin=1in}
+% 时间
+\usepackage{datetime2}
+% 图片
+\usepackage{graphicx}
+
+\begin{document}
+    \section{系统需求设计}
+    \textbf{本系统目的在于实现一个多角色AI赋能综合教务管理系统。主要提供开课与选课、成绩}
+    \subsection{学生}
+    \begin{enumerate}
+        \item \textsl{查看课程信息} 问题的\textbf{关键}就是\textbf{关键}的问题
+        \item \textsl{选课与退课}
+        \item \textsl{查看课表}
+        \item \textsl{查看成绩}
+        \item \textsl{评价教师}
+        \item \textsl{管理个人信息}
+    \end{enumerate}
+    \subsection{教师}
+    \begin{enumerate}
+        \item \textsl{开设课程与修改课程信息}
+        \item \textsl{查看选课结果}
+        \item \textsl{查看上课课表}
+        \item \textsl{录入成绩与成绩分析}
+        \item \textsl{管理个人信息}
+    \end{enumerate}
+    \subsection{学院教务}
+    \begin{enumerate}
+        \item \textsl{管理学生}
+        \item \textsl{管理教师}
+        \item \textsl{管理课程}
+        \item \textsl{管理选课}
+        \item \textsl{管理与分析成绩}
+        \item \textsl{管理教学评价信息}
+        \item \textsl{管理个人信息}
+    \end{enumerate}
+    \subsection{学校管理员}
+    \begin{enumerate}
+        \item \textsl{学院教务各权限} 
+        \item \textsl{管理院系信息}
+        \item \textsl{管理班级信息}
+        \item \textsl{管理系统运行信息}
+    \end{enumerate}
+
+\end{document}
