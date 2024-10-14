@@ -1,0 +1,38 @@
+\documentclass{article}
+\PassOptionsToPackage{quiet}{fontspec}
+% 中文支持
+\usepackage{ctex}
+% 数学公式
+\usepackage{amsmath}
+\usepackage{amsfonts}
+% 伪代码
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textsl{Input:}}
+\renewcommand{\algorithmicensure}{\textsl{Output:}}
+% 超链接
+\usepackage[hidelinks, bookmarks=false]{hyperref}
+% 页边距
+\usepackage{geometry}
+\geometry{a4paper,hmargin=1.25in,vmargin=1in}
+% 时间
+\usepackage{datetime2}
+% 图片
+\usepackage{graphicx}
+
+\title{系统设计报告}
+\author{@ap0stader, @spectaclecs, @jhdonghj}
+\date{\DTMnow}
+
+\begin{document}
+    \maketitle
+    
+    \textsf{黑体}   %无衬线字体
+    \texttt{仿宋}   %等宽字体
+    \textbf{宋体粗} %粗体
+    \textit{楷体}   %意大利斜体
+
+    \input{requirements}
+    \input{conceptional_schema}
+    \input{schema}
+\end{document}
