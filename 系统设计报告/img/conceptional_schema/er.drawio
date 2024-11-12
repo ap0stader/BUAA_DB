@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
-    <mxGraphModel dx="943" dy="552" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
+    <mxGraphModel dx="988" dy="578" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -52,7 +52,7 @@
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-168" value="专业" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="450" y="430" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-169" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-169" value="专业-院系" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="610" y="430" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-170" value="" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-168" target="rlZl26VW5r2tXbXL2Wnd-169" edge="1">
@@ -77,7 +77,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-174" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-174" value="班级-专业" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="330" y="430" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-175" value="" style="endArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-174" target="rlZl26VW5r2tXbXL2Wnd-166" edge="1">
@@ -147,7 +147,7 @@
             <mxPoint x="754" y="480" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-194" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-194" value="学生-班级" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="110" y="350" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-195" value="" style="endArrow=none;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-194" target="rlZl26VW5r2tXbXL2Wnd-166" edge="1">
@@ -211,7 +211,7 @@
             <mxPoint x="874" y="246.39" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-218" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-218" value="教师-院系" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="750" y="330" width="80" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-219" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-218" target="rlZl26VW5r2tXbXL2Wnd-209" edge="1">
@@ -329,8 +329,8 @@
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-242" value="教学班" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
           <mxGeometry x="330" y="90" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-243" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
-          <mxGeometry x="510" y="90" width="80" height="40" as="geometry" />
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-243" value="课程-教学班" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+          <mxGeometry x="500" y="90" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-244" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-243" target="rlZl26VW5r2tXbXL2Wnd-228" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -372,8 +372,8 @@
             <mxPoint x="794" y="130" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="rlZl26VW5r2tXbXL2Wnd-253" value="属于" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
-          <mxGeometry x="670" y="370" width="80" height="40" as="geometry" />
+        <mxCell id="rlZl26VW5r2tXbXL2Wnd-253" value="学院教务-院系" style="rhombus;whiteSpace=wrap;html=1;fontFamily=宋体-简;" parent="1" vertex="1">
+          <mxGeometry x="660" y="370" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="rlZl26VW5r2tXbXL2Wnd-254" value="" style="endArrow=none;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=宋体-简;" parent="1" source="rlZl26VW5r2tXbXL2Wnd-253" target="rlZl26VW5r2tXbXL2Wnd-167" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
