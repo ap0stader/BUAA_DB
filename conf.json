@@ -1,0 +1,7 @@
+{
+    "UPLOAD_DIRECTORY": "uploads",
+    "JWT_SECRET_KEY": "kyA;|K~C4Q_*j1r`[Xi.${qXC]+\"~g?t'W*vi{;%JcCRE9Bp@t$BFpW4;*,_;L(",
+    "ADMIN_KEY": "{spn=jL#b[Ekw5_(+g&.PM*7~D77nFoj|25~|Vp{6RHSnB]$wQ@T5u|Ws(]f1By",
+    "ALGORITHM": "HS256",
+    "EXPIRE_TIME_MINUTES": 1440
+}

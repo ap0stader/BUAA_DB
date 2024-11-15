@@ -1,0 +1,8 @@
+{
+    "image": "redis-cli:6.0.16",
+    "environment": {
+        "passwd": "8b72398d-EDA9-5F13-AA15-110981d4",
+        "addr": "127.0.0.1",
+        "port": "26379"
+    }
+}
