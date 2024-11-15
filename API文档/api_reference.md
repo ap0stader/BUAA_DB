@@ -10,7 +10,7 @@
 
 所有成功的请求，按如下格式返回，下文中所示JSON无特殊说明均省略"success"和"errCode"，只表示data成员的要求。
 
-```json
+```javascript
 {
   "success": true,
   "errCode": 0,
@@ -23,10 +23,10 @@
 
 所有错误的请求，按如下格式返回，下文中将以表格形式说明错误码对应的含义。
 
-```json
+```javascript
 {
   "success": false,
-  "errCode": 9, // 仅为示例，应替换为对应的错误码，类型为整型数字，不是字符串
+  "errCode": 99999, // 仅为示例，应替换为对应的错误码，类型为整型数字，不是字符串
   "data": {} // 仍要存在data成员，类型为空对象
 }
 ```
@@ -52,7 +52,7 @@
 
 成功返回
 
-```json
+```javascript
 {
   "data": {
     "token": "{token}", // 返回已在Redis中保存的token
@@ -67,3 +67,30 @@
 | ------- | -------------- |
 | 100101  | 账号或密码错误 |
 
+### 2. verify
+
+| Method | Content-Type        | 描述                    |
+| ------ | ------------------- | ----------------------- |
+| POST   | multipart/form-data | 客户端验证Token是否有效 |
+
+表单内容**（注：Value类型并非Content Type，下同）**
+
+| Key   | Value类型 | 描述      |
+| ----- | --------- | --------- |
+| Token | String    | 鉴权Token |
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 100201  | Token已经失效  |
+
+### 
