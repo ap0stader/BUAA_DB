@@ -2,7 +2,9 @@
 
 **请求编码: UTF-8**
 
-**请求响应格式（header中Content-Type）: 'application/json'**
+**POST请求体格式（header中的Content-Type）: 'application/json'**
+
+**请求响应体格式（header中的Content-Type）: 'application/json'**
 
 **请求地址格式: "http://ecs.1230123.xyz:20080/api/v1/*{Module}/{Method}*"**
 
@@ -39,16 +41,18 @@
 
 ### 1. login
 
-| Method | Content-Type        | 描述         |
-| ------ | ------------------- | ------------ |
-| POST   | multipart/form-data | 用户请求登录 |
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 用户请求登录 |
 
-表单内容**（注：Value类型并非Content Type，下同）**
+请求内容
 
-| Key      | Value类型 | 描述         |
-| -------- | --------- | ------------ |
-| username | String    | 用户名       |
-| password | String    | 密码**密文** |
+```javascript
+{
+  "username": "{username}", // 请求登录的学工号
+  "password": "{password}" // 请求登录的密码密文
+}
+```
 
 成功返回
 
@@ -63,21 +67,21 @@
 
 错误代码
 
-| errCode | errDescription |
-| ------- | -------------- |
-| 100101  | 账号或密码错误 |
+| errCode | errDescription   |
+| ------- | ---------------- |
+| 100101  | 学工号或密码错误 |
 
 ### 2. verify
 
-| Method | Content-Type        | 描述                    |
-| ------ | ------------------- | ----------------------- |
-| POST   | multipart/form-data | 客户端验证Token是否有效 |
+| Method | 描述                    |
+| ------ | ----------------------- |
+| GET    | 客户端验证Token是否有效 |
 
-表单内容**（注：Value类型并非Content Type，下同）**
+请求参数
 
-| Key   | Value类型 | 描述      |
-| ----- | --------- | --------- |
-| Token | String    | 鉴权Token |
+| Key   | Value类型 | 描述                    |
+| ----- | --------- | ----------------------- |
+| Token | String    | 请求验证是否有效的Token |
 
 成功返回
 
@@ -92,5 +96,3 @@
 | errCode | errDescription |
 | ------- | -------------- |
 | 100201  | Token已经失效  |
-
-### 
