@@ -66,7 +66,6 @@ const callapi = {
     },
 
     post: async function (
-        type: "form-data" | "json",
         module: string,
         method: string,
         body?: object | null,
@@ -79,7 +78,7 @@ const callapi = {
             baseURL: baseURL,
             url: url,
             headers: {
-                "Content-Type": type == "form-data" ? "multipart/form-data" : "application/json",
+                "Content-Type": "application/json",
             },
             data: body,
             responseType: "json",

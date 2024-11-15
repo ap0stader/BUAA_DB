@@ -59,12 +59,11 @@
             submit_loading.value = false
         } else {
             callapi.post(
-                "form-data",
                 "Auth",
                 "login",
                 {
                     username: username.value,
-                    password: CryptoJS.SHA512(password.value),
+                    password: CryptoJS.SHA512(password.value).toString(),
                 },
                 (data) => {
                     const result = <LoginResponse>data
