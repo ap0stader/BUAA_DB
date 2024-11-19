@@ -165,7 +165,7 @@
 ```javascript
 {
   "place_id": "{place_id}", // 修改的场地的场地编号
- 	"place_name": "{place_name}", // 修改后的场地名称
+  "place_name": "{place_name}", // 修改后的场地名称
   "is_enable": "{place_is_enable}" // 修改后的场地是否禁用
 }
 ```
@@ -181,6 +181,3 @@
 | errCode | errDescription |
 | ------- | -------------- |
 | 200301  | 有重名的场地   |
-
-### 4. deletePlace
-
