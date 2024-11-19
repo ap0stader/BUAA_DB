@@ -96,3 +96,42 @@
 | errCode | errDescription |
 | ------- | -------------- |
 | 100201  | Token已经失效  |
+
+## 2.Admin
+
+### 1. queryPlace
+
+| Method | 描述               |
+| ------ | ------------------ |
+| GET    | 返回所有的场地信息 |
+
+请求参数：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "place": [
+      {
+        "place_id": "{place_id}",
+        "place_name": "{place_name}",
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 2. addPlace
+
+
+
+### 3. updatePlace
+
+
+
+### 4. deletePlace
+

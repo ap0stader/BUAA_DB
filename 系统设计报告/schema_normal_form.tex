@@ -90,16 +90,17 @@
     \item (\uline{教学班编号, 场地资源编号}) \par
     该关系的唯一的码是全码，因此该关系满足\textbf{BCNF}。
     
-    \item (\uline{学号, 教学班编号}, 成绩, 评教分数) \par
+    \item (\uline{学号, 教学班编号}, 成绩, 评教分数, 操作人员身份标识符) \par
     其中的函数依赖有： \newline
-    $\text{学号, 教学班编号} \rightarrow \text{成绩}$ \newline
-    $\text{学号, 教学班编号} \rightarrow \text{评教分数}$ \par
+    $(\text{学号, 教学班编号}) \rightarrow \text{成绩}$ \newline
+    $(\text{学号, 教学班编号}) \rightarrow \text{评教分数}$ \newline
+    $(\text{学号, 教学班编号}) \rightarrow \text{操作人员身份标识符}$ \par
     这些函数依赖右侧的属性均不是左侧属性的字集，左侧的属性均为码，因此该关系满足\textbf{BCNF}。
     
     \item (\uline{学号, 教学班编号}, 志愿顺序, 自我介绍) \par
     其中的函数依赖有： \newline
-    $\text{学号, 教学班编号} \rightarrow \text{志愿顺序}$ \newline
-    $\text{学号, 教学班编号} \rightarrow \text{自我介绍}$ \par
+    $(\text{学号, 教学班编号}) \rightarrow \text{志愿顺序}$ \newline
+    $(\text{学号, 教学班编号}) \rightarrow \text{自我介绍}$ \par
     这些函数依赖右侧的属性均不是左侧属性的字集，左侧的属性均为码，因此该关系满足\textbf{BCNF}。
     
     \item (\uline{登录审计编号}, 声称身份标识符, 登录时间, 登录结果) \par
