@@ -11,7 +11,7 @@ import conf
 from utils.errno import *
 
 router = APIRouter(
-    prefix="/api/v1/Auth",
+    prefix="/Auth",
 )
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -31,17 +31,20 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 def verify_user(user: User):
-    cursor = get_cursor('root')
+    conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM login_table WHERE login_id=%s AND login_password=%s", (user.username, user.password))
     result = cursor.fetchone()
+    cursor.execute("INSERT INTO login_audit_table (login_audit_claim, login_audit_result) VALUES (%s, %s)",
+                        (user.username[:30], 1 if result is not None else 0))
+    conn.commit()
     if result is None:
-        return None
+        return -1
     return result['login_role']
 
 @router.post("/login")
 async def login(user: User):
     role = verify_user(user)
-    if not role:
+    if role < 0:
         return {
             'success': False,
             'errCode': ERR_LOGIN_FAILED,
@@ -63,7 +66,7 @@ async def verify(token: str):
     if rds.get(token) is None:
         return {
             'success': False,
-            'errCode': ERR_LOGIN_FAILED,
+            'errCode': ERR_TOKEN_EXPIRE,
             'data': {}
         }
     return {

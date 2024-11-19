@@ -37,7 +37,7 @@ def connect(user):
 def get_cursor(user):
     global db_pool
     if user in db_pool:
-        return db_pool[user].cursor(pymysql.cursors.DictCursor)
+        return db_pool[user], db_pool[user].cursor(pymysql.cursors.DictCursor)
     else:
         return None
 
