@@ -112,10 +112,11 @@
 ```javascript
 {
   "data": {
-    "place": [
+    "places": [
       {
-        "place_id": "{place_id}",
-        "place_name": "{place_name}",
+        "place_id": "{place_id}", // 场地编号
+        "place_name": "{place_name}", // 场地名称
+        "is_enable": "{place_is_enable}" // 场地是否被禁用
       },
       // ......
     ]
@@ -127,11 +128,59 @@
 
 ### 2. addPlace
 
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增场地 |
 
+请求内容
+
+```javascript
+{
+  "place_name": "{place_name}", // 新增的场地名称
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "place_id": "{place_id}", // 新增的场地的场地编号
+  }
+}
+```
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 200201  | 有重名的场地   |
 
 ### 3. updatePlace
 
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 更新场地信息 |
 
+请求内容
+
+```javascript
+{
+  "place_id": "{place_id}", // 修改的场地的场地编号
+ 	"place_name": "{place_name}", // 修改后的场地名称
+  "is_enable": "{place_is_enable}" // 修改后的场地是否禁用
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 200301  | 有重名的场地   |
 
 ### 4. deletePlace
 
