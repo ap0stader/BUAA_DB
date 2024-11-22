@@ -298,3 +298,61 @@
 | errCode | errDescription           |
 | ------- | ------------------------ |
 | 200701  | 有同专业号或者同名的专业 |
+
+### 8. queryClass
+
+| Method | 描述               |
+| ------ | ------------------ |
+| GET    | 返回所有的班级信息 |
+
+请求参数：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "classes": [
+      {
+        "class_id": class_id, // 班级编号
+        "class_major_id": class_major_id, // 班级所属专业号
+        "class_department_id": class_department_id, // 班级所属院系号
+        "class_teacher_id": class_teacher_id | null, // 班级的班主任工号
+        "class_teacher_name": "{class_teacher_name}" | null, // 班级的班主任姓名
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 9. addClass
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增班级 |
+
+请求内容
+
+```javascript
+{
+  "class_id": class_id, // 新增的班级的的班级号
+  "class_major_id": class_major_id // 新增的班级所属专业号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription   |
+| ------- | ---------------- |
+| 200901  | 有同班级号的班级 |
