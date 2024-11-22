@@ -2,7 +2,7 @@
 
 **请求编码: UTF-8**
 
-**POST请求体格式（header中的Content-Type）: 'application/json'**
+**POST请求体格式（header中的Content-Type）: 'application/json'，特殊标注除外**
 
 **请求响应体格式（header中的Content-Type）: 'application/json'**
 
@@ -392,9 +392,9 @@
 
 ### 11.queryStudent
 
-| Method | Content-Type | 描述                 |
-| ------ | ------------ | -------------------- |
-| GET    | /            | 获取所有的学生的信息 |
+| Method | 描述                 |
+| ------ | -------------------- |
+| GET    | 获取所有的学生的信息 |
 
 请求参数
 
@@ -489,7 +489,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 ```javascript
 {
   "data": {
-  	"failed_info": [
+    "failed_info": [
       {
         "student_id": student_id, // 添加失败的学生的学号
         "reason": 1 | 2 | 3 // 失败的原因1:有同学工号的人员 2:无此班级号对应的班级 3:未知原因（数据库插入时出错）
