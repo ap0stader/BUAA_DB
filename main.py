@@ -5,10 +5,11 @@ conf.init()
 
 app = FastAPI()
 
-from routers import auth, admin
+from routers import auth, admin, demo
 
 app.include_router(auth.router)
 app.include_router(admin.router)
+app.include_router(demo.router)
 
 if __name__ == '__main__':
     import uvicorn
