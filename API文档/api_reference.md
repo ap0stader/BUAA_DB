@@ -154,7 +154,7 @@
 
 | errCode | errDescription |
 | ------- | -------------- |
-| 200201  | 有重名的场地   |
+| 200201  | 有同名的场地   |
 
 ### 3. updatePlace
 
@@ -182,10 +182,10 @@
 
 错误代码
 
-| errCode | errDescription             |
-| ------- | -------------------------- |
-| 200301  | 有重名的场地               |
-| 200302  | 无此场地编号对应的场地信息 |
+| errCode | errDescription         |
+| ------- | ---------------------- |
+| 200301  | 有同名的场地           |
+| 200302  | 无此场地编号对应的场地 |
 
 ### 4. queryDepartment
 
@@ -318,7 +318,7 @@
         "class_major_id": class_major_id, // 班级所属专业号
         "class_department_id": class_department_id, // 班级所属院系号
         "class_teacher_id": class_teacher_id | null, // 班级的班主任工号
-        "class_teacher_name": "{class_teacher_name}" | null, // 班级的班主任姓名
+        "class_teacher_name": "{class_teacher_name}" | null // 班级的班主任姓名
       },
       // ......
     ]
@@ -356,3 +356,34 @@
 | errCode | errDescription   |
 | ------- | ---------------- |
 | 200901  | 有同班级号的班级 |
+
+### 10. updateClassTeacher
+
+| Method | 描述             |
+| ------ | ---------------- |
+| POST   | 修改班级的班主任 |
+
+请求内容
+
+```javascript
+{
+  "class_id": class_id, // 修改班主任的班级的的班级号
+  "class_teacher_id": class_teacher_id | null // 修改后的班级的班主任的工号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription                 |
+| ------- | ------------------------------ |
+| 201001  | 无此班级编号对应的班级         |
+| 201002  | 无此工号对应的教师             |
+| 201003  | 该教师已经担任其他班级的班主任 |
