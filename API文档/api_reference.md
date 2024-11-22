@@ -298,6 +298,7 @@
 | errCode | errDescription           |
 | ------- | ------------------------ |
 | 200701  | 有同专业号或者同名的专业 |
+| 200702  | 无此院系号对应的院系     |
 
 ### 8. queryClass
 
@@ -353,9 +354,10 @@
 
 错误代码
 
-| errCode | errDescription   |
-| ------- | ---------------- |
-| 200901  | 有同班级号的班级 |
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 200901  | 有同班级号的班级     |
+| 200902  | 无此专业号对应的专业 |
 
 ### 10. updateClassTeacher
 
@@ -387,3 +389,44 @@
 | 201001  | 无此班级编号对应的班级         |
 | 201002  | 无此工号对应的教师             |
 | 201003  | 该教师已经担任其他班级的班主任 |
+
+### 11.queryStudent
+
+| Method | Content-Type | 描述                 |
+| ------ | ------------ | -------------------- |
+| GET    | /            | 获取所有的学生的信息 |
+
+请求参数
+
+| Key  | Value类型 | 描述                 |
+| ---- | --------- | -------------------- |
+| page | Integer   | 结果展示第 {page} 页 |
+
+**注：一次只返回最多50个学生信息。即查询的结果分页表示，按照学号从大到小进行排列，页大小为50**
+
+**注：前端必须提供page，默认page参数为1**
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "count": count, // 学生信息的总条数
+    "students": [
+      {
+        "student_id": "{student_id}", // 学号
+        "student_name": "{student_name}", // 姓名
+        "student_gender": "{student_gender}", // 姓名
+        "student_phone": "{student_phone}", // 手机号
+        "student_class_id": student_class_id, // 学生所属的班级号
+        "student_major_id": student_major_id, // 学生所属的专业号
+        "student_department_id": student_department_id, // 学生所属的院系号
+        "login_is_enable": login_is_enable // 该学生是否能够登录 
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
