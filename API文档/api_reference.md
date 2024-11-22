@@ -114,9 +114,9 @@
   "data": {
     "places": [
       {
-        "place_id": "{place_id}", // 场地编号
+        "place_id": place_id, // 场地编号
         "place_name": "{place_name}", // 场地名称
-        "is_enable": "{place_is_enable}" // 场地是否被禁用
+        "place_is_enable": place_is_enable // 场地是否被禁用
       },
       // ......
     ]
@@ -136,7 +136,7 @@
 
 ```javascript
 {
-  "place_name": "{place_name}", // 新增的场地名称
+  "place_name": "{place_name}", // 新增的场地的场地名称
 }
 ```
 
@@ -145,10 +145,12 @@
 ```javascript
 {
   "data": {
-    "place_id": "{place_id}", // 新增的场地的场地编号
+    "place_id": place_id // 新增的场地的场地编号
   }
 }
 ```
+
+错误代码
 
 | errCode | errDescription |
 | ------- | -------------- |
@@ -164,9 +166,9 @@
 
 ```javascript
 {
-  "place_id": "{place_id}", // 修改的场地的场地编号
+  "place_id": place_id, // 修改的场地的场地编号
   "place_name": "{place_name}", // 修改后的场地名称
-  "is_enable": "{place_is_enable}" // 修改后的场地是否禁用
+  "place_is_enable": place_is_enable // 修改后的场地是否禁用
 }
 ```
 
@@ -178,7 +180,64 @@
 }
 ```
 
+错误代码
+
 | errCode | errDescription             |
 | ------- | -------------------------- |
 | 200301  | 有重名的场地               |
 | 200302  | 无此场地编号对应的场地信息 |
+
+### 4. queryDepartment
+
+| Method | 描述               |
+| ------ | ------------------ |
+| GET    | 返回所有的院系信息 |
+
+请求参数：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "departments": [
+      {
+        "department_id": department_id, // 院系编号
+        "department_name": "{department_name}", // 院系名称
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 5. addDepartment
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增院系 |
+
+请求内容
+
+```javascript
+{
+  "department_id": department_id, // 新增的院系的院系号
+  "department_name": "{department_name}", // 新增的院系的院系名称
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription         |
+| ------- | ---------------------- |
+| 200501  | 有同院系号或者同名院系 |
