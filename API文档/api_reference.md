@@ -238,6 +238,63 @@
 
 错误代码
 
-| errCode | errDescription         |
-| ------- | ---------------------- |
-| 200501  | 有同院系号或者同名院系 |
+| errCode | errDescription           |
+| ------- | ------------------------ |
+| 200501  | 有同院系号或者同名的院系 |
+
+### 6. queryMajor
+
+| Method | 描述               |
+| ------ | ------------------ |
+| GET    | 返回所有的专业信息 |
+
+请求参数：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "majors": [
+      {
+        "major_id": major_id, // 专业编号
+        "major_name": "{major_name}", // 专业名称
+        "major_department_id": major_department_id // 专业所属院系号
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 7. addMajor
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增专业 |
+
+请求内容
+
+```javascript
+{
+  "major_id": major_id, // 新增的专业的的专业号
+  "major_name": "{major_name}", // 新增的专业的专业名称
+  "major_department_id": major_department_id // 新增的专业所属院系号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription           |
+| ------- | ------------------------ |
+| 200701  | 有同专业号或者同名的专业 |
