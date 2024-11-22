@@ -402,7 +402,7 @@
 | ---- | --------- | -------------------- |
 | page | Integer   | 结果展示第 {page} 页 |
 
-**注：一次只返回最多50个学生信息。即查询的结果分页表示，按照学号从大到小进行排列，页大小为50**
+**注：一次只返回最多50个学生信息。即查询的结果分页表示，按照学号字典序进行排列，页大小为50**
 
 **注：前端必须提供page，默认page参数为1**
 
@@ -414,10 +414,10 @@
     "count": count, // 学生信息的总条数
     "students": [
       {
-        "student_id": "{student_id}", // 学号
-        "student_name": "{student_name}", // 姓名
-        "student_gender": "{student_gender}", // 姓名
-        "student_phone": "{student_phone}", // 手机号
+        "student_id": "{student_id}", // 学生的学号
+        "student_name": "{student_name}", // 学生的姓名
+        "student_gender": "{student_gender}" | null, // 学生的性别
+        "student_phone": "{student_phone}" | null, // 学生的手机号
         "student_class_id": student_class_id, // 学生所属的班级号
         "student_major_id": student_major_id, // 学生所属的专业号
         "student_department_id": student_department_id, // 学生所属的院系号
@@ -430,3 +430,78 @@
 ```
 
 错误代码：无
+
+### 12. addStudent
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增学生 |
+
+请求内容
+
+```javascript
+{
+  "student_id": "{student_id}", // 新增的学生的学号
+  "student_name": "{student_name}", // 新增的学生的姓名
+  "student_gender": "{student_gender}" | null, // 新增的学生的性别
+  "student_phone": "{student_phone}" | null, // 新增的学生的手机号
+  "student_class_id": student_class_id, // 新增的学生所属的班级号
+}
+```
+
+**注：添加学生同时添加登录权限，密码为默认密码`123456`，对应的密文为**
+
+```
+ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 201201  | 有同学工号的人员     |
+| 201202  | 无此班级号对应的班级 |
+
+### 13. addStudentBatch
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 批量新增学生 |
+
+请求内容
+
+**请求格式为`multipart/form-data`**
+
+| Key  | Value类型 | 描述                       |
+| ---- | --------- | -------------------------- |
+| file | FIle      | 按照模板填写的学生批量信息 |
+
+成功返回
+
+```javascript
+{
+  "data": {
+  	"failed_info": [
+      {
+        "student_id": student_id, // 添加失败的学生的学号
+        "reason": 1 | 2 | 3 // 失败的原因1:有同学工号的人员 2:无此班级号对应的班级 3:未知原因（数据库插入时出错）
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription             |
+| ------- | -------------------------- |
+| 201301  | 解析上传的文件遇到未知错误 |
