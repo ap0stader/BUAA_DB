@@ -945,7 +945,46 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | 301002  | 评教分数不合法 |
 | 301003  | 重复评教       |
 
-### 11. updateStudentInfo
+### 11. queryStudentInfo
+
+| Method | 描述         |
+| ------ | ------------ |
+| GET    | 获取学生信息 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "name": name,
+    "gender": gender,
+    "phone": phone,
+    "class_id": class_id,
+    "major_id": major_id,
+    "major_name": major_name,
+    "department_id": department_id,
+    "department_name": department_name,
+    "headteacher_id": headteacher_id,
+    "headteacher_name": headteacher_name
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 301101  | 学号不存在     |
+
+### 12. updateStudentInfo
 
 | Method | 描述         |
 | ------ | ------------ |
@@ -972,6 +1011,138 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 | errCode | errDescription |
 | ------- | -------------- |
-| 301101  | 学工号不存在   |
+| 301101  | 学号不存在     |
 | 301102  | 手机号码不合法 |
 
+## 4. Teacher
+
+### addCource
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 增开课程 |
+
+请求内容
+
+```javascript
+{
+  "teacher_id": teacher_id, // 请求修改信息的学号
+  "phone": "{phone}" // 手机号码
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 301101  | 工号不存在     |
+| 301102  | 手机号码不合法 |
+
+### queryCource
+
+
+
+### updateCource
+
+
+
+### addCurriculum
+
+
+
+### queryChoice
+
+
+
+### addAttendance
+
+
+
+### queryAttendance
+
+
+
+### addScore
+
+
+
+### queryCurriculumScore
+
+
+
+### queryClassScore
+
+
+
+### 11. queryTeacherInfo
+
+| Method | 描述         |
+| ------ | ------------ |
+| GET    | 获取教师信息 |
+
+请求内容
+
+```javascript
+{
+  "teacher_id": teacher_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "name": name,
+    "gender": gender,
+    "phone": phone,
+    "department_id": department_id,
+    "department_name": department_name,
+    "headteacher_of_class_id": headteacher_of_class_id
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 301101  | 工号不存在     |
+
+### 12. updateTeacherInfo
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 修改教师信息 |
+
+请求内容
+
+```javascript
+{
+  "teacher_id": teacher_id, // 请求修改信息的学号
+  "phone": "{phone}" // 手机号码
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 301101  | 工号不存在     |
+| 301102  | 手机号码不合法 |
