@@ -560,17 +560,29 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
     "curriculums": [
       {
         "curriculum_id": curriculum_id,
-        "curriculum_course_id": curriculum_course_id,
-        "curriculum_teacher_id": place_is_enable,
-        "curriculum_capacity_in": curriculum_capacity_in,
-        "curriculum_capacity_out":curriculum_capacity_out,
-        "curriculum_info": curriculum_info
+        "course_id": course_id,
+        "course_name": course_name,
+        "course_type": course_type,
+        "course_credit": course_credit,
+        "course_hours": course_hours,
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
+        "capacity_in": capacity_in,
+        "capacity_out":capacity_out,
+        "info": info,
+        "time_and_place_string": time_and_place_string
       },
       // ......
     ]
   }
 }
 ```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300101  | 学期号不存在   |
 
 ### 2. addChoice
 
@@ -582,10 +594,10 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 ```javascript
 {
-  "choice_student_id": student_id,
-  "choice_curriculum_id": choice_curriculum_id,
-  "choice_order": choice_order,
-  "choice_introduction": choice_introduction | null
+  "student_id": student_id,
+  "curriculum_id": curriculum_id,
+  "order": order, // 志愿顺序
+  "introduction": introduction | null
 }
 ```
 
@@ -602,11 +614,10 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | errCode | errDescription         |
 | ------- | ---------------------- |
 | 300201  | 学号不存在             |
-| 300202  | 课程班号不存在         |
+| 300202  | 教学班号不存在         |
 | 300203  | 志愿顺序不合法         |
 | 300204  | 自我介绍长度不合法     |
 | 300205  | 课程已选，无法重新选中 |
-| 300206  | 无法选中               |
 
 ### 3. deleteChoice
 
@@ -618,10 +629,302 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 ```javascript
 {
-  "choice_student_id": student_id,
-  "choice_curriculum_id": choice_curriculum_id,
-  "choice_order": choice_order,
-  "choice_introduction": choice_introduction | null
+  "student_id": student_id,
+  "curriculum_id": curriculum_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription           |
+| ------- | ------------------------ |
+| 300301  | 学号不存在               |
+| 300302  | 教学班号不存在           |
+| 300303  | 未选择该课程班，无法退课 |
+| 300304  | 无法退课                 |
+
+### 4. addAttendance
+
+| Method | 描述           |
+| ------ | -------------- |
+| POST   | 退改时间段选课 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id,
+  "curriculum_id": curriculum_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription                 |
+| ------- | ------------------------------ |
+| 300401  | 学号不存在                     |
+| 300402  | 教学班号不存在                 |
+| 300403  | 已选该教学班，不能重复选择     |
+| 300404  | 该教学班和已选教学班时间有重合 |
+| 300405  | 已选同一课程的另一教学班       |
+| 300406  | 该教学班已选满                 |
+
+### 5. deleteAttendance
+
+| Method | 描述           |
+| ------ | -------------- |
+| POST   | 退改时间段退课 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id,
+  "curriculum_id": curriculum_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription           |
+| ------- | ------------------------ |
+| 300501  | 学号不存在               |
+| 300502  | 教学班号不存在           |
+| 300503  | 未选择该课程班，无法退课 |
+| 300504  | 无法退课                 |
+
+### 6. querySelectionAudit
+
+| Method | 描述             |
+| ------ | ---------------- |
+| GET    | 查看选课操作记录 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "audits": [
+      {
+        "audit_id": audit_id,
+        "curriculum_id": curriculum_id,
+        "course_id": course_id,
+        "course_name": course_name,
+        "course_type": course_type,
+        "course_credit": course_credit,
+        "course_hours": course_hours,
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
+        "capacity_in": capacity_in,
+        "capacity_out":capacity_out,
+        "info": info,
+        "time_and_place_string": time_and_place_string,
+        "order": order, // 志愿顺序
+        "introduction": introduction | null, // 科研课堂自我介绍
+        "audit_type": audit_type,
+        "audit_time": audit_time
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300601  | 学号不存在     |
+
+### 7. queryChoice
+
+| Method | 描述                         |
+| ------ | ---------------------------- |
+| GET    | 查看某个学期所有预选的教学班 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id,
+  "semester_id": semester_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculums": [
+      {
+        "curriculum_id": curriculum_id,
+        "course_id": course_id,
+        "course_name": course_name,
+        "course_type": course_type,
+        "course_credit": course_credit,
+        "course_hours": course_hours,
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
+        "capacity_in": capacity_in,
+        "capacity_out":capacity_out,
+        "info": info,
+        "time_and_place_string": time_and_place_string,
+        "order": order, // 志愿顺序
+        "introduction": introduction | null // 科研课堂自我介绍
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300701  | 学号不存在     |
+| 300702  | 学期号不存在   |
+
+### 8. queryAttendance
+
+| Method | 描述                         |
+| ------ | ---------------------------- |
+| GET    | 查看某个学期所有选择的教学班 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id,
+  "semester_id": semester_id
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculums": [
+      {
+        "curriculum_id": curriculum_id,
+        "course_id": course_id,
+        "course_name": course_name,
+        "course_type": course_type,
+        "course_credit": course_credit,
+        "course_hours": course_hours,
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
+        "capacity_in": capacity_in,
+        "capacity_out":capacity_out,
+        "info": info,
+        "time_and_place_string": time_and_place_string
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300801  | 学号不存在     |
+| 300802  | 学期号不存在   |
+
+### 9.queryScore
+
+| Method | 描述                         |
+| ------ | ---------------------------- |
+| GET    | 查看某个学期所有选择的教学班 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id,
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculums": [
+      {
+        "curriculum_id": curriculum_id,
+        "course_id": course_id,
+        "course_name": course_name,
+        "course_type": course_type,
+        "course_credit": course_credit,
+        "course_hours": course_hours,
+        "teacher_id": teacher_id,
+        "teacher_name": teacher_name,
+        "info": info,
+        "score": score // 课程成绩
+      },
+      // ......
+    ], 
+    "gpa": gpa, 
+    "average": average,
+    "weighted_average": weighted_average
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300901  | 学号不存在     |
+
+### 10. addAttendanceEvaluation
+
+| Method | 描述           |
+| ------ | -------------- |
+| POST   | 给选课增加评教 |
+
+请求内容
+
+```javascript
+{
+  "attendance_id": attendance_id,
+  "evaluation": evaluation
 }
 ```
 
@@ -637,18 +940,11 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 | errCode | errDescription |
 | ------- | -------------- |
-| 300301  | 学号不存在     |
-| 300302  | 课程班号不存在 |
+| 301001  | 选课号不存在   |
+| 301002  | 评教分数不合法 |
+| 301003  | 重复评教       |
 
-### 4. queryAttendance
-
-### 5.queryScore
-
-### 6. addAttendanceEvaluation
-
-
-
-### 7. updateStudentInfo
+### 11. updateStudentInfo
 
 | Method | 描述         |
 | ------ | ------------ |
@@ -675,6 +971,6 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 | errCode | errDescription |
 | ------- | -------------- |
-| 300701  | 学工号不存在   |
-| 300702  | 手机号码不合法 |
+| 301101  | 学工号不存在   |
+| 301102  | 手机号码不合法 |
 
