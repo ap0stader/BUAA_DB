@@ -422,7 +422,7 @@
 | 201002  | 无此工号对应的教师             |
 | 201003  | 该教师已经担任其他班级的班主任 |
 
-### 11.queryStudent
+### 11. queryStudent
 
 | Method | 描述                 |
 | ------ | -------------------- |
@@ -537,6 +537,258 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | errCode | errDescription             |
 | ------- | -------------------------- |
 | 201301  | 解析上传的文件遇到未知错误 |
+
+### 14. updateStudent
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 更新学生信息 |
+
+请求内容
+
+```javascript
+{
+  "student_id": "{student_id}", // 修改的学生的学号
+  "student_name": "{student_name}", // 修改后的学生的姓名
+  "student_gender": "{student_gender}" | null, // 修改后的学生的性别
+  "student_phone": "{student_phone}" | null, // 修改后的学生的手机号
+  "student_class_id": student_class_id, // 修改后的学生所属的班级号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 201401  | 无此班级号对应的班级 |
+
+### 15. queryTeacher
+
+| Method | 描述                 |
+| ------ | -------------------- |
+| GET    | 获取所有的教师的信息 |
+
+请求参数
+
+| Key  | Value类型 | 描述                 |
+| ---- | --------- | -------------------- |
+| page | Integer   | 结果展示第 {page} 页 |
+
+**注：一次只返回最多50个教师信息。即查询的结果分页表示，按照工号字典序进行排列，页大小为50**
+
+**注：前端必须提供page，默认page参数为1**
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "count": count, // 教师信息的总条数
+    "teachers": [
+      {
+        "teacher_id": "{teacher_id}", // 教师的工号
+        "teacher_name": "{teacher_name}", // 教师的姓名
+        "teacher_gender": "{teacher_gender}" | null, // 教师的性别
+        "teacher_phone": "{teacher_phone}" | null, // 教师的手机号
+        "teacher_department_id": teacher_department_id, // 教师所属的院系号
+        "login_is_enable": login_is_enable // 该教师是否能够登录 
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 16. addTeacher
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增教师 |
+
+请求内容
+
+```javascript
+{
+  "teacher_id": "{teacher_id}", // 新增的教师的学号
+  "teacher_name": "{teacher_name}", // 新增的教师的姓名
+  "teacher_gender": "{teacher_gender}" | null, // 新增的教师的性别
+  "teacher_phone": "{teacher_phone}" | null, // 新增的教师的手机号
+  "teacher_department_id": teacher_department_id, // 新增的教师所属的院系号
+}
+```
+
+**注：添加教师同时添加登录权限，密码为默认密码`123456`，对应的密文为**
+
+```
+ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 201601  | 有同学工号的人员     |
+| 201602  | 无此院系号对应的院系 |
+
+### 17. updateTeacher
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 更新教师信息 |
+
+请求内容
+
+```javascript
+{
+  "teacher_id": "{teacher_id}", // 修改的教师的学号
+  "teacher_name": "{teacher_name}", // 修改后的教师的姓名
+  "teacher_gender": "{teacher_gender}" | null, // 修改后的教师的性别
+  "teacher_phone": "{teacher_phone}" | null, // 修改后的教师的手机号
+  "teacher_department_id": teacher_department_id, // 修改后的教师所属的院系号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 201701  | 无此院系号对应的院系 |
+
+### 18. queryFaculty
+
+| Method | 描述                     |
+| ------ | ------------------------ |
+| GET    | 获取所有的学院教务的信息 |
+
+请求参数
+
+| Key  | Value类型 | 描述                 |
+| ---- | --------- | -------------------- |
+| page | Integer   | 结果展示第 {page} 页 |
+
+**注：一次只返回最多50个学院教务信息。即查询的结果分页表示，按照工号字典序进行排列，页大小为50**
+
+**注：前端必须提供page，默认page参数为1**
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "count": count, // 学院教务信息的总条数
+    "faculties": [
+      {
+        "faculty_id": "{faculty_id}", // 学院教务的学号
+        "faculty_name": "{faculty_name}", // 学院教务的姓名
+        "faculty_gender": "{faculty_gender}" | null, // 学院教务的性别
+        "faculty_phone": "{faculty_phone}" | null, // 学院教务的手机号
+        "faculty_department_id": faculty_department_id, // 学院教务所属的院系号
+        "login_is_enable": login_is_enable // 该学院教务是否能够登录 
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
+
+### 19. addFaculty
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 新增学院教务 |
+
+请求内容
+
+```javascript
+{
+  "faculty_id": "{faculty_id}", // 新增的学院教务的学号
+  "faculty_name": "{faculty_name}", // 新增的学院教务的姓名
+  "faculty_gender": "{faculty_gender}" | null, // 新增的学院教务的性别
+  "faculty_phone": "{faculty_phone}" | null, // 新增的学院教务的手机号
+  "faculty_department_id": faculty_department_id, // 新增的学院教务所属的院系号
+}
+```
+
+**注：添加学院教务同时添加登录权限，密码为默认密码`123456`，对应的密文为**
+
+```
+ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 201901  | 有同学工号的人员     |
+| 201902  | 无此院系号对应的院系 |
+
+### 20. updateFaculty
+
+| Method | 描述             |
+| ------ | ---------------- |
+| POST   | 更新学院教务信息 |
+
+请求内容
+
+```javascript
+{
+  "faculty_id": "{faculty_id}", // 修改的学院教务的学号
+  "faculty_name": "{faculty_name}", // 修改后的学院教务的姓名
+  "faculty_gender": "{faculty_gender}" | null, // 修改后的学院教务的性别
+  "faculty_phone": "{faculty_phone}" | null, // 修改后的学院教务的手机号
+  "faculty_department_id": faculty_department_id, // 修改后的学院教务所属的院系号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 202001  | 无此院系号对应的院系 |
 
 ## 3. Student
 
