@@ -108,7 +108,7 @@
 ```javascript
 {
   "login_id": login_id, // 请求修改密码的学工号
-  "login_password": login_password, // 原密码
+  "login_password": "{login_password}", // 原密码
   "new_login_password": "{new_login_password}" // 新密码
 }
 ```
@@ -125,7 +125,8 @@
 
 | errCode | errDescription       |
 | ------- | -------------------- |
-| 100301  | 学工号或原密码不正确 |
+| 100301  | 无此学工号对应的人员 |
+| 100302  | 原密码不正确         |
 
 ## 2.Admin
 
