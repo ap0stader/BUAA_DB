@@ -97,6 +97,36 @@
 | ------- | -------------- |
 | 100201  | Token已经失效  |
 
+### 3. updatePassword
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 修改密码 |
+
+请求内容
+
+```javascript
+{
+  "login_id": login_id, // 请求修改密码的学工号
+  "login_password": login_password, // 原密码
+  "new_login_password": "{new_login_password}" // 新密码
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription       |
+| ------- | -------------------- |
+| 100301  | 学工号或原密码不正确 |
+
 ## 2.Admin
 
 ### 1. queryPlace
@@ -505,3 +535,140 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | errCode | errDescription             |
 | ------- | -------------------------- |
 | 201301  | 解析上传的文件遇到未知错误 |
+
+## 3. Student
+
+### 1. queryCurriculum
+
+| Method | 描述                     |
+| ------ | ------------------------ |
+| GET    | 获取给定学期的所有教学班 |
+
+请求内容
+
+```javascript
+{
+  "semester_id": semester_id, // 需要获取的学期
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculums": [
+      {
+        "curriculum_id": curriculum_id,
+        "curriculum_course_id": curriculum_course_id,
+        "curriculum_teacher_id": place_is_enable,
+        "curriculum_capacity_in": curriculum_capacity_in,
+        "curriculum_capacity_out":curriculum_capacity_out,
+        "curriculum_info": curriculum_info
+      },
+      // ......
+    ]
+  }
+}
+```
+
+### 2. addChoice
+
+| Method | 描述       |
+| ------ | ---------- |
+| POST   | 新增预选课 |
+
+请求内容
+
+```javascript
+{
+  "choice_student_id": student_id,
+  "choice_curriculum_id": choice_curriculum_id,
+  "choice_order": choice_order,
+  "choice_introduction": choice_introduction | null
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300201  |                |
+
+### 3. deleteChoice
+
+| Method | 描述       |
+| ------ | ---------- |
+| POST   | 删除预选课 |
+
+请求内容
+
+```javascript
+{
+  "choice_student_id": student_id,
+  "choice_curriculum_id": choice_curriculum_id,
+  "choice_order": choice_order,
+  "choice_introduction": choice_introduction | null
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300201  |                |
+
+### 4. queryAttendance
+
+### 5.queryScore
+
+### 6. addAttendanceEvaluation
+
+
+
+### 7. updateStudentInfo
+
+| Method | 描述         |
+| ------ | ------------ |
+| POST   | 修改学生信息 |
+
+请求内容
+
+```javascript
+{
+  "student_id": student_id, // 请求修改信息的学号
+  "phone": "{phone}" // 手机号码
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300701  | 学工号不存在   |
+| 300702  | 手机号码不合法 |
+
