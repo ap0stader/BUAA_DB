@@ -1,4 +1,4 @@
-# API文档-Admin
+# API文档-2.Admin
 
 [TOC]
 
@@ -518,7 +518,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 错误代码：无
 
-## 16. addTeacher
+## 16. ✅addTeacher
 
 | Method | 描述     |
 | ------ | -------- |
@@ -557,7 +557,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | 201601  | 有同学工号的人员     |
 | 201602  | 无此院系号对应的院系 |
 
-## 17. updateTeacher
+## 17. ✅updateTeacher
 
 | Method | 描述         |
 | ------ | ------------ |
@@ -590,7 +590,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | 201701  | 无此工号对应的教师   |
 | 201702  | 无此院系号对应的院系 |
 
-## 18. queryFaculty
+## 18. ✅queryFaculty
 
 | Method | 描述                     |
 | ------ | ------------------------ |
@@ -629,7 +629,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 
 错误代码：无
 
-## 19. addFaculty
+## 19. ✅addFaculty
 
 | Method | 描述         |
 | ------ | ------------ |
@@ -668,7 +668,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | 201901  | 有同学工号的人员     |
 | 201902  | 无此院系号对应的院系 |
 
-## 20. updateFaculty
+## 20. ✅updateFaculty
 
 | Method | 描述             |
 | ------ | ---------------- |
@@ -701,7 +701,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | 202001  | 无此工号对应的教务   |
 | 202002  | 无此院系号对应的院系 |
 
-## 21. disableLogin
+## 21. ✅disableLogin
 
 | Method | 描述           |
 | ------ | -------------- |
