@@ -148,8 +148,8 @@ class add_department_req(BaseModel):
     department_name: str
 
 @router.post("/addDepartment")
-async def add_department(department_req: add_department_req):
-    department_id, department_name = department_req.department_id, department_req.department_name
+async def add_department(req: add_department_req):
+    department_id, department_name = req.department_id, req.department_name
     if check_department_id_exist(department_id) or check_department_name_exist(department_name):
         return {
             'success': False,
@@ -210,8 +210,8 @@ class add_major_req(BaseModel):
     major_department_id: int
 
 @router.post("/addMajor")
-async def add_major(major_req: add_major_req):
-    major_id, major_name, major_department_id = major_req.major_id, major_req.major_name, major_req.major_department_id
+async def add_major(req: add_major_req):
+    major_id, major_name, major_department_id = req.major_id, req.major_name, req.major_department_id
     if check_major_id_exist(major_id) or check_major_name_exist(major_name):
         return {
             'success': False,
@@ -299,8 +299,8 @@ class add_class_req(BaseModel):
     class_major_id: int
 
 @router.post("/addClass")
-async def add_class(class_req: add_class_req):
-    class_id, class_major_id = class_req.class_id, class_req.class_major_id
+async def add_class(req: add_class_req):
+    class_id, class_major_id = req.class_id, req.class_major_id
     if check_class_id_exist(class_id):
         return {
             'success': False,
@@ -365,6 +365,11 @@ def check_login_id_exist(id: int):
     cursor.execute("SELECT * FROM login_table WHERE login_id=%s", (id,))
     return cursor.fetchone() is not None
 
+def check_student_id_exist(student_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM student_table WHERE student_id=%s", (student_id,))
+    return cursor.fetchone() is not None
+
 def check_student_class_id_exist(class_id: int):
     conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM class_table WHERE class_id=%s", (class_id,))
@@ -418,15 +423,15 @@ LIMIT 50 OFFSET %s;
     }
 
 class add_student_req(BaseModel):
-    student_id: int
+    student_id: str
     student_name: str
     student_gender: str | None
     student_phone: str | None
     student_class_id: int
 
 @router.post("/addStudent")
-async def add_student(student_req: add_student_req):
-    student_id, student_name, student_gender, student_phone, student_class_id = student_req.student_id, student_req.student_name, student_req.student_gender, student_req.student_phone, student_req.student_class_id
+async def add_student(req: add_student_req):
+    student_id, student_name, student_gender, student_phone, student_class_id = req.student_id, req.student_name, req.student_gender, req.student_phone, req.student_class_id
     if check_login_id_exist(student_id):
         return {
             'success': False,
@@ -439,10 +444,18 @@ async def add_student(student_req: add_student_req):
             'errCode': ERR_STUDENT__CLASS_ID_NOT_FOUND,
             'data': {}
         }
-    conn, cursor = get_cursor('root')
-    cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (student_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 1, 1))
-    cursor.execute("INSERT INTO student_table (student_id, student_name, student_gender, student_phone, student_class_id) VALUES (%s, %s, %s, %s, %s)", (student_id, student_name, student_gender, student_phone, student_class_id))
-    conn.commit()
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (student_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 0, 1))
+        cursor.execute("INSERT INTO student_table (student_id, student_name, student_gender, student_phone, student_class_id) VALUES (%s, %s, %s, %s, %s)", (student_id, student_name, student_gender, student_phone, student_class_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
     return {
         'success': True,
         'errCode': OK,
@@ -486,7 +499,7 @@ async def add_student_batch(file: UploadFile = File(...)):
                 })
                 continue
             try:
-                cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (student_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 1, 1))
+                cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (student_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 0, 1))
                 cursor.execute("INSERT INTO student_table (student_id, student_name, student_gender, student_phone, student_class_id) VALUES (%s, %s, %s, %s, %s)", (student_id, student_name, student_gender, student_phone, student_class_id))
             except Exception as e:
                 failed_info.append({
@@ -511,3 +524,326 @@ async def add_student_batch(file: UploadFile = File(...)):
             'errCode': ERR_STUDENT__UNKNOWN_ERROR,
             'data': {}
         }
+
+class update_student_req(BaseModel):
+    student_id: str
+    student_name: str
+    student_gender: str | None
+    student_phone: str | None
+    student_class_id: int
+
+@router.post("/updateStudent")
+async def update_student(req: update_student_req):
+    student_id, student_name, student_gender, student_phone, student_class_id = req.student_id, req.student_name, req.student_gender, req.student_phone, req.student_class_id
+    if not check_student_id_exist(student_id):
+        return {
+            'success': False,
+            'errCode': 201401,
+            'data': {}
+        }
+    if not check_student_class_id_exist(student_class_id):
+        return {
+            'success': False,
+            'errCode': 201402,
+            'data': {}
+        }
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("UPDATE student_table SET student_name=%s, student_gender=%s, student_phone=%s, student_class_id=%s WHERE student_id=%s",
+                        (student_name, student_gender, student_phone, student_class_id, student_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+###############################################################
+#####################    Teacher    ###########################
+###############################################################
+
+def check_teacher_id_exist(teacher_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM teacher_table WHERE teacher_id=%s", (teacher_id,))
+    return cursor.fetchone() is not None
+
+@router.get("/queryTeacher")
+async def query_teacher(page: int):
+    conn, cursor = get_cursor('root')
+    offset = (page - 1) * 50
+    cursor.execute(
+"""SELECT
+    tt.teacher_id AS "teacher_id",
+    tt.teacher_name AS "teacher_name",
+    tt.teacher_gender AS "teacher_gender",
+    tt.teacher_phone AS "teacher_phone",
+    tt.teacher_department_id AS "teacher_department_id",
+    lt.login_is_enable AS "login_is_enable"
+FROM
+    teacher_table tt
+JOIN
+    login_table lt
+ON
+    tt.teacher_id = lt.login_id
+ORDER BY
+    tt.teacher_id
+LIMIT 50 OFFSET %s;
+""", (offset,))
+    result = cursor.fetchall()
+    teachers = []
+    for row in result:
+        teachers.append({
+            'teacher_id': row['teacher_id'],
+            'teacher_name': row['teacher_name'],
+            'teacher_gender': row['teacher_gender'],
+            'teacher_phone': row['teacher_phone'],
+            'teacher_department_id': row['teacher_department_id'],
+            'login_is_enable': row['login_is_enable']
+        })
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {
+            'teachers': teachers
+        }
+    }
+
+class add_teacher_req(BaseModel):
+    teacher_id: str
+    teacher_name: str
+    teacher_gender: str | None
+    teacher_phone: str | None
+    teacher_department_id: int
+
+@router.post("/addTeacher")
+async def add_teacher(req: add_teacher_req):
+    teacher_id, teacher_name, teacher_gender, teacher_phone, teacher_department_id = req.teacher_id, req.teacher_name, req.teacher_gender, req.teacher_phone, req.teacher_department_id
+    if check_login_id_exist(teacher_id):
+        return {
+            'success': False,
+            'errCode': 201601,
+            'data': {}
+        }
+    if not check_department_id_exist(teacher_department_id):
+        return {
+            'success': False,
+            'errCode': 201602,
+            'data': {}
+        }
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (teacher_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 1, 1))
+        cursor.execute("INSERT INTO teacher_table (teacher_id, teacher_name, teacher_gender, teacher_phone, teacher_department_id) VALUES (%s, %s, %s, %s, %s)", (teacher_id, teacher_name, teacher_gender, teacher_phone, teacher_department_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+class update_teacher_req(BaseModel):
+    teacher_id: str
+    teacher_name: str
+    teacher_gender: str | None
+    teacher_phone: str | None
+    teacher_department_id: int
+
+@router.post("/updateTeacher")
+async def update_teacher(req: update_teacher_req):
+    teacher_id, teacher_name, teacher_gender, teacher_phone, teacher_department_id = req.teacher_id, req.teacher_name, req.teacher_gender, req.teacher_phone, req.teacher_department_id
+    if not check_teacher_id_exist(teacher_id):
+        return {
+            'success': False,
+            'errCode': 201701,
+            'data': {}
+        }
+    if not check_department_id_exist(teacher_department_id):
+        return {
+            'success': False,
+            'errCode': 201702,
+            'data': {}
+        }
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("UPDATE teacher_table SET teacher_name=%s, teacher_gender=%s, teacher_phone=%s, teacher_department_id=%s WHERE teacher_id=%s", (teacher_name, teacher_gender, teacher_phone, teacher_department_id, teacher_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+###############################################################
+#####################    Faculty    ###########################
+###############################################################
+
+def check_faculty_id_exist(faculty_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM faculty_table WHERE faculty_id=%s", (faculty_id,))
+    return cursor.fetchone() is not None
+
+@router.get("/queryFaculty")
+async def query_faculty(page: int):
+    conn, cursor = get_cursor('root')
+    offset = (page - 1) * 50
+    cursor.execute(
+"""SELECT
+    ft.faculty_id AS "faculty_id",
+    ft.faculty_name AS "faculty_name",
+    ft.faculty_gender AS "faculty_gender",
+    ft.faculty_phone AS "faculty_phone",
+    ft.faculty_department_id AS "faculty_department_id",
+    lt.login_is_enable AS "login_is_enable"
+FROM
+    faculty_table ft
+JOIN
+    login_table lt
+ON
+    ft.faculty_id = lt.login_id
+ORDER BY
+    ft.faculty_id
+LIMIT 50 OFFSET %s;
+""", (offset,))
+    result = cursor.fetchall()
+    faculties = []
+    for row in result:
+        faculties.append({
+            'faculty_id': row['faculty_id'],
+            'faculty_name': row['faculty_name'],
+            'faculty_gender': row['faculty_gender'],
+            'faculty_phone': row['faculty_phone'],
+            'faculty_department_id': row['faculty_department_id'],
+            'login_is_enable': row['login_is_enable']
+        })
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {
+            'faculties': faculties
+        }
+    }
+
+class add_faculty_req(BaseModel):
+    faculty_id: str
+    faculty_name: str
+    faculty_gender: str | None
+    faculty_phone: str | None
+    faculty_department_id: int
+
+@router.post("/addFaculty")
+async def add_faculty(req: add_faculty_req):
+    faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_department_id = req.faculty_id, req.faculty_name, req.faculty_gender, req.faculty_phone, req.faculty_department_id
+    if check_login_id_exist(faculty_id):
+        return {
+            'success': False,
+            'errCode': 201901,
+            'data': {}
+        }
+    if not check_department_id_exist(faculty_department_id):
+        return {
+            'success': False,
+            'errCode': 201902,
+            'data': {}
+        }
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("INSERT INTO login_table (login_id, login_password, login_role, login_is_enable) VALUES (%s, %s, %s, %s)", (faculty_id, "ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413", 2, 1))
+        cursor.execute("INSERT INTO faculty_table (faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_department_id) VALUES (%s, %s, %s, %s, %s)", (faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_department_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+class update_faculty_req(BaseModel):
+    faculty_id: str
+    faculty_name: str
+    faculty_gender: str | None
+    faculty_phone: str | None
+    faculty_department_id: int
+
+@router.post("/updateFaculty")
+async def update_faculty(req: update_faculty_req):
+    faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_department_id = req.faculty_id, req.faculty_name, req.faculty_gender, req.faculty_phone, req.faculty_department_id
+    if not check_faculty_id_exist(faculty_id):
+        return {
+            'success': False,
+            'errCode': 202001,
+            'data': {}
+        }
+    if not check_department_id_exist(faculty_department_id):
+        return {
+            'success': False,
+            'errCode': 202002,
+            'data': {}
+        }
+    try:
+        conn, cursor = get_cursor('root')
+        cursor.execute("UPDATE faculty_table SET faculty_name=%s, faculty_gender=%s, faculty_phone=%s, faculty_department_id=%s WHERE faculty_id=%s", (faculty_name, faculty_gender, faculty_phone, faculty_department_id, faculty_id))
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return {
+            'success': False,
+            'errCode': ERR_UNKNOWN,
+            'data': {}
+        }
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+###############################################################
+#####################    Login    #############################
+###############################################################
+
+class disable_login_req(BaseModel):
+    username: str
+
+@router.post("/disableLogin")
+async def disable_login(req: disable_login_req):
+    username = req.username
+    if not check_login_id_exist(username):
+        return {
+            'success': False,
+            'errCode': 202101,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("UPDATE login_table SET login_is_enable=0 WHERE login_id=%s", (username,))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }

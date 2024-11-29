@@ -16,10 +16,6 @@ router = APIRouter(
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-class User(BaseModel):
-    username: str
-    password: str
-
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
@@ -30,26 +26,48 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, conf.JWT_SECRET_KEY, algorithm="HS256")
     return encoded_jwt
 
-def verify_user(user: User):
+def get_user(username: str):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM login_table WHERE login_id=%s AND login_password=%s", (user.username, user.password))
+    cursor.execute("SELECT login_password FROM login_table WHERE login_id=%s", (username,))
     result = cursor.fetchone()
-    cursor.execute("INSERT INTO login_audit_table (login_audit_claim, login_audit_result) VALUES (%s, %s)",
-                        (user.username[:30], 1 if result is not None else 0))
+    return result
+
+def update_audit_table(username: str, result: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("INSERT INTO login_audit_table (login_audit_claim, login_audit_result) VALUES (%s, %s)", (username[:30], result))
     conn.commit()
-    if result is None:
-        return -1
-    return result['login_role']
+
+class login_req(BaseModel):
+    username: str
+    password: str
 
 @router.post("/login")
-async def login(user: User):
-    role = verify_user(user)
-    if role < 0:
+async def login(req: login_req):
+    username, password = req.username, req.password
+    user = get_user(username)
+    if user is None:
+        update_audit_table(username, 1)
         return {
             'success': False,
-            'errCode': ERR_LOGIN_FAILED,
+            'errCode': ERR_AUTH__LOGIN_FAILED,
             'data': {}
         }
+    if user['login_password'] != password:
+        update_audit_table(username, 2)
+        return {
+            'success': False,
+            'errCode': ERR_AUTH__LOGIN_FAILED,
+            'data': {}
+        }
+    if user['login_is_enable'] == 0:
+        update_audit_table(username, 3)
+        return {
+            'success': False,
+            'errCode': ERR_AUTH__ACOUNT_BANNED,
+            'data': {}
+        }
+    update_audit_table(username, 0)
+    role = user['login_role']
     token = create_access_token(data={"sub": user.username})
     rds.set(token, user.username, ex=conf.EXPIRE_TIME_MINUTES*60)
     return {
@@ -66,7 +84,7 @@ async def verify(token: str):
     if rds.get(token) is None:
         return {
             'success': False,
-            'errCode': ERR_TOKEN_EXPIRE,
+            'errCode': ERR_AUTH__TOKEN_EXPIRE,
             'data': {}
         }
     return {
@@ -74,3 +92,34 @@ async def verify(token: str):
         'errCode': OK,
         'data': {}
     }
+
+class update_password_req(BaseModel):
+    username: str
+    oldPassword: str
+    newPassword: str
+
+@router.post("updatePassword")
+async def updatePassword(req: update_password_req):
+    username, oldPassword, newPassword = req.username, req.oldPassword, req.newPassword
+    user = get_user(username)
+    if user is None:
+        return {
+            'success': False,
+            'errCode': ERR_AUTH__LOGIN_ID_NOT_FOUND,
+            'data': {}
+        }
+    if user['login_password'] != oldPassword:
+        return {
+            'success': False,
+            'errCode': ERR_AUTH__PASSWORD_NOT_MATCH,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("UPDATE login_table SET login_password=%s WHERE login_id=%s", (newPassword, username))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+    
