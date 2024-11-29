@@ -569,8 +569,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
         "course_hours": course_hours,
         "teacher_id": teacher_id,
         "teacher_name": teacher_name,
-        "capacity_in": capacity_in,
-        "capacity_out":capacity_out,
+        "capacity": capacity,
         "info": info,
         "time_and_place_string": time_and_place_string
       },
@@ -749,8 +748,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
         "course_hours": course_hours,
         "teacher_id": teacher_id,
         "teacher_name": teacher_name,
-        "capacity_in": capacity_in,
-        "capacity_out":capacity_out,
+        "capacity": capacity,
         "info": info,
         "time_and_place_string": time_and_place_string,
         "order": order, // 志愿顺序
@@ -800,8 +798,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
         "course_hours": course_hours,
         "teacher_id": teacher_id,
         "teacher_name": teacher_name,
-        "capacity_in": capacity_in,
-        "capacity_out":capacity_out,
+        "capacity": capacity,
         "info": info,
         "time_and_place_string": time_and_place_string,
         "order": order, // 志愿顺序
@@ -850,8 +847,7 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
         "course_hours": course_hours,
         "teacher_id": teacher_id,
         "teacher_name": teacher_name,
-        "capacity_in": capacity_in,
-        "capacity_out":capacity_out,
+        "capacity": capacity,
         "info": info,
         "time_and_place_string": time_and_place_string
       },
@@ -1103,9 +1099,8 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
   "teacher_id": teacher_id, // 教学班的老师
   "course_id": course_id,
   "semester_id": semester_id,
-  "capacity_in": course_id, // 对内容量
-  "capacity_out": course_id, // 对外容量
-  "info": course_id, // 教学班描述
+  "capacity": capacity, // 容量
+  "info": info, // 教学班描述
 }
 ```
 
