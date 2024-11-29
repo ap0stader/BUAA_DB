@@ -39,7 +39,7 @@
 | ------------------------------- | ------------------------------ |
 | 99999                           | 未知错误                       |
 
-## 1. addCourse
+## 1. ✅addCourse
 
 | Method | 描述     |
 | ------ | -------- |
@@ -63,7 +63,7 @@
 ```javascript
 {
   "data": {
-    "course_id": "{course_id}" // 申报课程的课程编号。刚申报的课程是未经过审核的课程，编号统一为"T+10位十进制时间戳"
+    "course_id": "{course_id}" // 申报课程的课程编号。刚申报的课程是未经过审核的课程，编号统一为"T{10位随机标识符}"
   }
 }
 ```
@@ -75,7 +75,7 @@
 | 300101  | 无此工号对应的教师   |
 | 300102  | 提供的课程信息不合法 |
 
-## 2. uploadCoursePlan
+## 2. ✅uploadCoursePlan
 
 | Method | 描述                 |
 | ------ | -------------------- |
@@ -198,3 +198,146 @@
 | ------- | ---------------------- |
 | 300501  | 无此课程编号对应的课程 |
 
+## 6. addCurriculum
+
+| Method | 描述       |
+| ------ | ---------- |
+| POST   | 开设教学班 |
+
+请求内容
+
+```javascript
+{
+  "curriculum_teacher_id": "{curriculum_teacher_id}", // 教学班的老师
+  "curriculum_course_id": "{curriculum_course_id}", // 教学班对应的课程
+  "curriculum_semester_id": curriculum_semester_id, // 教学班所载的学期编号
+  "curriculum_capacity": curriculum_capacity, // 教学班的容量
+  "curriculum_info": curriculum_info, // 教学班的额外信息
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculum_id": "{curriculum_id}", // 教学班编号
+  } // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription         |
+| ------- | ---------------------- |
+| 300601  | 无此工号对应的教师     |
+| 300602  | 无此课程编号对应的课程 |
+| 300603  | 无此学期编号对应的学期 |
+
+## 7. querySemesterCurriculums
+
+| Method | 描述                     |
+| ------ | ------------------------ |
+| GET    | 获取给定学期的所有教学班 |
+
+请求参数
+
+| Key         | Value类型 | 描述       |
+| ----------- | --------- | ---------- |
+| semester_id | Integer   | 给定的学期 |
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "curriculums": [
+      {
+        "curriculum_id": "{curriculum_id}", // 教学班编号
+        "curriculum_course_id": "{curriculum_course_id}", // 教学班对应的课程编号
+        "curriculum_course_name": "{curriculum_course_name}", // 教学班对应的课程名称
+        "curriculum_course_type": 0 | 1 | 2 | 3 | 4, // 教学班对应的课程分类，依次对应必修课、选修课、通识课、体育课、科研课
+        "curriculum_course_credit": curriculum_course_credit, // 教学班对应的课程学分
+        "curriculum_course_hours": curriculum_course_hours, // 教学班对应的课程学时
+        "curriculum_teacher_id": "{curriculum_teacher_id}", // 开设教学班的教师工号
+        "curriculum_teacher_name": "{curriculum_teacher_name}", // 开设教学班的教师姓名
+        "curriculum_capacity": curriculum_capacity, // 教学班容量
+        "curriculum_info": "{curriculum_info}", // 教学班的额外信息
+        "curriculum_time_place": "{curriculum_time_place}" | null // 教学班的时间场地信息
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 300701  | 学期号不存在   |
+
+## 8. setCurriculumResource
+
+| Method | 描述                 |
+| ------ | -------------------- |
+| POST   | 给教学班分配场地资源 |
+
+请求内容
+
+```javascript
+{
+  "curriculum_id": "{curriculum_teacher_id}", // 教学班编号
+  "acquire_resources": [ // 申请的场地资源
+    resource_id,
+    // ......
+  ]
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {
+ 		"curriculum_time_place": "{curriculum_time_place}" // 教学班的时间场地信息，以字符串表示
+  }
+}
+```
+
+错误代码
+
+| errCode | errDescription                                 |
+| ------- | ---------------------------------------------- |
+| 300801  | 无此教学班编号对应的教学班                     |
+| 300802  | 该场地所选时间段在**本学期**已被其他教学班占用 |
+
+## 9. releaseCurriculumResource
+
+| Method | 描述                   |
+| ------ | ---------------------- |
+| POST   | 释放教学班分配场地资源 |
+
+请求内容
+
+```javascript
+{
+  "curriculum_id": "{curriculum_teacher_id}", // 教学班编号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+**执行成功后，数据库缓存的`curriculum_time_place`应置位NULL（空值，不是空字符串）**
+
+错误代码
+
+| errCode | errDescription             |
+| ------- | -------------------------- |
+| 300901  | 无此教学班编号对应的教学班 |
