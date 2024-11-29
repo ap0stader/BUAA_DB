@@ -140,7 +140,7 @@
 
 错误代码：无
 
-## 4.  acceptCourse
+## 4. acceptCourse
 
 | Method | 描述               |
 | ------ | ------------------ |

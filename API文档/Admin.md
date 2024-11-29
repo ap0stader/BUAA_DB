@@ -728,3 +728,131 @@ ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec
 | errCode | errDescription       |
 | ------- | -------------------- |
 | 202101  | 无此学工号对应的人员 |
+
+## 22. getEnv
+
+| Method | 描述         |
+| ------ | ------------ |
+| GET    | 获取环境信息 |
+
+请求参数：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "now_step": now_step, // 当前的选课阶段
+    "now_semester_id": now_semester_id, // 当前的学期编号
+    "now_semester_name": "now_semester_name" // 当前的学期名称
+  }
+}
+```
+
+错误代码：无
+
+## 23. setEnvStep
+
+| Method | 描述               |
+| ------ | ------------------ |
+| POST   | 设置当前的选课阶段 |
+
+请求内容
+
+```javascript
+{
+  "step": step, // 当前的选课阶段
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码：无
+
+## 24. setEnvSemester
+
+| Method | 描述           |
+| ------ | -------------- |
+| POST   | 设置当前的学期 |
+
+请求内容
+
+```javascript
+{
+  "semester_id": semester_id, // 当前的学期编号
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription         |
+| ------- | ---------------------- |
+| 202401  | 无此学期编号对应的学期 |
+
+## 25. addSemester
+
+| Method | 描述     |
+| ------ | -------- |
+| POST   | 新增学期 |
+
+请求内容
+
+```javascript
+{
+  "semester_name": semester_name, // 新增的学期名称
+}
+```
+
+成功返回
+
+```javascript
+{
+  "data": {} // 空对象
+}
+```
+
+错误代码
+
+| errCode | errDescription |
+| ------- | -------------- |
+| 202501  | 有重名的学期   |
+
+## 26. querySemesters
+
+| Method | 描述     |
+| ------ | -------- |
+| GET    | 新增学期 |
+
+请求内容：无
+
+成功返回
+
+```javascript
+{
+  "data": {
+    "semesters": [
+      {
+        "semester_id": semester_id, // 学期编号
+        "semester_name": semester_name // 学期名称
+      },
+      // ......
+    ]
+  }
+}
+```
+
+错误代码：无
