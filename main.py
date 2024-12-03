@@ -5,10 +5,11 @@ conf.init()
 
 app = FastAPI()
 
-from routers import auth, admin, demo
+from routers import auth, admin, demo, course
 
 app.include_router(auth.router)
 app.include_router(admin.router)
+app.include_router(course.router)
 app.include_router(demo.router)
 
 if __name__ == '__main__':

@@ -9,6 +9,7 @@ from utils.db import get_cursor
 from utils.rds import rds
 import conf
 from utils.errno import *
+from utils.utils import *
 from io import BytesIO
 import pandas as pd
 
@@ -22,19 +23,6 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 ###############################################################
 #####################    Place    #############################
 ###############################################################
-
-def check_place_id_exist(place_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM place_table WHERE place_id=%s", (place_id,))
-    return cursor.fetchone() is not None
-
-def check_place_name_exist(place_name: str, ex_place_id: int = -1):
-    conn, cursor = get_cursor('root')
-    if ex_place_id == -1:
-        cursor.execute("SELECT * FROM place_table WHERE place_name=%s", (place_name,))
-    else:
-        cursor.execute("SELECT * FROM place_table WHERE place_name=%s AND place_id!=%s", (place_name, ex_place_id))
-    return cursor.fetchone() is not None
 
 @router.get("/queryPlace")
 async def query_place():
@@ -114,16 +102,6 @@ async def update_place(req: update_place_req):
 #####################    Department    ########################
 ###############################################################
 
-def check_department_id_exist(department_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM department_table WHERE department_id=%s", (department_id,))
-    return cursor.fetchone() is not None
-
-def check_department_name_exist(department_name: str):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM department_table WHERE department_name=%s", (department_name,))
-    return cursor.fetchone() is not None
-
 @router.get("/queryDepartment")
 async def query_department():
     conn, cursor = get_cursor('root')
@@ -169,21 +147,6 @@ async def add_department(req: add_department_req):
 #####################    Majar    ##############################
 ###############################################################
 
-def check_major_id_exist(major_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM major_table WHERE major_id=%s", (major_id,))
-    return cursor.fetchone() is not None
-
-def check_major_name_exist(major_name: str):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM major_table WHERE major_name=%s", (major_name,))
-    return cursor.fetchone() is not None
-
-def check_major_department_id_exist(department_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM department_table WHERE department_id=%s", (department_id,))
-    return cursor.fetchone() is not None
-
 @router.get("/queryMajor")
 async def query_major():
     conn, cursor = get_cursor('root')
@@ -218,7 +181,7 @@ async def add_major(req: add_major_req):
             'errCode': ERR_MAJOR__DUPLICATE_MAJOR_ID_NAME,
             'data': {}
         }
-    if not check_major_department_id_exist(major_department_id):
+    if not check_department_id_exist(major_department_id):
         return {
             'success': False,
             'errCode': ERR_MAJOR__DEPARTMENT_ID_NOT_FOUND,
@@ -237,21 +200,6 @@ async def add_major(req: add_major_req):
 ###############################################################
 #####################    Class    #############################
 ###############################################################
-
-def check_class_id_exist(class_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM class_table WHERE class_id=%s", (class_id,))
-    return cursor.fetchone() is not None
-
-def check_teacher_id_exist(teacher_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM teacher_table WHERE teacher_id=%s", (teacher_id,))
-    return cursor.fetchone() is not None
-
-def check_teacher_is_master(teacher_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM class_table WHERE class_teacher_id=%s", (teacher_id,))
-    return cursor.fetchone() is not None
 
 @router.get("/queryClass")
 async def query_class():
@@ -360,21 +308,6 @@ async def update_class_teacher(req: update_class_teacher_req):
 #####################    Student    ###########################
 ###############################################################
 
-def check_login_id_exist(id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM login_table WHERE login_id=%s", (id,))
-    return cursor.fetchone() is not None
-
-def check_student_id_exist(student_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM student_table WHERE student_id=%s", (student_id,))
-    return cursor.fetchone() is not None
-
-def check_student_class_id_exist(class_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM class_table WHERE class_id=%s", (class_id,))
-    return cursor.fetchone() is not None
-
 @router.get("/queryStudent")
 async def query_student(page: int):
     conn, cursor = get_cursor('root')
@@ -438,7 +371,7 @@ async def add_student(req: add_student_req):
             'errCode': ERR_STUDENT__DUPLICATE_LOGIN_ID,
             'data': {}
         }
-    if not check_student_class_id_exist(student_class_id):
+    if not check_class_id_exist(student_class_id):
         return {
             'success': False,
             'errCode': ERR_STUDENT__CLASS_ID_NOT_FOUND,
@@ -541,7 +474,7 @@ async def update_student(req: update_student_req):
             'errCode': 201401,
             'data': {}
         }
-    if not check_student_class_id_exist(student_class_id):
+    if not check_class_id_exist(student_class_id):
         return {
             'success': False,
             'errCode': 201402,
@@ -568,11 +501,6 @@ async def update_student(req: update_student_req):
 ###############################################################
 #####################    Teacher    ###########################
 ###############################################################
-
-def check_teacher_id_exist(teacher_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM teacher_table WHERE teacher_id=%s", (teacher_id,))
-    return cursor.fetchone() is not None
 
 @router.get("/queryTeacher")
 async def query_teacher(page: int):
@@ -697,11 +625,6 @@ async def update_teacher(req: update_teacher_req):
 ###############################################################
 #####################    Faculty    ###########################
 ###############################################################
-
-def check_faculty_id_exist(faculty_id: int):
-    conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM faculty_table WHERE faculty_id=%s", (faculty_id,))
-    return cursor.fetchone() is not None
 
 @router.get("/queryFaculty")
 async def query_faculty(page: int):

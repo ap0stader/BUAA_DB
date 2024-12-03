@@ -28,7 +28,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 def get_user(username: str):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT login_password FROM login_table WHERE login_id=%s", (username,))
+    cursor.execute("SELECT * FROM login_table WHERE login_id=%s", (username,))
     result = cursor.fetchone()
     return result
 
@@ -68,8 +68,8 @@ async def login(req: login_req):
         }
     update_audit_table(username, 0)
     role = user['login_role']
-    token = create_access_token(data={"sub": user.username})
-    rds.set(token, user.username, ex=conf.EXPIRE_TIME_MINUTES*60)
+    token = create_access_token(data={"sub": user['login_id']})
+    rds.set(token, user['login_id'], ex=conf.EXPIRE_TIME_MINUTES*60)
     return {
         'success': True,
         'errCode': OK,
