@@ -770,3 +770,107 @@ async def disable_login(req: disable_login_req):
         'errCode': OK,
         'data': {}
     }
+
+###############################################################
+#####################    Environment    #######################
+###############################################################
+
+@router.get("/getEnv")
+async def get_env():
+    conn, cursor = get_cursor('root')
+    cursor.execute(
+"""SELECT
+    et.now_step,
+    et.now_semester_id,
+    st.semester_name AS now_semester_name
+FROM
+    env_table et
+JOIN
+    semester_table st
+ON
+    et.now_semester_id = st.semester_id;
+""")
+    result = cursor.fetchone()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {
+            'now_step': result['now_step'],
+            'now_semester_id': result['now_semester_id'],
+            'now_semester_name': result['now_semester_name']
+        }
+    }
+
+class set_env_step_req(BaseModel):
+    step: int
+
+@router.post("/setEnvStep")
+async def set_env_step(req: set_env_step_req):
+    step = req.step
+    conn, cursor = get_cursor('root')
+    cursor.execute("UPDATE env_table SET now_step=%s", (step,))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+class set_env_semester_req(BaseModel):
+    semester_id: int
+
+@router.post("/setEnvSemester")
+async def set_env_semester(req: set_env_semester_req):
+    semester_id = req.semester_id
+    if not check_semester_id_exist(semester_id):
+        return {
+            'success': False,
+            'errCode': 202401,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("UPDATE env_table SET now_semester_id=%s", (semester_id,))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+###############################################################
+#####################    Semester    ##########################
+###############################################################
+
+class add_semester_req(BaseModel):
+    semester_name: str
+
+@router.post("/addSemester")
+async def add_semester(req: add_semester_req):
+    semester_name = req.semester_name
+    if check_semester_name_exist(semester_name):
+        return {
+            'success': False,
+            'errCode': 202501,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("INSERT INTO semester_table (semester_name) VALUES (%s)", (semester_name,))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
+@router.get("/querySemester")
+async def query_semester():
+    conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM semester_table")
+    result = cursor.fetchall()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {
+            'semesters': result
+        }
+    }

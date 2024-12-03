@@ -80,6 +80,11 @@ def check_semester_id_exist(semester_id: str):
     cursor.execute("SELECT * FROM semester_table WHERE semester_id=%s", (semester_id,))
     return cursor.fetchone() is not None
 
+def check_semester_name_exist(semester_name: str):
+    conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM semester_table WHERE semester_name=%s", (semester_name,))
+    return cursor.fetchone() is not None
+
 def check_curriculum_id_exist(curriculum_id: int):
     conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM curriculum_table WHERE curriculum_id=%s", (curriculum_id,))

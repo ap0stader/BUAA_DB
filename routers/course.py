@@ -355,4 +355,26 @@ async def release_curriculum_resource(req: release_curriculum_resource_req):
         'errCode': OK,
         'data': {}
     }
-    
+
+class update_curriculum_capacity_req(BaseModel):
+    curriculum_id: int
+    curriculum_capacity: int
+
+@router.post("/updateCurriculumCapacity")
+async def update_curriculum_capacity(req: update_curriculum_capacity_req):
+    curriculum_id, curriculum_capacity = req.curriculum_id, req.curriculum_capacity
+    if not check_curriculum_id_exist(curriculum_id):
+        return {
+            'success': False,
+            'errCode': 301001,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("UPDATE curriculum_table SET curriculum_capacity=%s WHERE curriculum_id=%s", (curriculum_capacity, curriculum_id))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
+
