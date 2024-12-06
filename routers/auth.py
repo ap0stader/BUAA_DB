@@ -98,7 +98,7 @@ class update_password_req(BaseModel):
     oldPassword: str
     newPassword: str
 
-@router.post("updatePassword")
+@router.post("/updatePassword")
 async def updatePassword(req: update_password_req):
     username, oldPassword, newPassword = req.username, req.oldPassword, req.newPassword
     user = get_user(username)

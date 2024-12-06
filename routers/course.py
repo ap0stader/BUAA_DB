@@ -245,17 +245,17 @@ async def query_semester_curriculums(semester_id: int):
     conn, cursor = get_cursor('root')
     cursor.execute(
 """SELECT 
-    ct.curriculum_id AS "curriculum_id", 
-    ct.curriculum_course_id AS "curriculum_course_id", 
-    c.course_name AS "curriculum_course_name", 
-    c.course_type AS "curriculum_course_type", 
-    c.course_credit AS "curriculum_course_credit", 
-    c.course_hours AS "curriculum_course_hours", 
-    ct.curriculum_teacher_id AS "curriculum_teacher_id", 
-    t.teacher_name AS "curriculum_teacher_name", 
-    ct.curriculum_capacity AS "curriculum_capacity", 
-    ct.curriculum_info AS "curriculum_info", 
-    cust.curriculum_utilization_string AS "curriculum_time_place"
+    ct.curriculum_id,
+    ct.curriculum_course_id,
+    c.course_name,
+    c.course_type,
+    c.course_credit,
+    c.course_hours,
+    ct.curriculum_teacher_id,
+    t.teacher_name,
+    ct.curriculum_capacity,
+    ct.curriculum_info,
+    cust.curriculum_utilization_string
 FROM 
     curriculum_table ct
 LEFT JOIN 
@@ -275,16 +275,15 @@ ORDER BY
         curriculums.append({
             'curriculum_id': row['curriculum_id'],
             'curriculum_course_id': row['curriculum_course_id'],
-            'curriculum_course_name': row['curriculum_course_name'],
-            'curriculum_course_type': row['curriculum_course_type'],
-            'curriculum_course_credit': row['curriculum_course_credit'],
-            'curriculum_course_hours': row['curriculum_course_hours'],
+            'course_name': row['course_name'],
+            'course_type': row['course_type'],
+            'course_credit': row['course_credit'],
+            'course_hours': row['course_hours'],
             'curriculum_teacher_id': row['curriculum_teacher_id'],
-            'curriculum_teacher_name': row['curriculum_teacher_name'],
-            'curriculum_semester_id': row['curriculum_semester_id'],
+            'teacher_name': row['teacher_name'],
             'curriculum_capacity': row['curriculum_capacity'],
             'curriculum_info': row['curriculum_info'],
-            'curriculum_time_place': row['curriculum_time_place']
+            'curriculum_utilization_string': row['curriculum_utilization_string']
         })
     return {
         'success': True,
@@ -331,7 +330,9 @@ async def set_curriculum_resource(req: set_curriculum_resource_req):
     return {
         'success': True,
         'errCode': OK,
-        'data': {}
+        'data': {
+            'curriculum_utilization_string': acq.str
+        }
     }
 
 class release_curriculum_resource_req(BaseModel):

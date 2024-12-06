@@ -311,6 +311,8 @@ async def update_class_teacher(req: update_class_teacher_req):
 @router.get("/queryStudent")
 async def query_student(page: int):
     conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM student_table")
+    count = len(cursor.fetchall())
     offset = (page - 1) * 50
     cursor.execute(
 """SELECT 
@@ -351,6 +353,7 @@ LIMIT 50 OFFSET %s;
         'success': True,
         'errCode': OK,
         'data': {
+            'count': count,
             'students': students
         }
     }
@@ -505,6 +508,8 @@ async def update_student(req: update_student_req):
 @router.get("/queryTeacher")
 async def query_teacher(page: int):
     conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM teacher_table")
+    count = len(cursor.fetchall())
     offset = (page - 1) * 50
     cursor.execute(
 """SELECT
@@ -539,6 +544,7 @@ LIMIT 50 OFFSET %s;
         'success': True,
         'errCode': OK,
         'data': {
+            'count': count,
             'teachers': teachers
         }
     }
@@ -629,6 +635,8 @@ async def update_teacher(req: update_teacher_req):
 @router.get("/queryFaculty")
 async def query_faculty(page: int):
     conn, cursor = get_cursor('root')
+    cursor.execute("SELECT * FROM faculty_table")
+    count = len(cursor.fetchall())
     offset = (page - 1) * 50
     cursor.execute(
 """SELECT
@@ -663,6 +671,7 @@ LIMIT 50 OFFSET %s;
         'success': True,
         'errCode': OK,
         'data': {
+            'count': count,
             'faculties': faculties
         }
     }
