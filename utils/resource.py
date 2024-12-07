@@ -9,15 +9,19 @@ week_trans = {
 }
 
 class ResourceManager:
-    def __init__(self, data: str | List[int]):
-        self.table = get_place_table() # {resource_id: resource_name}
-        if type(data) == str:
-            self._str = data
-            self._list = self.from_str(data)
-        elif type(data) == list:
-            # 31:16 resource_id, 15:8 week, 7:4 day, 3:0 ti
-            self._list = data
-            self._str = self.from_list(data)
+    def __init__(self, data: str | List[int] | None):
+        if data is None:
+            self._str = ''
+            self._list = []
+        else:
+            self.table = get_place_table() # {resource_id: resource_name}
+            if type(data) == str:
+                self._str = data
+                self._list = self.from_str(data)
+            elif type(data) == list:
+                # 31:16 resource_id, 15:8 week, 7:4 day, 3:0 ti
+                self._list = data
+                self._str = self.from_list(data)
 
     def from_str(self, data: str):
         result = []

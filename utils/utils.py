@@ -107,80 +107,124 @@ def get_place_table():
 def get_curriculums_resource(semester_id: int, ex_curriculum_id: int = -1):
     conn, cursor = get_cursor('root')
     cursor.execute('''
-SELECT
-    cust.curriculum_utilization_string AS resource
-FROM
-    curriculum_table ct
-JOIN
-    curriculum_utilization_string_table cust
-ON
-    ct.curriculum_id = cust.curriculum_id
-WHERE
-    ct.curriculum_semester_id=%s AND ct.curriculum_id!=%s;
-''', (semester_id, ex_curriculum_id))
+        SELECT
+            cust.curriculum_utilization_string AS resource
+        FROM
+            curriculum_table ct
+        JOIN
+            curriculum_utilization_string_table cust
+        ON
+            ct.curriculum_id = cust.curriculum_id
+        WHERE
+            ct.curriculum_semester_id=%s AND ct.curriculum_id!=%s;
+        ''', (semester_id, ex_curriculum_id))
     resources = []
     for row in cursor.fetchall():
         resources.append(row['resource'])
     return resources
 
-def get_curriculum_course_info(curriculum_id: int):
+def get_curriculum_course_id(curriculum_id: int):
     conn, cursor = get_cursor('root')
     cursor.execute("""
-SELECT
-    cot.course_id
-    cot.course_type
-FROM
-    curriculum_table ct
-JOIN
-    course_table cot
-ON
-    ct.curriculum_course_id = cot.course_id
-WHERE
-    ct.curriculum_id=%s;
-""", (curriculum_id,))
-    result = cursor.fetchone()
-    return result['course_id'], result['course_type']
+        SELECT curriculum_course_id FROM curriculum_view
+        WHERE curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()
+
+def get_curriculum_course_type(curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT course_type FROM curriculum_view
+        WHERE curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()
+
+def get_curriculum_capacity(curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT curriculum_capacity FROM curriculum_table
+        WHERE curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()
+
+def check_is_student_in_curriculum(student_id: str, curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT * FROM attendance_view
+        WHERE attendance_student_id=%s AND attendance_curriculum_id=%s;
+        """, (student_id, curriculum_id))
+    return cursor.fetchone() is not None
 
 def check_choice_curriculum_is_exist(student_id: str, curriculum_id: int):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM choice_table WHERE choice_student_id=%s AND choice_curriculum_id=%s", (student_id, curriculum_id))
+    cursor.execute("""
+        SELECT *
+        FROM choice_table 
+        WHERE choice_student_id=%s 
+            AND choice_curriculum_id=%s
+        """, (student_id, curriculum_id))
     return cursor.fetchone() is not None
 
 def check_choice_order_is_exist(student_id: str, curriculum_id: int, order: int):
-    course_id, course_type = get_curriculum_course_info(curriculum_id)
+    course_id = get_curriculum_course_id(curriculum_id)
+    course_type = get_curriculum_course_type(curriculum_id)
     conn, cursor = get_cursor('root')
     if course_type in [0, 1]:
         cursor.execute("""
-SELECT
-    *
-FROM
-    choice_table cht
-JOIN
-    curriculum_table ct
-ON
-    cht.choice_curriculum_id = ct.curriculum_id
-WHERE
-    cht.choice_student_id=%s AND ct.curriculum_course_id=%s AND cht.choice_order=%s;
-""", (student_id, course_id, order))
+            SELECT
+                *
+            FROM
+                choice_table cht
+            JOIN
+                curriculum_table ct
+            ON
+                cht.choice_curriculum_id = ct.curriculum_id
+            WHERE
+                cht.choice_student_id=%s AND ct.curriculum_course_id=%s AND cht.choice_order=%s;
+            """, (student_id, course_id, order))
         return cursor.fetchone() is not None
     else:
         cursor.execute("""
-SELECT
-    *
-FROM
-    choice_table cht
-JOIN
-    curriculum_table ct
-ON
-    cht.choice_curriculum_id = ct.curriculum_id
-JOIN
-    course_table cot
-ON
-    ct.curriculum_course_id = cot.course_id`
-WHERE
-    cht.choice_student_id=%s AND cot.course_type=%s AND cht.choice_order=%s;
-""", (student_id, course_type, order))
+            SELECT
+                *
+            FROM
+                choice_table cht
+            JOIN
+                curriculum_table ct
+            ON
+                cht.choice_curriculum_id = ct.curriculum_id
+            JOIN
+                course_table cot
+            ON
+                ct.curriculum_course_id = cot.course_id`
+            WHERE
+                cht.choice_student_id=%s AND cot.course_type=%s AND cht.choice_order=%s;
+            """, (student_id, course_type, order))
         return cursor.fetchone() is not None
-    
 
+def check_attendance_curriculum_is_chosen(student_id: str, curriculum_id: str):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT * FROM attendance_view
+        WHERE attendance_student_id=%s 
+            AND attendance_curriculum_id=%s;
+        """, (student_id, curriculum_id))
+    return cursor.fetchone() is not None
+
+def check_attendance_course_is_chosen(student_id: str, course_id: str):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT * FROM attendance_view
+        WHERE attendance_student_id=%s 
+            AND attendance_course_id=%s;
+        """, (student_id, course_id))
+    return cursor.fetchone() is not None
+
+def get_attendance_curriculum_chosen_count(curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT COUNT(*) AS count FROM attendance_view
+        WHERE attendance_curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()
 

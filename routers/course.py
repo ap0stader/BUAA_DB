@@ -243,47 +243,17 @@ async def query_semester_curriculums(semester_id: int):
             'data': {}
         }
     conn, cursor = get_cursor('root')
-    cursor.execute(
-"""SELECT 
-    ct.curriculum_id,
-    ct.curriculum_course_id,
-    c.course_name,
-    c.course_type,
-    c.course_credit,
-    c.course_hours,
-    ct.curriculum_teacher_id,
-    t.teacher_name,
-    ct.curriculum_capacity,
-    ct.curriculum_info,
-    cust.curriculum_utilization_string
-FROM 
-    curriculum_table ct
-LEFT JOIN 
-    course_table c ON ct.curriculum_course_id = c.course_id
-LEFT JOIN 
-    teacher_table t ON ct.curriculum_teacher_id = t.teacher_id
-LEFT JOIN 
-    curriculum_utilization_string_table cust ON ct.curriculum_id = cust.curriculum_id
-WHERE 
-    ct.curriculum_semester_id=%s
-ORDER BY
-    ct.curriculum_id;
-""", (semester_id,))
+    cursor.execute("""
+        SELECT * FROM querySemesterCurriculums qsc 
+        WHERE qsc.curriculum_semester_id = %s
+        ORDER BY qsc.curriculum_id;
+        """, (semester_id,))
     result = cursor.fetchall()
     curriculums = []
     for row in result:
         curriculums.append({
-            'curriculum_id': row['curriculum_id'],
-            'curriculum_course_id': row['curriculum_course_id'],
-            'course_name': row['course_name'],
-            'course_type': row['course_type'],
-            'course_credit': row['course_credit'],
-            'course_hours': row['course_hours'],
-            'curriculum_teacher_id': row['curriculum_teacher_id'],
-            'teacher_name': row['teacher_name'],
-            'curriculum_capacity': row['curriculum_capacity'],
-            'curriculum_info': row['curriculum_info'],
-            'curriculum_utilization_string': row['curriculum_utilization_string']
+            **row,
+            'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_string']).list
         })
     return {
         'success': True,

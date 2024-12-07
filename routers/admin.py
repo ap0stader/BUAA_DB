@@ -787,26 +787,13 @@ async def disable_login(req: disable_login_req):
 @router.get("/getEnv")
 async def get_env():
     conn, cursor = get_cursor('root')
-    cursor.execute(
-"""SELECT
-    et.now_step,
-    et.now_semester_id,
-    st.semester_name AS now_semester_name
-FROM
-    env_table et
-JOIN
-    semester_table st
-ON
-    et.now_semester_id = st.semester_id;
-""")
+    cursor.execute("SELECT * FROM env_table et;")
     result = cursor.fetchone()
     return {
         'success': True,
         'errCode': OK,
         'data': {
-            'now_step': result['now_step'],
-            'now_semester_id': result['now_semester_id'],
-            'now_semester_name': result['now_semester_name']
+            **result
         }
     }
 
@@ -850,27 +837,6 @@ async def set_env_semester(req: set_env_semester_req):
 #####################    Semester    ##########################
 ###############################################################
 
-class add_semester_req(BaseModel):
-    semester_name: str
-
-@router.post("/addSemester")
-async def add_semester(req: add_semester_req):
-    semester_name = req.semester_name
-    if check_semester_name_exist(semester_name):
-        return {
-            'success': False,
-            'errCode': 202501,
-            'data': {}
-        }
-    conn, cursor = get_cursor('root')
-    cursor.execute("INSERT INTO semester_table (semester_name) VALUES (%s)", (semester_name,))
-    conn.commit()
-    return {
-        'success': True,
-        'errCode': OK,
-        'data': {}
-    }
-
 @router.get("/querySemester")
 async def query_semester():
     conn, cursor = get_cursor('root')
@@ -882,4 +848,25 @@ async def query_semester():
         'data': {
             'semesters': result
         }
+    }
+
+class add_semester_req(BaseModel):
+    semester_name: str
+
+@router.post("/addSemester")
+async def add_semester(req: add_semester_req):
+    semester_name = req.semester_name
+    if check_semester_name_exist(semester_name):
+        return {
+            'success': False,
+            'errCode': 202601,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("INSERT INTO semester_table (semester_name) VALUES (%s)", (semester_name,))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
     }
