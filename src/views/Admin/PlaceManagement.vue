@@ -6,6 +6,15 @@
         <v-data-table :headers="headers" :items="env.places" disable-sort sticky items-per-page="50">
             <template v-slot:item.actions="{ item }">
                 <v-btn
+                    variant="tonal"
+                    icon
+                    density="comfortable"
+                    color="blue"
+                    class="me-1"
+                    @click="openModifyDialog(item)">
+                    <v-icon size="default"> mdi-pencil </v-icon>
+                </v-btn>
+                <v-btn
                     v-if="item.place_is_enable"
                     variant="tonal"
                     icon
@@ -63,6 +72,28 @@
         </v-card>
     </v-dialog>
 
+    <v-dialog max-width="500px" v-model="modifyialogActive">
+        <v-card>
+            <v-toolbar>
+                <v-btn icon="mdi-close" @click="modifyialogActive = false" />
+                <v-toolbar-title>修改场地</v-toolbar-title>
+            </v-toolbar>
+            <v-card-item> 场地原名称：{{ modifyialogItem.place_name }} </v-card-item>
+
+            <v-text-field
+                v-model="modifyialogPlaceName"
+                :rules="[(v) => !!v || '请输入新的场地名称']"
+                label="新场地名称"
+                variant="outlined"
+                class="ma-2" />
+
+            <template v-slot:actions>
+                <v-btn @click="modifyialogActive = false">取消</v-btn>
+                <v-btn color="red" :loading="modifyialogSubmitLoading" @click="onModifyialogSubmitClick"> 修改 </v-btn>
+            </template>
+        </v-card>
+    </v-dialog>
+
     <v-dialog max-width="500px" v-model="addDialogActive">
         <v-card>
             <v-toolbar>
@@ -105,6 +136,7 @@
         envManager.updatePlace()
     })
 
+    // ===== Enable Dialog =====
     let enableDialogActive = ref(false)
     let enableDialogItem = ref({} as placeInfo)
 
@@ -133,7 +165,10 @@
                 place_is_enable: enableDialogItem.value.place_is_enable ? 0 : 1,
             },
             (data) => {
-                emitter.emit("success_snackbar", (enableDialogItem.value.place_is_enable ? "停用" : "启用") + "成功")
+                emitter.emit(
+                    "success_snackbar",
+                    "场地" + (enableDialogItem.value.place_is_enable ? "停用" : "启用") + "成功"
+                )
                 enableDialogSubmitLoading.value = false
                 enableDialogActive.value = false
             },
@@ -143,6 +178,48 @@
         )
     }
 
+    // ===== Modify Dialog =====
+    let modifyialogActive = ref(false)
+    let modifyialogItem = ref({} as placeInfo)
+    let modifyialogPlaceName = ref("")
+
+    function openModifyDialog(item: placeInfo) {
+        modifyialogActive.value = true
+        modifyialogItem.value = item
+        modifyialogPlaceName.value = item.place_name
+    }
+
+    watch(modifyialogActive, (newValue, oldValue) => {
+        if (oldValue && !newValue) {
+            envManager.updatePlace()
+        }
+    })
+
+    let modifyialogSubmitLoading = ref(false)
+
+    function onModifyialogSubmitClick() {
+        modifyialogSubmitLoading.value = true
+        callapi.post(
+            "json",
+            "Admin",
+            "updatePlace",
+            {
+                place_id: modifyialogItem.value.place_id,
+                place_name: modifyialogPlaceName.value,
+                place_is_enable: modifyialogItem.value.place_is_enable,
+            },
+            (data) => {
+                emitter.emit("success_snackbar", "场地修改成功")
+                modifyialogSubmitLoading.value = false
+                modifyialogActive.value = false
+            },
+            (errCode) => {
+                modifyialogSubmitLoading.value = false
+            }
+        )
+    }
+
+    // ===== Add Dialog =====
     let addDialogActive = ref(false)
     let addDialogPlaceName = ref("")
 
