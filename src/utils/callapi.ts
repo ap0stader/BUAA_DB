@@ -10,6 +10,9 @@ interface errDescription {
 const errDescription: errDescription = {
     99999: "未知错误",
     100101: "账号或密码错误",
+    100201: "登录信息已经失效",
+    100301: "无此学工号对应的人员",
+    100302: "原密码不正确",
 }
 
 interface APIResponse {

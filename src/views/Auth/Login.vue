@@ -2,7 +2,7 @@
     <v-card-subtitle class="text-center card-subtitle"> 欢迎登录选课系统 </v-card-subtitle>
 
     <v-card-text>
-        <v-form :readonly="submit_loading" @submit.prevent="onLoginSubmit">
+        <v-form :readonly="submitLoading" @submit.prevent="onLoginSubmit">
             <v-text-field
                 label="请输入学工号"
                 :rules="[(v) => !!v || '请输入学工号']"
@@ -20,9 +20,9 @@
                 color="#3073C4"
                 prepend-inner-icon="mdi-lock-outline"
                 class="mb-3"
-                :type="password_visible ? 'text' : 'password'"
-                :append-inner-icon="password_visible ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append-inner="password_visible = !password_visible" />
+                :type="passwordVisible ? 'text' : 'password'"
+                :append-inner-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="passwordVisible = !passwordVisible" />
             <v-btn
                 block
                 variant="flat"
@@ -30,7 +30,7 @@
                 size="x-large"
                 class="mb-6"
                 type="submit"
-                :loading="submit_loading"
+                :loading="submitLoading"
                 >登录</v-btn
             >
         </v-form>
@@ -48,16 +48,16 @@
     const router = useRouter()
     const token = useToken()
 
-    let password_visible = ref(false)
     let username = ref("")
     let password = ref("")
-    let submit_loading = ref(false)
+    let passwordVisible = ref(false)
+    let submitLoading = ref(false)
 
     function onLoginSubmit() {
-        submit_loading.value = true
-        let usernameStore = username.value
+        submitLoading.value = true
+        let username_store = username.value
         if (username.value == "" || password.value == "") {
-            submit_loading.value = false
+            submitLoading.value = false
         } else {
             callapi.post(
                 "Auth",
@@ -68,12 +68,12 @@
                 },
                 (data) => {
                     const result = <LoginResponse>data
-                    token.setToken(result.token, result.type, usernameStore)
+                    token.setToken(result.token, result.type, username_store)
                     emitter.emit("success_snackbar", "登录成功")
                     router.replace("/home")
                 },
                 (errCode) => {
-                    submit_loading.value = false
+                    submitLoading.value = false
                 }
             )
         }

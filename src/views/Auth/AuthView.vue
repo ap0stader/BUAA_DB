@@ -23,6 +23,7 @@
 
 <script lang="ts" setup name="AuthView">
     import { useToken } from "@/stores/token"
+    import { callapi } from "@/utils/callapi"
     import { onMounted } from "vue"
     import { useRouter, RouterView } from "vue-router"
     const router = useRouter()
@@ -30,9 +31,23 @@
 
     onMounted(() => {
         if (token.isInit) {
+            // 没有登录信息则导航到登录界面
             router.replace({ name: "login" })
         } else {
-            router.replace("/home")
+            // 有登录信息则检验登录信息是否有效
+            callapi.get(
+                "Auth",
+                "verify",
+                {
+                    token: token.token,
+                },
+                (data) => {
+                    router.replace("/home")
+                },
+                (errCode) => {
+                    router.replace({ name: "login" })
+                }
+            )
         }
     })
 </script>
