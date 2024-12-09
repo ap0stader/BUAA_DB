@@ -196,9 +196,9 @@
     let modifyialogPlaceName = ref("")
 
     function openModifyDialog(item: placeInfo) {
-        modifyialogActive.value = true
         modifyialogItem.value = item
         modifyialogPlaceName.value = item.place_name
+        modifyialogActive.value = true
     }
 
     watch(modifyialogActive, (newValue, oldValue) => {
@@ -236,8 +236,8 @@
     let addDialogPlaceName = ref("")
 
     function openAddDialog() {
-        addDialogActive.value = true
         addDialogPlaceName.value = ""
+        addDialogActive.value = true
     }
 
     watch(addDialogActive, (newValue, oldValue) => {

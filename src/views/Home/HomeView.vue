@@ -17,6 +17,11 @@
                 prepend-icon="mdi-bank"
                 title="学院管理"
                 value="departmentManagement" />
+            <v-list-item
+                v-if="token.isSuperAdmin"
+                prepend-icon="mdi-school"
+                title="专业管理"
+                value="majorManagement" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -69,6 +74,7 @@
         userCenter: "个人中心",
         placeManagement: "场地管理",
         departmentManagement: "学院管理",
+        majorManagement: "专业管理",
     }
 
     let selected = ref(<string[]>[route.name])

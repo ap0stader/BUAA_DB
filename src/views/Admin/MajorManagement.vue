@@ -1,10 +1,9 @@
 <template>
     <v-container fluid class="pa-6">
-        <p class="text-h4 mt-6 mb-4">学院管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理学院</p>
+        <p class="text-h4 mt-6 mb-4">专业管理</p>
+        <p class="text-subtitle-2 mb-4">查看、查看管理专业</p>
 
-        <v-data-table :headers="headers" :items="env.department" disable-sort sticky items-per-page="25">
-        </v-data-table>
+        <v-data-table :headers="headers" :items="env.major" disable-sort sticky items-per-page="25"> </v-data-table>
     </v-container>
 
     <v-fab
@@ -13,7 +12,7 @@
         location="top end"
         size="x-large"
         position="sticky"
-        text="添加学院"
+        text="添加专业"
         extended
         app
         @click="openAddDialog"
@@ -23,23 +22,34 @@
         <v-card>
             <v-toolbar>
                 <v-btn icon="mdi-close" @click="addDialogActive = false" />
-                <v-toolbar-title>添加学院</v-toolbar-title>
+                <v-toolbar-title>添加专业</v-toolbar-title>
             </v-toolbar>
 
             <v-text-field
-                v-model="addDialogDepartmentId"
-                :rules="[(v) => !!v || '请输入新学院系号', (v) => parseInt(v) > 0 || '学院系号必须为非负整数']"
-                label="新学院系号"
+                v-model="addDialogMajorId"
+                :rules="[(v) => !!v || '请输入新专业专业号', (v) => parseInt(v) > 0 || '专业专业号必须为非负整数']"
+                label="新专业专业号"
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
                 class="ma-2" />
 
             <v-text-field
-                v-model="addDialogDepartmentName"
-                :rules="[(v) => !!v || '请输入新学院名称']"
-                label="新学院名称"
+                v-model="addDialogMajorName"
+                :rules="[(v) => !!v || '请输入新专业名称']"
+                label="新专业名称"
                 variant="outlined"
+                class="ma-2" />
+
+            <v-select
+                v-model="addDialogDepartmentId"
+                :rules="[(v) => !!v || '请选择新专业所属学院']"
+                :items="env.department"
+                item-title="department_name"
+                item-value="department_id"
+                label="新专业所属学院"
+                variant="outlined"
+                clearable
                 class="ma-2" />
 
             <template v-slot:actions>
@@ -48,9 +58,10 @@
                     color="primary"
                     :loading="addDialogSubmitLoading"
                     :disabled="
-                        addDialogDepartmentId == '' ||
-                        parseInt(addDialogDepartmentId) <= 0 ||
-                        addDialogDepartmentName == ''
+                        addDialogMajorId == '' ||
+                        parseInt(addDialogMajorId) <= 0 ||
+                        addDialogDepartmentId == undefined ||
+                        addDialogMajorName == ''
                     "
                     @click="onAddDialogSubmitClick">
                     添加
@@ -60,7 +71,7 @@
     </v-dialog>
 </template>
 
-<script lang="ts" setup name="DepartmentManagement">
+<script lang="ts" setup name="MajorManagement">
     import { useEnv } from "@/stores/env"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
@@ -68,29 +79,32 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "ID", key: "department_id" },
-        { title: "学院名称", key: "department_name" },
+        { title: "ID", key: "major_id" },
+        { title: "专业名称", key: "major_name" },
     ]
 
     const env = useEnv()
 
     onMounted(() => {
-        envManager.updateDepartment()
+        envManager.updateMajor()
     })
 
     // ===== Add Dialog =====
     let addDialogActive = ref(false)
-    let addDialogDepartmentId = ref("")
-    let addDialogDepartmentName = ref("")
+    let addDialogMajorId = ref("")
+    let addDialogMajorName = ref("")
+    let addDialogDepartmentId = ref()
 
     function openAddDialog() {
+        addDialogMajorId.value = ""
+        addDialogMajorName.value = ""
+        addDialogDepartmentId.value = undefined
         addDialogActive.value = true
-        addDialogDepartmentName.value = ""
     }
 
     watch(addDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
-            envManager.updateDepartment()
+            envManager.updateMajor()
         }
     })
 
@@ -101,13 +115,14 @@
         callapi.post(
             "json",
             "Admin",
-            "addDepartment",
+            "addMajor",
             {
-                department_id: parseInt(addDialogDepartmentId.value),
-                department_name: addDialogDepartmentName.value,
+                major_id: parseInt(addDialogMajorId.value),
+                major_name: addDialogMajorName.value,
+                major_department_id: addDialogDepartmentId.value,
             },
             (data) => {
-                emitter.emit("success_snackbar", "学院添加成功")
+                emitter.emit("success_snackbar", "专业添加成功")
                 addDialogSubmitLoading.value = false
                 addDialogActive.value = false
             },
