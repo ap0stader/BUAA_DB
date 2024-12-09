@@ -67,7 +67,7 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "ID", key: "department_id" },
+        { title: "院系号", key: "department_id" },
         { title: "学院名称", key: "department_name" },
     ]
 

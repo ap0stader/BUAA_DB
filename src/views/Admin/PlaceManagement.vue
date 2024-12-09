@@ -137,7 +137,7 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "ID", key: "place_id" },
+        { title: "场地编号", key: "place_id" },
         { title: "场地名称", key: "place_name" },
         { title: "操作", key: "actions", sortable: false },
     ]

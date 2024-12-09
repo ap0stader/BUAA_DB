@@ -6,6 +6,7 @@ import UserCenter from "@/views/Home/UserCenter.vue"
 import PlaceManagement from "@/views/Admin/PlaceManagement.vue"
 import DepartmentManagment from "@/views/Admin/DepartmentManagement.vue"
 import MajorManagement from "@/views/Admin/MajorManagement.vue"
+import ClassManagement from "@/views/Admin/ClassManagement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -52,6 +53,11 @@ const router = createRouter({
                     name: "majorManagement",
                     path: "majorManagement",
                     component: MajorManagement,
+                },
+                {
+                    name: "classManagement",
+                    path: "classManagement",
+                    component: ClassManagement,
                 },
             ],
         },

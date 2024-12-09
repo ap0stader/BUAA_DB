@@ -3,7 +3,11 @@
         <p class="text-h4 mt-6 mb-4">专业管理</p>
         <p class="text-subtitle-2 mb-4">查看、查看管理专业</p>
 
-        <v-data-table :headers="headers" :items="env.major" disable-sort sticky items-per-page="25"> </v-data-table>
+        <v-data-table :headers="headers" :items="env.major" disable-sort sticky items-per-page="25">
+            <template v-slot:item.major_department_name="{ item }">
+                {{ env.getDepartmentInfo(item.major_department_id)?.department_name }}
+            </template>
+        </v-data-table>
     </v-container>
 
     <v-fab
@@ -79,8 +83,9 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "ID", key: "major_id" },
+        { title: "专业号", key: "major_id" },
         { title: "专业名称", key: "major_name" },
+        { title: "所属学院", key: "major_department_name" },
     ]
 
     const env = useEnv()
