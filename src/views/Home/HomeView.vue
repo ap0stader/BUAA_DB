@@ -2,7 +2,7 @@
     <v-navigation-drawer expand-on-hover rail permanent>
         <v-list>
             <v-list-item
-                prepend-avatar="favicon.ico"
+                prepend-avatar="/favicon.png"
                 title="选课系统" />
         </v-list>
 

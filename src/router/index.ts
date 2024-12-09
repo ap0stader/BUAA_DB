@@ -27,6 +27,10 @@ const router = createRouter({
             component: Home,
             children: [
                 {
+                    path: "",
+                    redirect: "/home/userCenter",
+                },
+                {
                     name: "userCenter",
                     path: "userCenter",
                     component: UserCenter,
