@@ -26,7 +26,7 @@ export const useEnv = defineStore("env", {
     state: () => {
         return {
             env: {} as envInfo,
-            places: [] as placeInfo[],
+            place: [] as placeInfo[],
             department: [] as departmentFullInfo[],
             major: [] as majorInfo[],
             class: [] as classInfo[],
@@ -39,7 +39,7 @@ export const useEnv = defineStore("env", {
         },
         getplaceInfo() {
             return (place_id: number) => {
-                return this.places.find((place) => place.place_id == place_id)
+                return this.place.find((place) => place.place_id == place_id)
             }
         },
         getDepartmentInfo() {

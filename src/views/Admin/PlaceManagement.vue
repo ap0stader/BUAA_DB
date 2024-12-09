@@ -3,7 +3,7 @@
         <p class="text-h4 mt-6 mb-4">场地管理</p>
         <p class="text-subtitle-2 mb-4">查看、查看管理场地</p>
 
-        <v-data-table :headers="headers" :items="env.places" disable-sort sticky items-per-page="25">
+        <v-data-table :headers="headers" :items="env.place" disable-sort sticky items-per-page="25">
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     variant="tonal"
@@ -89,7 +89,13 @@
 
             <template v-slot:actions>
                 <v-btn @click="modifyialogActive = false">取消</v-btn>
-                <v-btn color="red" :loading="modifyialogSubmitLoading" @click="onModifyialogSubmitClick"> 修改 </v-btn>
+                <v-btn
+                    color="red"
+                    :loading="modifyialogSubmitLoading"
+                    :disabled="modifyialogPlaceName == ''"
+                    @click="onModifyialogSubmitClick">
+                    修改
+                </v-btn>
             </template>
         </v-card>
     </v-dialog>
@@ -110,7 +116,13 @@
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>
-                <v-btn color="primary" :loading="addDialogSubmitLoading" @click="onAddDialogSubmitClick"> 添加 </v-btn>
+                <v-btn
+                    color="primary"
+                    :loading="addDialogSubmitLoading"
+                    :disabled="addDialogPlaceName == ''"
+                    @click="onAddDialogSubmitClick">
+                    添加
+                </v-btn>
             </template>
         </v-card>
     </v-dialog>

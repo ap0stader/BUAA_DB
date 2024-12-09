@@ -13,7 +13,7 @@ const envManager = {
     updatePlace: function () {
         callapi.get("Admin", "queryPlace", null, (data) => {
             const result = <queryPlaceResponse>data
-            useEnv().places = result.places
+            useEnv().place = result.places
         })
     },
     updateDepartment: function () {

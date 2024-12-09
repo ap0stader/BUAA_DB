@@ -4,6 +4,7 @@ import Login from "@/views/Auth/Login.vue"
 import Home from "@/views/Home/HomeView.vue"
 import UserCenter from "@/views/Home/UserCenter.vue"
 import PlaceManagement from "@/views/Admin/PlaceManagement.vue"
+import DepartmentManagment from "@/views/Admin/DepartmentManagment.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -40,6 +41,11 @@ const router = createRouter({
                     name: "placeManagement",
                     path: "placeManagement",
                     component: PlaceManagement,
+                },
+                {
+                    name: "departmentManagement",
+                    path: "departmentManagement",
+                    component: DepartmentManagment,
                 }
             ],
         },
