@@ -3,6 +3,7 @@ import Auth from "@/views/Auth/AuthView.vue"
 import Login from "@/views/Auth/Login.vue"
 import Home from "@/views/Home/HomeView.vue"
 import UserCenter from "@/views/Home/UserCenter.vue"
+import PlaceManagement from "@/views/Admin/PlaceManagement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -35,6 +36,11 @@ const router = createRouter({
                     path: "userCenter",
                     component: UserCenter,
                 },
+                {
+                    name: "placeManagement",
+                    path: "placeManagement",
+                    component: PlaceManagement,
+                }
             ],
         },
     ],
