@@ -28,7 +28,11 @@
         </template> -->
         <v-app-bar-title>{{ titleDict[<string>$route.name] }}</v-app-bar-title>
         <v-spacer />
-        <p>欢迎你，{{  token.getName }}</p>
+        <p>当前选课阶段：{{ env.getStepString }}</p>
+        <span class="mx-3"></span>
+        <p>当前学期：{{ env.getSemesterInfo(env.env.now_semester_id)?.semester_name }}</p>
+        <span class="mx-3"></span>
+        <p>欢迎，{{ token.getName }}</p>
         <v-btn icon @click="onLogoutClick">
             <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
@@ -40,11 +44,14 @@
 </template>
 
 <script lang="ts" setup name="HomeView">
+    import { useEnv } from "@/stores/env";
     import { useToken } from "@/stores/token"
     import { ref, watch } from "vue"
     import { RouterView, useRoute, useRouter } from "vue-router"
+
     const route = useRoute()
     const router = useRouter()
+    const env = useEnv()
     const token = useToken()
 
     const titleDict: {

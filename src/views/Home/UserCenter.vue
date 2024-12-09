@@ -65,8 +65,8 @@
     import { useToken } from "@/stores/token"
     import { ref } from "vue"
 
-    const token = useToken()
     const env = useEnv()
+    const token = useToken()
 
     let changePasswordButton = ref()
 </script>

@@ -9,7 +9,7 @@ import type {
     querySemesterResponse,
 } from "@/types"
 
-const env = {
+const envManager = {
     updatePlace: function () {
         callapi.get("Admin", "queryPlace", null, (data) => {
             const result = <queryPlaceResponse>data
@@ -57,4 +57,4 @@ const env = {
     },
 }
 
-export { env }
+export { envManager }

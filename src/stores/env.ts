@@ -10,6 +10,18 @@ import type {
     semesterInfo,
 } from "@/types"
 
+const stepString: {
+    [key: number]: string
+} = {
+    0: "预选未开始",
+    1: "预选时间段",
+    2: "正在抽签",
+    3: "抽签结束",
+    4: "退改时间段",
+    5: "退改已结束",
+    6: "本学期已结束",
+}
+
 export const useEnv = defineStore("env", {
     state: () => {
         return {
@@ -22,6 +34,9 @@ export const useEnv = defineStore("env", {
         }
     },
     getters: {
+        getStepString(): string {
+            return stepString[this.env.now_step]
+        },
         getplaceInfo() {
             return (place_id: number) => {
                 return this.places.find((place) => place.place_id == place_id)
