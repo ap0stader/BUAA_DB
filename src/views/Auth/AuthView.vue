@@ -45,6 +45,7 @@
                     router.replace("/home")
                 },
                 (errCode) => {
+                    token.$reset()
                     router.replace({ name: "login" })
                 }
             )

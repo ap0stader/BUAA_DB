@@ -18,7 +18,6 @@ export const useToken = defineStore("token", {
     },
     actions: {
         setToken(token: string, type: number, id: string) {
-            this.$reset()
             this.token = token
             this.id = id
             this.type = type
@@ -87,7 +86,7 @@ export const useToken = defineStore("token", {
                 return ""
             }
         },
-        getTypeString(): string { 
+        getTypeString(): string {
             if (this.isStudent) {
                 return "学生"
             } else if (this.isTeacher) {
@@ -110,7 +109,7 @@ export const useToken = defineStore("token", {
             } else {
                 return -1
             }
-        }
+        },
     },
     persist: true,
 })
