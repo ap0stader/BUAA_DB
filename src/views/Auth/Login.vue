@@ -60,6 +60,7 @@
             submitLoading.value = false
         } else {
             callapi.post(
+                "json",
                 "Auth",
                 "login",
                 {

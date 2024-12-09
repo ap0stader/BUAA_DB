@@ -26,7 +26,7 @@
                 <v-icon size="default"> mdi-arrow-left </v-icon>
             </v-btn>
         </template> -->
-        <v-app-bar-title>{{ title_dict[<string>$route.name] }}</v-app-bar-title>
+        <v-app-bar-title>{{ titleDict[<string>$route.name] }}</v-app-bar-title>
         <v-spacer />
         <p>欢迎你，{{  token.getName }}</p>
         <v-btn icon @click="onLogoutClick">
@@ -47,7 +47,7 @@
     const router = useRouter()
     const token = useToken()
 
-    const title_dict: {
+    const titleDict: {
         [key: string]: string
     } = {
         userCenter: "个人中心",

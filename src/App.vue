@@ -10,7 +10,7 @@
     import { RouterView } from "vue-router"
     import ErrorSnackbars from "./components/ErrorSnackbars.vue"
     import SuccessSnackbars from "./components/SuccessSnackbars.vue"
-    import { env } from "./utils/env"
+    import { env } from "./utils/envManager"
     // 获取当前环境
     env.updateAll()
 </script>

@@ -86,6 +86,30 @@ export const useToken = defineStore("token", {
             } else {
                 return ""
             }
+        },
+        getTypeString(): string { 
+            if (this.isStudent) {
+                return "学生"
+            } else if (this.isTeacher) {
+                return "教师"
+            } else if (this.isFaculty) {
+                return "学院教务"
+            } else if (this.isSuperAdmin) {
+                return "学校管理员"
+            } else {
+                return ""
+            }
+        },
+        getDepartmentId(): number {
+            if (this.isStudent) {
+                return this.studentInfo.student_department_id
+            } else if (this.isTeacher) {
+                return this.teacherInfo.teacher_department_id
+            } else if (this.isFaculty) {
+                return this.facultyInfo.faculty_department_id
+            } else {
+                return -1
+            }
         }
     },
     persist: true,
