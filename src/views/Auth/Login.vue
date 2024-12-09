@@ -55,6 +55,7 @@
 
     function onLoginSubmit() {
         submit_loading.value = true
+        let usernameStore = username.value
         if (username.value == "" || password.value == "") {
             submit_loading.value = false
         } else {
@@ -67,7 +68,7 @@
                 },
                 (data) => {
                     const result = <LoginResponse>data
-                    token.setToken(result.token, result.type)
+                    token.setToken(result.token, result.type, usernameStore)
                     emitter.emit("success_snackbar", "登录成功")
                     router.replace("/home")
                 },

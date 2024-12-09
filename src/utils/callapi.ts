@@ -1,7 +1,7 @@
 import axios from "axios"
 import emitter from "./emitter"
 
-const baseURL = "/api/v1"
+const baseURL = "https://ecs.1230123.xyz:20080/api/v1"
 
 interface errDescription {
     [key: number]: string

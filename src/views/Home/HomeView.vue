@@ -28,7 +28,7 @@
         </template> -->
         <v-app-bar-title>{{ title_dict[<string>$route.name] }}</v-app-bar-title>
         <v-spacer />
-        <p>{{ token.name }}</p>
+        <p>欢迎你，{{  token.getName }}</p>
         <v-btn icon @click="onLogoutClick">
             <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
@@ -64,7 +64,7 @@
     }
 
     function onLogoutClick() {
-        token.clear()
+        token.$reset()
         router.replace("/")
     }
 </script>
