@@ -3,7 +3,7 @@
         <p class="text-h4 mt-6 mb-4">场地管理</p>
         <p class="text-subtitle-2 mb-4">查看、查看管理场地</p>
 
-        <v-data-table :headers="headers" :items="env.places" disable-sort sticky items-per-page="50">
+        <v-data-table :headers="headers" :items="env.places" disable-sort sticky items-per-page="25">
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     variant="tonal"

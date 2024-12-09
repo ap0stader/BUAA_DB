@@ -1,23 +1,27 @@
 <template>
     <v-navigation-drawer expand-on-hover rail permanent>
         <v-list>
-            <v-list-item
-                prepend-avatar="/favicon.png"
-                title="选课系统" />
+            <v-list-item prepend-avatar="/favicon.png" title="选课系统" />
         </v-list>
 
         <v-divider />
 
         <v-list density="compact" v-model:selected="selected" mandatory nav>
+            <v-list-item
+                v-if="token.isSuperAdmin"
+                prepend-icon="mdi-home-city"
+                title="场地管理"
+                value="placeManagement" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
 
     <v-app-bar density="compact" elevation="1" location="top">
         <!-- 返回按钮 -->
-        <!-- <template #prepend>
+        <template #prepend>
+            <!-- 添加需要返回键 -->
             <v-btn
-                v-if="$route.name == 'groupDetail' || $route.name == 'tagDetail'"
+                v-if="typeof $route.name == 'string' && navigateBackPagenName.includes($route.name)"
                 variant="text"
                 icon
                 density="comfortable"
@@ -25,7 +29,7 @@
                 @click="navigateBack">
                 <v-icon size="default"> mdi-arrow-left </v-icon>
             </v-btn>
-        </template> -->
+        </template>
         <v-app-bar-title>{{ titleDict[<string>$route.name] }}</v-app-bar-title>
         <v-spacer />
         <p>当前选课阶段：{{ env.getStepString }}</p>
@@ -44,7 +48,7 @@
 </template>
 
 <script lang="ts" setup name="HomeView">
-    import { useEnv } from "@/stores/env";
+    import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
     import { ref, watch } from "vue"
     import { RouterView, useRoute, useRouter } from "vue-router"
@@ -58,6 +62,7 @@
         [key: string]: string
     } = {
         userCenter: "个人中心",
+        placeManagement: "场地管理",
     }
 
     let selected = ref(<string[]>[route.name])
@@ -65,6 +70,8 @@
     watch(selected, (newValue) => {
         router.push({ name: newValue[0] })
     })
+
+    const navigateBackPagenName: string[] = []
 
     function navigateBack() {
         router.back()
