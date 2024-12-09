@@ -3,7 +3,7 @@
         <p class="text-h4 mt-6 mb-4">场地管理</p>
         <p class="text-subtitle-2 mb-4">查看、查看管理场地</p>
 
-        <v-data-table :headers="headers" :items="env.places"  disable-sort sticky>
+        <v-data-table :headers="headers" :items="env.places" disable-sort sticky items-per-page="50">
             <template v-slot:item.actions="{ item }">
                 <v-btn
                     v-if="item.place_is_enable"
@@ -29,6 +29,18 @@
         </v-data-table>
     </v-container>
 
+    <v-fab
+        color="primary"
+        prepend-icon="mdi-plus"
+        location="top end"
+        size="x-large"
+        position="sticky"
+        text="添加场地"
+        extended
+        app
+        @click="openAddDialog"
+        class="mt-4" />
+
     <v-dialog max-width="500px" v-model="enableDialogActive">
         <v-card>
             <v-toolbar>
@@ -47,6 +59,27 @@
                     @click="onEnableDialogSubmitClick">
                     {{ enableDialogItem.place_is_enable ? "停用" : "启用" }}
                 </v-btn>
+            </template>
+        </v-card>
+    </v-dialog>
+
+    <v-dialog max-width="500px" v-model="addDialogActive">
+        <v-card>
+            <v-toolbar>
+                <v-btn icon="mdi-close" @click="addDialogActive = false" />
+                <v-toolbar-title>添加场地</v-toolbar-title>
+            </v-toolbar>
+
+            <v-text-field
+                v-model="addDialogPlaceName"
+                :rules="[(v) => !!v || '请输入新场地名称']"
+                label="新场地名称"
+                variant="outlined"
+                class="ma-2" />
+
+            <template v-slot:actions>
+                <v-btn @click="addDialogActive = false">取消</v-btn>
+                <v-btn color="primary" :loading="addDialogSubmitLoading" @click="onAddDialogSubmitClick"> 添加 </v-btn>
             </template>
         </v-card>
     </v-dialog>
@@ -106,6 +139,42 @@
             },
             (errCode) => {
                 enableDialogSubmitLoading.value = false
+            }
+        )
+    }
+
+    let addDialogActive = ref(false)
+    let addDialogPlaceName = ref("")
+
+    function openAddDialog() {
+        addDialogActive.value = true
+        addDialogPlaceName.value = ""
+    }
+
+    watch(addDialogActive, (newValue, oldValue) => {
+        if (oldValue && !newValue) {
+            envManager.updatePlace()
+        }
+    })
+
+    let addDialogSubmitLoading = ref(false)
+
+    function onAddDialogSubmitClick() {
+        addDialogSubmitLoading.value = true
+        callapi.post(
+            "json",
+            "Admin",
+            "addPlace",
+            {
+                place_name: addDialogPlaceName.value,
+            },
+            (data) => {
+                emitter.emit("success_snackbar", "场地添加成功")
+                addDialogSubmitLoading.value = false
+                addDialogActive.value = false
+            },
+            (errCode) => {
+                addDialogSubmitLoading.value = false
             }
         )
     }
