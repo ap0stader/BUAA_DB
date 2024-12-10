@@ -61,7 +61,7 @@
                 persistent-placeholder
                 label="新的班主任工号"
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
@@ -86,7 +86,7 @@
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <v-select
                 v-model="addDialogMajorId"
@@ -101,7 +101,7 @@
                 label="新班级所属专业"
                 variant="outlined"
                 clearable
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>

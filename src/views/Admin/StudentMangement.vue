@@ -17,7 +17,6 @@
             <template v-slot:item.student_phone="{ item }">
                 {{ item.student_phone ? item.student_phone : "无" }}
             </template>
-
             <template v-slot:item.student_major_name="{ item }">
                 {{ env.getMajorInfo(item.student_major_id)?.major_name }}
             </template>
@@ -123,7 +122,7 @@
                 label="请选择填写后的批量添加学生模板文件"
                 variant="outlined"
                 clearable
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <v-list v-if="addBatchDialogFailedInfo.length > 0" lines="two" density="compact" slim class="ma-2 mt-0">
                 <v-list-subheader color="red">以下学生的数据存在问题：</v-list-subheader>
@@ -161,18 +160,18 @@
                 :rules="[(v) => !!v || '请输入修改后的学生姓名']"
                 label="修改后的学生姓名"
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
             <v-text-field
                 v-model="modifyDialogStudentGender"
-                :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男，或女']"
+                :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男或女']"
                 label="修改后的学生性别"
                 variant="outlined"
-                class="mx-2" />
+                class="mx-2 mb-1" />
             <v-text-field
                 v-model="modifyDialogStudentPhone"
                 label="修改后的学生联系方式"
                 variant="outlined"
-                class="mx-2" />
+                class="mx-2 mb-1" />
             <v-select
                 v-model="modifyDialogStudentClassId"
                 :rules="[(v) => !!v || '请选择修改后的学生所属班级']"
@@ -182,7 +181,7 @@
                 label="修改后的学生所属班级"
                 variant="outlined"
                 clearable
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
@@ -209,20 +208,20 @@
                 :rules="[(v) => !!v || '请输入新学生学号']"
                 label="新学生学号"
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
             <v-text-field
                 v-model="addDialogStudentName"
                 :rules="[(v) => !!v || '请输入新学生姓名']"
                 label="新学生姓名"
                 variant="outlined"
-                class="mx-2" />
+                class="mx-2 mb-1" />
             <v-text-field
                 v-model="addDialogStudentGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男，或女']"
                 label="新学生性别"
                 variant="outlined"
-                class="mx-2" />
-            <v-text-field v-model="addDialogStudentPhone" label="新学生联系方式" variant="outlined" class="mx-2" />
+                class="mx-2 mb-1" />
+            <v-text-field v-model="addDialogStudentPhone" label="新学生联系方式" variant="outlined" class="mx-2 mb-1" />
             <v-select
                 v-model="addDialogStudentClassId"
                 :rules="[(v) => !!v || '请选择新学生所属班级']"
@@ -232,7 +231,7 @@
                 label="新学生所属班级"
                 variant="outlined"
                 clearable
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>
@@ -256,7 +255,6 @@
     import type { addStudentBatchFailedInfo, addStudentBatchResponse, queryStudentResponse, studentInfo } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
-    import { envManager } from "@/utils/envManager"
     import { onMounted, ref, watch } from "vue"
 
     const headers = [

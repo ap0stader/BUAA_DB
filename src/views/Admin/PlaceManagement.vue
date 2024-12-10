@@ -80,7 +80,7 @@
                 :rules="[(v) => !!v || '请输入新的场地名称']"
                 label="新场地名称"
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
@@ -107,7 +107,7 @@
                 :rules="[(v) => !!v || '请输入新场地名称']"
                 label="新场地名称"
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>

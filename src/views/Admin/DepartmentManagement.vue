@@ -32,14 +32,14 @@
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <v-text-field
                 v-model="addDialogDepartmentName"
                 :rules="[(v) => !!v || '请输入新学院名称']"
                 label="新学院名称"
                 variant="outlined"
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>

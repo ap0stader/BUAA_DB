@@ -36,14 +36,14 @@
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
-                class="ma-2 mb-0" />
+                class="ma-2 mb-1" />
 
             <v-text-field
                 v-model="addDialogMajorName"
                 :rules="[(v) => !!v || '请输入新专业名称']"
                 label="新专业名称"
                 variant="outlined"
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <v-select
                 v-model="addDialogDepartmentId"
@@ -54,7 +54,7 @@
                 label="新专业所属学院"
                 variant="outlined"
                 clearable
-                class="mx-2" />
+                class="mx-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>
