@@ -18,6 +18,8 @@ import MyCourse from "@/views/Teacher/MyCourse.vue"
 import TeacherCurriculum from "@/views/Teacher/TeacherCurriculum.vue"
 import MyCurriculum from "@/views/Teacher/MyCurriculum.vue"
 import CourseManagement from "@/views/Admin/CourseManagement.vue"
+import CurriculumChoice from "@/views/Teacher/CurriculumChoice.vue"
+import CurriculumAttendance from "@/views/Teacher/CurriculumAttendance.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -124,6 +126,18 @@ const router = createRouter({
                             name: "myCurriculum",
                             path: "",
                             component: MyCurriculum,
+                        },
+                        {
+                            name: "curriculumChoice",
+                            path: "choice/:curriculum_id",
+                            component: CurriculumChoice,
+                            props: true,
+                        },
+                        {
+                            name: "curriculumAttendance",
+                            path: "attendance/:curriculum_id",
+                            component: CurriculumAttendance,
+                            props: true,
                         },
                     ],
                 },

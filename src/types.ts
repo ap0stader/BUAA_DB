@@ -161,7 +161,7 @@ export interface courseInfo {
     course_status: number
 }
 
-export interface curriculumInfo {
+export interface curriculumPublicInfo {
     curriculum_semester_id: number
     curriculum_semester_name: string
     curriculum_course_id: string
@@ -182,6 +182,20 @@ export interface queryCoursesResponse {
     courses: courseInfo[]
 }
 
+export interface curriculumInfo extends curriculumPublicInfo {
+    curriculum_id: number
+    course_credit: number
+    course_hours: number
+    curriculum_teacher_department_id: number
+    curriculum_capacity: number
+    curriculum_info: number
+    curriculum_utilization_resources: number[]
+}
+
+export interface queryCurriculumResponse {
+    curriculums: curriculumInfo[]
+}
+
 // ===== Audit =====
 export interface loginAuditInfo {
     login_audit_id: number
@@ -195,7 +209,7 @@ export interface queryLoginAuditResponse {
     audits: loginAuditInfo[]
 }
 
-export interface selectionAuditInfo extends curriculumInfo {
+export interface selectionAuditInfo extends curriculumPublicInfo {
     selection_audit_id: number
     selection_audit_student_id: string
     selection_audit_operator_id: string
