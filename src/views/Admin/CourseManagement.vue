@@ -54,13 +54,13 @@
         </v-data-table>
     </v-container>
 
-    <v-dialog max-width="500px" v-model="accpetDialogActive">
+    <v-dialog max-width="500px" v-model="acceptDialogActive">
         <v-card>
             <v-toolbar>
-                <v-btn icon="mdi-close" @click="accpetDialogActive = false" />
+                <v-btn icon="mdi-close" @click="acceptDialogActive = false" />
                 <v-toolbar-title>通过审核</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 课程临时编号：{{ accpetDialogItem.course_id }} </v-card-item>
+            <v-card-item> 课程临时编号：{{ acceptDialogItem.course_id }} </v-card-item>
 
             <v-text-field
                 v-model="acceptDialogCourseId"
@@ -70,10 +70,10 @@
                 class="ma-2 mb-1" />
 
             <template v-slot:actions>
-                <v-btn @click="accpetDialogActive = false">取消</v-btn>
+                <v-btn @click="acceptDialogActive = false">取消</v-btn>
                 <v-btn
                     color="green"
-                    :loading="accpetDialogSubmitLoading"
+                    :loading="acceptDialogSubmitLoading"
                     :disabled="acceptDialogCourseId == ''"
                     @click="onAcceptDialogSubmitClick">
                     通过
@@ -126,36 +126,40 @@
     }
 
     // ===== Accept Dialog =====
-    let accpetDialogActive = ref(false)
-    let accpetDialogItem = ref({} as courseInfo)
+    let acceptDialogActive = ref(false)
+    let acceptDialogItem = ref({} as courseInfo)
     let acceptDialogCourseId = ref("")
 
     function openAcceptDialog(item: courseInfo) {
-        accpetDialogItem.value = item
-        accpetDialogActive.value = true
+        acceptDialogItem.value = item
+        acceptDialogActive.value = true
     }
 
-    watch(accpetDialogActive, (newValue, oldValue) => {
+    watch(acceptDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
             queryCourses()
         }
     })
 
-    let accpetDialogSubmitLoading = ref(false)
+    let acceptDialogSubmitLoading = ref(false)
 
     function onAcceptDialogSubmitClick() {
-        accpetDialogSubmitLoading.value = true
+        acceptDialogSubmitLoading.value = true
         callapi.post(
             "json",
             "Course",
             "acceptCourse",
             {
-                temp_course_id: accpetDialogItem.value.course_id,
+                temp_course_id: acceptDialogItem.value.course_id,
                 accept_course_id: acceptDialogCourseId.value,
             },
             () => {
                 emitter.emit("success_snackbar", "通过审核成功")
-                accpetDialogActive.value = false
+                acceptDialogSubmitLoading.value = false
+                acceptDialogActive.value = false
+            },
+            () => {
+                acceptDialogSubmitLoading.value = false
             }
         )
     }

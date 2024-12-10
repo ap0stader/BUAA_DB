@@ -15,11 +15,12 @@ import EnvManagement from "@/views/Admin/EnvManagement.vue"
 import AuditCenter from "@/views/Admin/AuditCenter.vue"
 import TeacherCourse from "@/views/Teacher/TeacherCourse.vue"
 import MyCourse from "@/views/Teacher/MyCourse.vue"
+import CourseManagement from "@/views/Admin/CourseManagement.vue"
 import TeacherCurriculum from "@/views/Teacher/TeacherCurriculum.vue"
 import MyCurriculum from "@/views/Teacher/MyCurriculum.vue"
-import CourseManagement from "@/views/Admin/CourseManagement.vue"
 import CurriculumChoice from "@/views/Teacher/CurriculumChoice.vue"
 import CurriculumAttendance from "@/views/Teacher/CurriculumAttendance.vue"
+import AddCurriculum from "@/views/Teacher/AddCurriculum.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -140,6 +141,11 @@ const router = createRouter({
                             props: true,
                         },
                     ],
+                },
+                {
+                    name: "addCurriculum",
+                    path: "addCurriculum",
+                    component: AddCurriculum,
                 },
             ],
         },

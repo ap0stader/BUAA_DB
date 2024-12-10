@@ -26,7 +26,7 @@
                     }}
                 </p>
                 <p class="mb-3">教学班容量： {{ curriculum.curriculum_capacity }}</p>
-                <p class="mb-3">额外说明： {{ curriculum.curriculum_info ? curriculum.curriculum_info : "无" }}</p>
+                <p class="mb-3">教学班说明： {{ curriculum.curriculum_info ? curriculum.curriculum_info : "无" }}</p>
                 <p>
                     场地：
                     {{

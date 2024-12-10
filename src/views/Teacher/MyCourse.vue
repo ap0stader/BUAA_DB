@@ -247,6 +247,7 @@
     let addDialogSubmitLoading = ref(false)
 
     function onAddDialogSubmitClick() {
+        addDialogSubmitLoading.value = true
         // 有之前的课程的，先取消开设
         if (addDialogAsModify.value) {
             callapi.post("json", "Course", "disableCourse", {

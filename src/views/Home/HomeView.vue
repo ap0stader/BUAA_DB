@@ -54,6 +54,11 @@
                 prepend-icon="mdi-human-male-board-poll"
                 title="查看教学班"
                 value="myCurriculum" />
+            <v-list-item
+                v-if="token.isTeacher && env.env.now_step === 0"
+                prepend-icon="mdi-domain-plus"
+                title="开设教学班"
+                value="addCurriculum" />
             <!-- Insert Befor Here -->
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-cogs" title="系统设置" value="envManagement" />
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-list-box" title="审计信息" value="auditCenter" />
@@ -118,6 +123,7 @@
         myCourse: "申报课程",
         courseManagement: "课程管理",
         myCurriculum: "查看教学班",
+        addCurriculum: "开设教学班",
         // Insert Befor Here
         envManagement: "系统设置",
         auditCenter: "审计信息",
