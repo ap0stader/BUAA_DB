@@ -30,7 +30,7 @@
                     修改
                 </v-btn>
                 <v-btn
-                    v-if="item.login_is_enable"
+                    v-if="item.login_is_enable && token.isSuperAdmin"
                     variant="tonal"
                     density="comfortable"
                     color="red"
@@ -40,7 +40,7 @@
                     暂停登录
                 </v-btn>
                 <v-btn
-                    v-else
+                    v-else-if="token.isSuperAdmin"
                     variant="tonal"
                     density="comfortable"
                     color="green"
@@ -175,7 +175,11 @@
             <v-select
                 v-model="modifyDialogStudentClassId"
                 :rules="[(v) => !!v || '请选择修改后的学生所属班级']"
-                :items="env.class"
+                :items="
+                    token.isFaculty
+                        ? env.class.filter((item) => item.class_department_id == token.getDepartmentId)
+                        : env.class
+                "
                 item-title="class_id"
                 item-value="class_id"
                 label="修改后的学生所属班级"

@@ -36,9 +36,9 @@
                     block
                     variant="tonal"
                     @click="openAddDialogAsModify(course)"
-                    >查看、修改改课程信息</v-btn
+                    >查看或修改课程信息</v-btn
                 >
-                <v-btn v-if="course.course_status === 2" color="red" block variant="tonal">课程停止开设</v-btn>
+                <v-btn v-if="course.course_status === 2" color="red" block variant="tonal">课程已停开</v-btn>
             </v-card-actions>
         </v-card>
     </v-container>

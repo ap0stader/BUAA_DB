@@ -27,7 +27,7 @@
                     修改
                 </v-btn>
                 <v-btn
-                    v-if="item.login_is_enable"
+                    v-if="item.login_is_enable && token.isSuperAdmin"
                     variant="tonal"
                     density="comfortable"
                     color="red"
@@ -37,7 +37,7 @@
                     暂停登录
                 </v-btn>
                 <v-btn
-                    v-else
+                    v-else-if="token.isSuperAdmin"
                     variant="tonal"
                     density="comfortable"
                     color="green"
@@ -125,6 +125,7 @@
                 label="修改后的教师所属学院"
                 variant="outlined"
                 clearable
+                :disabled="!token.isSuperAdmin"
                 class="mx-2 mb-1" />
 
             <template v-slot:actions>
@@ -183,7 +184,9 @@
                     color="primary"
                     :loading="addDialogSubmitLoading"
                     :disabled="
-                        addDialogTeacherId == '' || addDialogTeacherName == '' || addDialogTeacherDepartmentId == undefined
+                        addDialogTeacherId == '' ||
+                        addDialogTeacherName == '' ||
+                        addDialogTeacherDepartmentId == undefined
                     "
                     @click="onAddDialogSubmitClick">
                     添加
