@@ -23,14 +23,9 @@
                 {{ item.class_headmaster_name ? item.class_headmaster_name : "无" }}
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-btn
-                    variant="tonal"
-                    icon
-                    density="comfortable"
-                    color="blue"
-                    class="me-1"
-                    @click="openModifyDialog(item)">
-                    <v-icon size="default"> mdi-account-edit </v-icon>
+                <v-btn variant="tonal" density="comfortable" color="blue" class="me-1" @click="openModifyDialog(item)">
+                    <v-icon size="default"> mdi-pencil </v-icon>
+                    修改
                 </v-btn>
             </template>
         </v-data-table>
@@ -66,7 +61,7 @@
                 persistent-placeholder
                 label="新的班主任工号"
                 variant="outlined"
-                class="ma-2" />
+                class="ma-2 mb-0" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
@@ -91,7 +86,7 @@
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
-                class="ma-2" />
+                class="ma-2 mb-0" />
 
             <v-select
                 v-model="addDialogMajorId"
@@ -106,7 +101,7 @@
                 label="新班级所属专业"
                 variant="outlined"
                 clearable
-                class="ma-2" />
+                class="mx-2" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>

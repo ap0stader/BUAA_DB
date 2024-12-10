@@ -3,14 +3,14 @@
         <v-card>
             <v-toolbar>
                 <v-btn icon="mdi-close" @click="isDialogActive = false" />
-                <v-toolbar-title>修改学号</v-toolbar-title>
+                <v-toolbar-title>修改密码</v-toolbar-title>
             </v-toolbar>
             <v-text-field
                 v-model="oldPassword"
                 :rules="[(v) => !!v || '请输入旧密码']"
                 label="旧密码"
                 variant="outlined"
-                class="ma-2"
+                class="ma-2 mb-0"
                 prepend-inner-icon="mdi-lock"
                 :type="passwordVisible ? 'text' : 'password'"
                 :append-inner-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
@@ -20,7 +20,7 @@
                 :rules="[(v) => !!v || '请输入新密码']"
                 label="新密码"
                 variant="outlined"
-                class="ma-2"
+                class="mx-2"
                 prepend-inner-icon="mdi-lock-outline"
                 :type="passwordVisible ? 'text' : 'password'"
                 :append-inner-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"

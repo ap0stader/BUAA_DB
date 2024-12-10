@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup name="UserCenter">
-    import ChangePassword from "@/components/UserrCenter/ChangePassword.vue"
+    import ChangePassword from "@/components/UserCenter/ChangePassword.vue"
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
     import { ref } from "vue"

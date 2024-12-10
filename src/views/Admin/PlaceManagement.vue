@@ -5,34 +5,29 @@
 
         <v-data-table :headers="headers" :items="env.place" disable-sort sticky items-per-page="25">
             <template v-slot:item.actions="{ item }">
-                <v-btn
-                    variant="tonal"
-                    icon
-                    density="comfortable"
-                    color="blue"
-                    class="me-1"
-                    @click="openModifyDialog(item)">
+                <v-btn variant="tonal" density="comfortable" color="blue" class="me-1" @click="openModifyDialog(item)">
                     <v-icon size="default"> mdi-pencil </v-icon>
+                    修改
                 </v-btn>
                 <v-btn
                     v-if="item.place_is_enable"
                     variant="tonal"
-                    icon
                     density="comfortable"
                     color="red"
                     class="me-1"
                     @click="openEnableDialog(item)">
                     <v-icon size="default"> mdi-close </v-icon>
+                    停用
                 </v-btn>
                 <v-btn
                     v-else
                     variant="tonal"
-                    icon
                     density="comfortable"
                     color="green"
                     class="me-1"
                     @click="openEnableDialog(item)">
                     <v-icon size="default"> mdi-check </v-icon>
+                    启用
                 </v-btn>
             </template>
         </v-data-table>
@@ -85,7 +80,7 @@
                 :rules="[(v) => !!v || '请输入新的场地名称']"
                 label="新场地名称"
                 variant="outlined"
-                class="ma-2" />
+                class="ma-2 mb-0" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
@@ -112,7 +107,7 @@
                 :rules="[(v) => !!v || '请输入新场地名称']"
                 label="新场地名称"
                 variant="outlined"
-                class="ma-2" />
+                class="ma-2 mb-0" />
 
             <template v-slot:actions>
                 <v-btn @click="addDialogActive = false">取消</v-btn>

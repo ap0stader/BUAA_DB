@@ -26,34 +26,29 @@
             </template>
 
             <template v-slot:item.actions="{ item }">
-                <v-btn
-                    variant="tonal"
-                    icon
-                    density="comfortable"
-                    color="blue"
-                    class="me-1"
-                    @click="openModifyDialog(item)">
+                <v-btn variant="tonal" density="comfortable" color="blue" class="me-1" @click="openModifyDialog(item)">
                     <v-icon size="default"> mdi-pencil </v-icon>
+                    修改
                 </v-btn>
                 <v-btn
                     v-if="item.login_is_enable"
                     variant="tonal"
-                    icon
                     density="comfortable"
                     color="red"
                     class="me-1"
                     @click="openEnableDialog(item)">
                     <v-icon size="default"> mdi-close </v-icon>
+                    暂停登录
                 </v-btn>
                 <v-btn
                     v-else
                     variant="tonal"
-                    icon
                     density="comfortable"
                     color="green"
                     class="me-1"
                     @click="openEnableDialog(item)">
                     <v-icon size="default"> mdi-check </v-icon>
+                    启用登录
                 </v-btn>
             </template>
 
