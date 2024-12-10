@@ -94,7 +94,7 @@
                 :items="
                     token.isFaculty
                         ? env.major.filter((item) => item.major_department_id == token.getDepartmentId)
-                        : env.class
+                        : env.major
                 "
                 item-title="major_name"
                 item-value="major_id"

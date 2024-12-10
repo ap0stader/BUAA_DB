@@ -451,7 +451,7 @@
 
     watch(addDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
-            envManager.updatePlace()
+            queryStudent()
         }
     })
 
