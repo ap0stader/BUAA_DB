@@ -1,24 +1,24 @@
 <template>
     <v-container fluid class="pa-6">
-        <p class="text-h4 mt-6 mb-4">教师管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理教师</p>
+        <p class="text-h4 mt-6 mb-4">学院教务管理</p>
+        <p class="text-subtitle-2 mb-4">查看、查看管理学院教务</p>
 
         <v-data-table
             :headers="headers"
-            :items="teachers"
+            :items="faculties"
             :loading="tableLoading"
             disable-sort
             sticky
             items-per-page="50"
             loading-text="加载中">
-            <template v-slot:item.teacher_gender="{ item }">
-                {{ item.teacher_gender ? item.teacher_gender : "无" }}
+            <template v-slot:item.faculty_gender="{ item }">
+                {{ item.faculty_gender ? item.faculty_gender : "无" }}
             </template>
-            <template v-slot:item.teacher_phone="{ item }">
-                {{ item.teacher_phone ? item.teacher_phone : "无" }}
+            <template v-slot:item.faculty_phone="{ item }">
+                {{ item.faculty_phone ? item.faculty_phone : "无" }}
             </template>
-            <template v-slot:item.teacher_department_name="{ item }">
-                {{ env.getDepartmentInfo(item.teacher_department_id)?.department_name }}
+            <template v-slot:item.faculty_department_name="{ item }">
+                {{ env.getDepartmentInfo(item.faculty_department_id)?.department_name }}
             </template>
 
             <template v-slot:item.actions="{ item }">
@@ -62,7 +62,7 @@
         location="top end"
         size="x-large"
         position="sticky"
-        text="添加教师"
+        text="添加学院教务"
         extended
         app
         @click="openAddDialog"
@@ -72,11 +72,13 @@
         <v-card>
             <v-toolbar>
                 <v-btn icon="mdi-close" @click="enableDialogActive = false" />
-                <v-toolbar-title>{{ enableDialogItem.login_is_enable ? "暂停" : "启用" }}教师登录权限</v-toolbar-title>
+                <v-toolbar-title
+                    >{{ enableDialogItem.login_is_enable ? "暂停" : "启用" }}学院教务登录权限</v-toolbar-title
+                >
             </v-toolbar>
             <v-card-item>
-                确定要{{ enableDialogItem.login_is_enable ? "暂停" : "启用" }}教师“{{
-                    enableDialogItem.teacher_name
+                确定要{{ enableDialogItem.login_is_enable ? "暂停" : "启用" }}学院教务“{{
+                    enableDialogItem.faculty_name
                 }}”的登录权限？
             </v-card-item>
 
@@ -96,33 +98,33 @@
         <v-card>
             <v-toolbar>
                 <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
-                <v-toolbar-title>修改教师信息</v-toolbar-title>
+                <v-toolbar-title>修改学院教务信息</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 教师工号：{{ modifyDialogItem.teacher_id }} </v-card-item>
+            <v-card-item> 学院教务工号：{{ modifyDialogItem.faculty_id }} </v-card-item>
             <v-text-field
-                v-model="modifyDialogTeacherName"
-                :rules="[(v) => !!v || '请输入修改后的教师姓名']"
-                label="修改后的教师姓名"
+                v-model="modifyDialogFacultyName"
+                :rules="[(v) => !!v || '请输入修改后的学院教务姓名']"
+                label="修改后的学院教务姓名"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
-                v-model="modifyDialogTeacherGender"
+                v-model="modifyDialogFacultyGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男或女']"
-                label="修改后的教师性别"
+                label="修改后的学院教务性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
             <v-text-field
-                v-model="modifyDialogTeacherPhone"
-                label="修改后的教师联系方式"
+                v-model="modifyDialogFacultyPhone"
+                label="修改后的学院教务联系方式"
                 variant="outlined"
                 class="mx-2 mb-1" />
             <v-select
-                v-model="modifyDialogTeacherDepartmentId"
-                :rules="[(v) => !!v || '请选择修改后的教师所属学院']"
+                v-model="modifyDialogFacultyDepartmentId"
+                :rules="[(v) => !!v || '请选择修改后的学院教务所属学院']"
                 :items="env.department"
                 item-title="department_name"
                 item-value="department_id"
-                label="修改后的教师所属学院"
+                label="修改后的学院教务所属学院"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />
@@ -132,7 +134,7 @@
                 <v-btn
                     color="red"
                     :loading="modifyDialogSubmitLoading"
-                    :disabled="modifyDialogTeacherName == '' || modifyDialogTeacherDepartmentId == undefined"
+                    :disabled="modifyDialogFacultyName == '' || modifyDialogFacultyDepartmentId == undefined"
                     @click="onModifyialogSubmitClick">
                     修改
                 </v-btn>
@@ -144,35 +146,39 @@
         <v-card>
             <v-toolbar>
                 <v-btn icon="mdi-close" @click="addDialogActive = false" />
-                <v-toolbar-title>添加教师</v-toolbar-title>
+                <v-toolbar-title>添加学院教务</v-toolbar-title>
             </v-toolbar>
 
             <v-text-field
-                v-model="addDialogTeacherId"
-                :rules="[(v) => !!v || '请输入新教师工号']"
-                label="新教师工号"
+                v-model="addDialogFacultyId"
+                :rules="[(v) => !!v || '请输入新学院教务工号']"
+                label="新学院教务工号"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
-                v-model="addDialogTeacherName"
-                :rules="[(v) => !!v || '请输入新教师姓名']"
-                label="新教师姓名"
+                v-model="addDialogFacultyName"
+                :rules="[(v) => !!v || '请输入新学院教务姓名']"
+                label="新学院教务姓名"
                 variant="outlined"
                 class="mx-2 mb-1" />
             <v-text-field
-                v-model="addDialogTeacherGender"
+                v-model="addDialogFacultyGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男，或女']"
-                label="新教师性别"
+                label="新学院教务性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
-            <v-text-field v-model="addDialogTeacherPhone" label="新教师联系方式" variant="outlined" class="mx-2 mb-1" />
+            <v-text-field
+                v-model="addDialogFacultyPhone"
+                label="新学院教务联系方式"
+                variant="outlined"
+                class="mx-2 mb-1" />
             <v-select
-                v-model="addDialogTeacherDepartmentId"
-                :rules="[(v) => !!v || '请选择新教师所属专业']"
+                v-model="addDialogFacultyDepartmentId"
+                :rules="[(v) => !!v || '请选择新学院教务所属专业']"
                 :items="env.department"
                 item-title="department_name"
                 item-value="department_id"
-                label="新教师所属专业"
+                label="新学院教务所属专业"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />
@@ -183,7 +189,9 @@
                     color="primary"
                     :loading="addDialogSubmitLoading"
                     :disabled="
-                        addDialogTeacherId == '' || addDialogTeacherName == '' || addDialogTeacherDepartmentId == undefined
+                        addDialogFacultyId == '' ||
+                        addDialogFacultyName == '' ||
+                        addDialogFacultyDepartmentId == undefined
                     "
                     @click="onAddDialogSubmitClick">
                     添加
@@ -193,41 +201,41 @@
     </v-dialog>
 </template>
 
-<script lang="ts" setup name="TeacherManagement">
+<script lang="ts" setup name="FacultyManagement">
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
-    import type { queryTeacherResponse, teacherInfo } from "@/types"
+    import type { queryFacultyResponse, facultyInfo } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "工号", key: "teacher_id" },
-        { title: "姓名", key: "teacher_name" },
-        { title: "性别", key: "teacher_gender" },
-        { title: "联系方式", key: "teacher_phone" },
-        { title: "学院", key: "teacher_department_name" },
+        { title: "工号", key: "faculty_id" },
+        { title: "姓名", key: "faculty_name" },
+        { title: "性别", key: "faculty_gender" },
+        { title: "联系方式", key: "faculty_phone" },
+        { title: "学院", key: "faculty_department_name" },
         { title: "操作", key: "actions", sortable: false },
     ]
 
     const env = useEnv()
     const token = useToken()
 
-    let teachers = ref([] as teacherInfo[])
+    let faculties = ref([] as facultyInfo[])
     let tableLoading = ref(false)
     let nowPage = ref(1)
     let allPages = ref(1)
 
-    function queryTeacher() {
+    function queryFaculty() {
         tableLoading.value = true
         callapi.get(
             "Admin",
-            "queryTeacher",
-            { page: nowPage.value, department_id: token.getDepartmentId },
+            "queryFaculty",
+            { page: nowPage.value },
             (data) => {
-                const result = <queryTeacherResponse>data
+                const result = <queryFacultyResponse>data
                 allPages.value = Math.ceil(result.count / 50)
-                teachers.value = result.teachers
+                faculties.value = result.faculties
                 tableLoading.value = false
             },
             (errCode) => {
@@ -237,25 +245,25 @@
     }
 
     onMounted(() => {
-        queryTeacher()
+        queryFaculty()
     })
 
     watch(nowPage, () => {
-        queryTeacher()
+        queryFaculty()
     })
 
     // ===== Enable Dialog =====
     let enableDialogActive = ref(false)
-    let enableDialogItem = ref({} as teacherInfo)
+    let enableDialogItem = ref({} as facultyInfo)
 
-    function openEnableDialog(item: teacherInfo) {
+    function openEnableDialog(item: facultyInfo) {
         enableDialogItem.value = item
         enableDialogActive.value = true
     }
 
     watch(enableDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
-            queryTeacher()
+            queryFaculty()
         }
     })
 
@@ -268,12 +276,12 @@
             "Admin",
             "toggleLoginEnable",
             {
-                username: enableDialogItem.value.teacher_id,
+                username: enableDialogItem.value.faculty_id,
             },
             (data) => {
                 emitter.emit(
                     "success_snackbar",
-                    "教师登录权限" + (enableDialogItem.value.login_is_enable ? "停用" : "启用") + "成功"
+                    "学院教务登录权限" + (enableDialogItem.value.login_is_enable ? "停用" : "启用") + "成功"
                 )
                 enableDialogSubmitLoading.value = false
                 enableDialogActive.value = false
@@ -286,24 +294,24 @@
 
     // ===== Modify Dialog =====
     let modifyDialogActive = ref(false)
-    let modifyDialogItem = ref({} as teacherInfo)
-    let modifyDialogTeacherName = ref("")
-    let modifyDialogTeacherGender = ref("" as string | null)
-    let modifyDialogTeacherPhone = ref("" as string | null)
-    let modifyDialogTeacherDepartmentId = ref()
+    let modifyDialogItem = ref({} as facultyInfo)
+    let modifyDialogFacultyName = ref("")
+    let modifyDialogFacultyGender = ref("" as string | null)
+    let modifyDialogFacultyPhone = ref("" as string | null)
+    let modifyDialogFacultyDepartmentId = ref()
 
-    function openModifyDialog(item: teacherInfo) {
+    function openModifyDialog(item: facultyInfo) {
         modifyDialogItem.value = item
-        modifyDialogTeacherName.value = item.teacher_name
-        modifyDialogTeacherGender.value = item.teacher_gender
-        modifyDialogTeacherPhone.value = item.teacher_phone
-        modifyDialogTeacherDepartmentId.value = item.teacher_department_id
+        modifyDialogFacultyName.value = item.faculty_name
+        modifyDialogFacultyGender.value = item.faculty_gender
+        modifyDialogFacultyPhone.value = item.faculty_phone
+        modifyDialogFacultyDepartmentId.value = item.faculty_department_id
         modifyDialogActive.value = true
     }
 
     watch(modifyDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
-            queryTeacher()
+            queryFaculty()
         }
     })
 
@@ -314,16 +322,16 @@
         callapi.post(
             "json",
             "Admin",
-            "updateTeacher",
+            "updateFaculty",
             {
-                teacher_id: modifyDialogItem.value.teacher_id,
-                teacher_name: modifyDialogTeacherName.value,
-                teacher_gender: !!modifyDialogTeacherGender.value ? modifyDialogTeacherGender.value : null,
-                teacher_phone: !!modifyDialogTeacherPhone.value ? modifyDialogTeacherPhone.value : null,
-                teacher_department_id: modifyDialogTeacherDepartmentId.value,
+                faculty_id: modifyDialogItem.value.faculty_id,
+                faculty_name: modifyDialogFacultyName.value,
+                faculty_gender: !!modifyDialogFacultyGender.value ? modifyDialogFacultyGender.value : null,
+                faculty_phone: !!modifyDialogFacultyPhone.value ? modifyDialogFacultyPhone.value : null,
+                faculty_department_id: modifyDialogFacultyDepartmentId.value,
             },
             (data) => {
-                emitter.emit("success_snackbar", "教师修改成功")
+                emitter.emit("success_snackbar", "学院教务修改成功")
                 modifyDialogSubmitLoading.value = false
                 modifyDialogActive.value = false
             },
@@ -335,24 +343,24 @@
 
     // ===== Add Dialog =====
     let addDialogActive = ref(false)
-    let addDialogTeacherId = ref("")
-    let addDialogTeacherName = ref("")
-    let addDialogTeacherGender = ref("")
-    let addDialogTeacherPhone = ref("")
-    let addDialogTeacherDepartmentId = ref()
+    let addDialogFacultyId = ref("")
+    let addDialogFacultyName = ref("")
+    let addDialogFacultyGender = ref("")
+    let addDialogFacultyPhone = ref("")
+    let addDialogFacultyDepartmentId = ref()
 
     function openAddDialog() {
-        addDialogTeacherId.value = ""
-        addDialogTeacherName.value = ""
-        addDialogTeacherGender.value = ""
-        addDialogTeacherPhone.value = ""
-        addDialogTeacherDepartmentId.value = undefined
+        addDialogFacultyId.value = ""
+        addDialogFacultyName.value = ""
+        addDialogFacultyGender.value = ""
+        addDialogFacultyPhone.value = ""
+        addDialogFacultyDepartmentId.value = undefined
         addDialogActive.value = true
     }
 
     watch(addDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
-            queryTeacher()
+            queryFaculty()
         }
     })
 
@@ -363,16 +371,16 @@
         callapi.post(
             "json",
             "Admin",
-            "addTeacher",
+            "addFaculty",
             {
-                teacher_id: addDialogTeacherId.value,
-                teacher_name: addDialogTeacherName.value,
-                teacher_gender: !!addDialogTeacherGender.value ? addDialogTeacherGender.value : null,
-                teacher_phone: !!addDialogTeacherPhone.value ? addDialogTeacherPhone.value : null,
-                teacher_department_id: addDialogTeacherDepartmentId.value,
+                faculty_id: addDialogFacultyId.value,
+                faculty_name: addDialogFacultyName.value,
+                faculty_gender: !!addDialogFacultyGender.value ? addDialogFacultyGender.value : null,
+                faculty_phone: !!addDialogFacultyPhone.value ? addDialogFacultyPhone.value : null,
+                faculty_department_id: addDialogFacultyDepartmentId.value,
             },
             (data) => {
-                emitter.emit("success_snackbar", "教师添加成功")
+                emitter.emit("success_snackbar", "学院教务添加成功")
                 addDialogSubmitLoading.value = false
                 addDialogActive.value = false
             },

@@ -9,6 +9,7 @@ import MajorManagement from "@/views/Admin/MajorManagement.vue"
 import ClassManagement from "@/views/Admin/ClassManagement.vue"
 import StudentMangement from "@/views/Admin/StudentMangement.vue"
 import TeacherManagement from "@/views/Admin/TeacherManagement.vue"
+import FacultyManagement from "@/views/Admin/FacultyManagement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -70,6 +71,11 @@ const router = createRouter({
                     name: "teacherManagement",
                     path: "teacherManagement",
                     component: TeacherManagement,
+                },
+                {
+                    name: "facultyManagement",
+                    path: "facultyManagement",
+                    component: FacultyManagement,
                 },
             ],
         },
