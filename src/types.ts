@@ -147,3 +147,42 @@ export interface queryFacultyResponse {
     count: number
     faculties: facultyInfo[]
 }
+
+// ===== Public =====
+export interface curriculumInfo {
+    curriculum_semester_id: number
+    curriculum_semester_name: string
+    curriculum_course_id: string
+    course_name: string
+    course_type: number
+    curriculum_teacher_id: string
+    curriculum_teacher_name: string
+    curriculum_utilization_string: string | null
+}
+
+// ===== Audit =====
+export interface loginAuditInfo {
+    login_audit_id: number
+    login_audit_claim: string
+    login_audit_time: string
+    login_audit_result: number
+}
+
+export interface queryLoginAuditResponse {
+    count: number
+    audits: loginAuditInfo[]
+}
+
+export interface selectionAuditInfo extends curriculumInfo {
+    selection_audit_id: number
+    selection_audit_student_id: string
+    selection_audit_operator_id: string
+    selection_audit_curriculum_id: number
+    selection_audit_type: number
+    selection_audit_time: string
+}
+
+export interface querySelectionAuditResponse {
+    count: number
+    audits: selectionAuditInfo[]
+}

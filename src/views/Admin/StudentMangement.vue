@@ -131,7 +131,7 @@
                     :key="item.student_id"
                     :title="item.student_id"
                     :subtitle="
-                        item.reason == 1 ? '有同学工号的人员' : item.reason == 2 ? '无此班级号对应的班级' : '未知原因'
+                        item.reason === 1 ? '有同学工号的人员' : item.reason === 2 ? '无此班级号对应的班级' : '未知原因'
                     " />
             </v-list>
 

@@ -12,6 +12,7 @@ import TeacherManagement from "@/views/Admin/TeacherManagement.vue"
 import FacultyManagement from "@/views/Admin/FacultyManagement.vue"
 import SemesterManagement from "@/views/Admin/SemesterManagement.vue"
 import EnvManagement from "@/views/Admin/EnvManagement.vue"
+import AuditCenter from "@/views/Admin/AuditCenter.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -88,6 +89,11 @@ const router = createRouter({
                     name: "envManagement",
                     path: "envManagement",
                     component: EnvManagement,
+                },
+                {
+                    name: "auditCenter",
+                    path: "auditCenter",
+                    component: AuditCenter,
                 },
             ],
         },
