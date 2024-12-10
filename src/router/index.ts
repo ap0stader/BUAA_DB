@@ -17,6 +17,7 @@ import TeacherCourse from "@/views/Teacher/TeacherCourse.vue"
 import MyCourse from "@/views/Teacher/MyCourse.vue"
 import TeacherCurriculum from "@/views/Teacher/TeacherCurriculum.vue"
 import MyCurriculum from "@/views/Teacher/MyCurriculum.vue"
+import CourseManagement from "@/views/Admin/CourseManagement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -109,6 +110,11 @@ const router = createRouter({
                             component: MyCourse,
                         },
                     ],
+                },
+                {
+                    name: "courseManagement",
+                    path: "courseManagement",
+                    component: CourseManagement,
                 },
                 {
                     path: "teacherCurriculum",

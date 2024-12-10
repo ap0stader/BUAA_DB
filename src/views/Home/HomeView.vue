@@ -17,11 +17,7 @@
                 prepend-icon="mdi-bank"
                 title="学院管理"
                 value="departmentManagement" />
-            <v-list-item
-                v-if="token.isSuperAdmin"
-                prepend-icon="mdi-school"
-                title="专业管理"
-                value="majorManagement" />
+            <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-school" title="专业管理" value="majorManagement" />
             <v-list-item
                 v-if="token.isSuperAdmin || token.isFaculty"
                 prepend-icon="mdi-manjaro"
@@ -47,21 +43,16 @@
                 prepend-icon="mdi-calendar"
                 title="学期管理"
                 value="semesterManagement" />
+            <v-list-item v-if="token.isTeacher" prepend-icon="mdi-book-open" title="申报课程" value="myCourse" />
             <v-list-item
                 v-if="token.isSuperAdmin"
-                prepend-icon="mdi-cogs"
-                title="系统设置"
-                value="envManagement" />
-            <v-list-item
-                v-if="token.isSuperAdmin"
-                prepend-icon="mdi-list-box"
-                title="审计信息"
-                value="auditCenter" />
-            <v-list-item
-                v-if="token.isTeacher"
                 prepend-icon="mdi-book-open"
-                title="申报课程"
-                value="myCourse" />
+                title="课程管理"
+                value="courseManagement" />
+
+            <!-- Insert Befor Here -->
+            <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-cogs" title="系统设置" value="envManagement" />
+            <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-list-box" title="审计信息" value="auditCenter" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -120,9 +111,10 @@
         teacherManagement: "教师管理",
         facultyManagement: "学院教务管理",
         semesterManagement: "学期管理",
+        myCourse: "申报课程",
+        courseManagement: "课程管理",
         envManagement: "系统设置",
         auditCenter: "审计信息",
-        myCourse: "申报课程"
     }
 
     let selected = ref(<string[]>[route.name])

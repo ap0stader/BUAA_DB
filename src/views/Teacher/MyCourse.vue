@@ -12,13 +12,13 @@
                     {{
                         course.course_type === 0
                             ? "必修课"
-                            : course.course_type === 0
+                            : course.course_type === 1
                             ? "选修课"
-                            : course.course_type === 0
+                            : course.course_type === 2
                             ? "通识课"
-                            : course.course_type === 0
+                            : course.course_type === 3
                             ? "体育课"
-                            : course.course_type === 0
+                            : course.course_type === 4
                             ? "科研课"
                             : "其他课"
                     }}
@@ -152,7 +152,7 @@
     import type { courseInfo, queryCoursesResponse, uploadCoursePlanResponse } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
-    import { onMounted, ref } from "vue"
+    import { onMounted, ref, watch } from "vue"
 
     const token = useToken()
 
@@ -203,6 +203,12 @@
         addDialogCoursePlanFilename.value = ""
         addDialogActive.value = true
     }
+
+    watch(addDialogActive, (newValue, oldValue) => {
+        if (oldValue && !newValue) {
+            queryCourses()
+        }
+    })
 
     function openAddDialogAsModify(item: courseInfo) {
         addDialogAsModify.value = true
@@ -263,7 +269,6 @@
                 emitter.emit("success_snackbar", "课程申报成功")
                 addDialogSubmitLoading.value = false
                 addDialogActive.value = false
-                queryCourses()
             },
             (errCode) => {
                 addDialogSubmitLoading.value = false
