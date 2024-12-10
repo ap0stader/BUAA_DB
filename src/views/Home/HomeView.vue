@@ -47,6 +47,11 @@
                 prepend-icon="mdi-calendar"
                 title="学期管理"
                 value="semesterManagement" />
+            <v-list-item
+                v-if="token.isSuperAdmin"
+                prepend-icon="mdi-cogs"
+                title="系统设置"
+                value="envManagement" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -105,6 +110,7 @@
         teacherManagement: "教师管理",
         facultyManagement: "学院教务管理",
         semesterManagement: "学期管理",
+        envManagement: "系统设置"
     }
 
     let selected = ref(<string[]>[route.name])

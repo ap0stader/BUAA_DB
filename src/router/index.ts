@@ -11,6 +11,7 @@ import StudentMangement from "@/views/Admin/StudentMangement.vue"
 import TeacherManagement from "@/views/Admin/TeacherManagement.vue"
 import FacultyManagement from "@/views/Admin/FacultyManagement.vue"
 import SemesterManagement from "@/views/Admin/SemesterManagement.vue"
+import EnvManagement from "@/views/Admin/EnvManagement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -82,6 +83,11 @@ const router = createRouter({
                     name: "semesterManagement",
                     path: "semesterManagement",
                     component: SemesterManagement,
+                },
+                {
+                    name: "envManagement",
+                    path: "envManagement",
+                    component: EnvManagement,
                 },
             ],
         },
