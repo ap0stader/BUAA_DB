@@ -37,6 +37,16 @@
                 prepend-icon="mdi-account-tie"
                 title="教师管理"
                 value="teacherManagement" />
+            <v-list-item
+                v-if="token.isSuperAdmin"
+                prepend-icon="mdi-account-cog"
+                title="学院教务管理"
+                value="facultyManagement" />
+            <v-list-item
+                v-if="token.isSuperAdmin"
+                prepend-icon="mdi-calendar"
+                title="学期管理"
+                value="semesterManagement" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -93,6 +103,8 @@
         classManagement: "班级管理",
         studentManagement: "学生管理",
         teacherManagement: "教师管理",
+        facultyManagement: "学院教务管理",
+        semesterManagement: "学期管理",
     }
 
     let selected = ref(<string[]>[route.name])
