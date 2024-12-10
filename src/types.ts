@@ -149,6 +149,18 @@ export interface queryFacultyResponse {
 }
 
 // ===== Public =====
+export interface courseInfo {
+    course_id: number
+    course_name: string
+    course_type: number
+    course_credit: number
+    course_hours: number
+    course_teacher_id: string | null
+    course_teacher_name: string | null
+    course_plan_filename: string
+    course_status: number
+}
+
 export interface curriculumInfo {
     curriculum_semester_id: number
     curriculum_semester_name: string
@@ -158,6 +170,16 @@ export interface curriculumInfo {
     curriculum_teacher_id: string
     curriculum_teacher_name: string
     curriculum_utilization_string: string | null
+}
+
+// ===== Course ====
+
+export interface uploadCoursePlanResponse {
+    filename: string
+}
+
+export interface queryCoursesResponse {
+    courses: courseInfo[]
 }
 
 // ===== Audit =====

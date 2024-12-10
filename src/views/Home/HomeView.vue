@@ -57,6 +57,11 @@
                 prepend-icon="mdi-list-box"
                 title="审计信息"
                 value="auditCenter" />
+            <v-list-item
+                v-if="token.isTeacher"
+                prepend-icon="mdi-book-open"
+                title="申报课程"
+                value="myCourse" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -116,7 +121,8 @@
         facultyManagement: "学院教务管理",
         semesterManagement: "学期管理",
         envManagement: "系统设置",
-        auditCenter: "审计信息"
+        auditCenter: "审计信息",
+        myCourse: "申报课程"
     }
 
     let selected = ref(<string[]>[route.name])

@@ -13,6 +13,10 @@ import FacultyManagement from "@/views/Admin/FacultyManagement.vue"
 import SemesterManagement from "@/views/Admin/SemesterManagement.vue"
 import EnvManagement from "@/views/Admin/EnvManagement.vue"
 import AuditCenter from "@/views/Admin/AuditCenter.vue"
+import TeacherCourse from "@/views/Teacher/TeacherCourse.vue"
+import MyCourse from "@/views/Teacher/MyCourse.vue"
+import TeacherCurriculum from "@/views/Teacher/TeacherCurriculum.vue"
+import MyCurriculum from "@/views/Teacher/MyCurriculum.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -94,6 +98,28 @@ const router = createRouter({
                     name: "auditCenter",
                     path: "auditCenter",
                     component: AuditCenter,
+                },
+                {
+                    path: "teacherCourse",
+                    component: TeacherCourse,
+                    children: [
+                        {
+                            name: "myCourse",
+                            path: "",
+                            component: MyCourse,
+                        },
+                    ],
+                },
+                {
+                    path: "teacherCurriculum",
+                    component: TeacherCurriculum,
+                    children: [
+                        {
+                            name: "myCurriculum",
+                            path: "",
+                            component: MyCurriculum,
+                        },
+                    ],
                 },
             ],
         },
