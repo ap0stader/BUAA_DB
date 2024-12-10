@@ -28,7 +28,7 @@
                 <p class="mb-3">教学班容量： {{ curriculum.curriculum_capacity }}</p>
                 <p class="mb-3">教学班说明： {{ curriculum.curriculum_info ? curriculum.curriculum_info : "无" }}</p>
                 <p>
-                    场地：
+                    上课时间与地点：
                     {{
                         curriculum.curriculum_utilization_string ? curriculum.curriculum_utilization_string : "暂未分配"
                     }}
@@ -60,7 +60,7 @@
 <script lang="ts" setup name="MyCurriculum">
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
-    import type { curriculumInfo, queryCurriculumResponse } from "@/types"
+    import type { curriculumInfo, queryCurriculumsResponse } from "@/types"
     import { callapi } from "@/utils/callapi"
     import { onMounted, ref } from "vue"
     import { useRouter } from "vue-router"
@@ -73,7 +73,7 @@
 
     function queryCurriculums() {
         callapi.get("Course", "queryCurriculums", {}, (data) => {
-            const result = <queryCurriculumResponse>data
+            const result = <queryCurriculumsResponse>data
             curriculums.value = result.curriculums.filter((curriculum) => curriculum.curriculum_teacher_id === token.id)
         })
     }

@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="pa-6">
         <p class="text-h4 mt-6 mb-4">学院教务管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理学院教务</p>
+        <p class="text-subtitle-2 mb-4">查看和管理学院教务</p>
 
         <v-data-table
             :headers="headers"

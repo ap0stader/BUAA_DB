@@ -192,7 +192,7 @@ export interface curriculumInfo extends curriculumPublicInfo {
     curriculum_utilization_resources: number[]
 }
 
-export interface queryCurriculumResponse {
+export interface queryCurriculumsResponse {
     curriculums: curriculumInfo[]
 }
 

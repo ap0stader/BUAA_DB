@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="pa-6">
         <p class="text-h4 mt-6 mb-4">专业管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理专业</p>
+        <p class="text-subtitle-2 mb-4">查看和管理专业</p>
 
         <v-data-table :headers="headers" :items="env.major" disable-sort sticky items-per-page="25">
             <template v-slot:item.major_department_name="{ item }">

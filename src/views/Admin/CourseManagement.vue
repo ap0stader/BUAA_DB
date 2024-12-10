@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="pa-6">
         <p class="text-h4 mt-6 mb-4">课程管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理课程</p>
+        <p class="text-subtitle-2 mb-4">查看和管理课程</p>
 
         <v-data-table :headers="headers" :items="courses" disable-sort sticky items-per-page="50">
             <template v-slot:item.course_type_string="{ item }">

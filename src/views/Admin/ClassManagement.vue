@@ -1,7 +1,7 @@
 <template>
     <v-container fluid class="pa-6">
         <p class="text-h4 mt-6 mb-4">班级管理</p>
-        <p class="text-subtitle-2 mb-4">查看、查看管理班级</p>
+        <p class="text-subtitle-2 mb-4">查看和管理班级</p>
 
         <v-data-table
             :headers="headers"
