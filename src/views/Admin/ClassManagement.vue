@@ -48,18 +48,20 @@
         @click="openAddDialog"
         class="mt-4" />
 
-    <v-dialog max-width="500px" v-model="modifyialogActive">
+    <v-dialog max-width="500px" v-model="modifyDialogActive">
         <v-card>
             <v-toolbar>
-                <v-btn icon="mdi-close" @click="modifyialogActive = false" />
+                <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
                 <v-toolbar-title>修改班级班主任</v-toolbar-title>
             </v-toolbar>
             <v-card-item>
-                班级原班主任：{{ modifyialogItem.class_headmaster_name ? modifyialogItem.class_headmaster_name : "无" }}
+                班级原班主任：{{
+                    modifyDialogItem.class_headmaster_name ? modifyDialogItem.class_headmaster_name : "无"
+                }}
             </v-card-item>
 
             <v-text-field
-                v-model="modifyialogHeadmasterId"
+                v-model="modifyDialogHeadmasterId"
                 placeholder="无"
                 persistent-placeholder
                 label="新的班主任工号"
@@ -67,8 +69,10 @@
                 class="ma-2" />
 
             <template v-slot:actions>
-                <v-btn @click="modifyialogActive = false">取消</v-btn>
-                <v-btn color="red" :loading="modifyialogSubmitLoading" @click="onModifyialogSubmitClick"> 修改 </v-btn>
+                <v-btn @click="modifyDialogActive = false">取消</v-btn>
+                <v-btn color="red" :loading="modifyDialogSubmitLoading" @click="onModifyDialogSubmitClick">
+                    修改
+                </v-btn>
             </template>
         </v-card>
     </v-dialog>
@@ -92,7 +96,11 @@
             <v-select
                 v-model="addDialogMajorId"
                 :rules="[(v) => !!v || '请选择新班级所属专业']"
-                :items="env.major"
+                :items="
+                    token.isFaculty
+                        ? env.major.filter((item) => item.major_department_id == token.getDepartmentId)
+                        : env.class
+                "
                 item-title="major_name"
                 item-value="major_id"
                 label="新班级所属专业"
@@ -141,41 +149,41 @@
     })
 
     // ===== Modify Dialog =====
-    let modifyialogActive = ref(false)
-    let modifyialogItem = ref({} as classInfo)
-    let modifyialogHeadmasterId = ref()
+    let modifyDialogActive = ref(false)
+    let modifyDialogItem = ref({} as classInfo)
+    let modifyDialogHeadmasterId = ref()
 
     function openModifyDialog(item: classInfo) {
-        modifyialogItem.value = item
-        modifyialogHeadmasterId.value = item.class_headmaster_id
-        modifyialogActive.value = true
+        modifyDialogItem.value = item
+        modifyDialogHeadmasterId.value = item.class_headmaster_id
+        modifyDialogActive.value = true
     }
 
-    watch(modifyialogActive, (newValue, oldValue) => {
+    watch(modifyDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
             envManager.updateClass()
         }
     })
 
-    let modifyialogSubmitLoading = ref(false)
+    let modifyDialogSubmitLoading = ref(false)
 
-    function onModifyialogSubmitClick() {
-        modifyialogSubmitLoading.value = true
+    function onModifyDialogSubmitClick() {
+        modifyDialogSubmitLoading.value = true
         callapi.post(
             "json",
             "Admin",
             "updateClassHeadmaster",
             {
-                class_id: modifyialogItem.value.class_id,
-                class_headmaster_id: !!modifyialogHeadmasterId.value ? modifyialogHeadmasterId.value : null,
+                class_id: modifyDialogItem.value.class_id,
+                class_headmaster_id: !!modifyDialogHeadmasterId.value ? modifyDialogHeadmasterId.value : null,
             },
             (data) => {
                 emitter.emit("success_snackbar", "班级班主任修改成功")
-                modifyialogSubmitLoading.value = false
-                modifyialogActive.value = false
+                modifyDialogSubmitLoading.value = false
+                modifyDialogActive.value = false
             },
             (errCode) => {
-                modifyialogSubmitLoading.value = false
+                modifyDialogSubmitLoading.value = false
             }
         )
     }

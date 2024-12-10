@@ -7,6 +7,7 @@ import PlaceManagement from "@/views/Admin/PlaceManagement.vue"
 import DepartmentManagment from "@/views/Admin/DepartmentManagement.vue"
 import MajorManagement from "@/views/Admin/MajorManagement.vue"
 import ClassManagement from "@/views/Admin/ClassManagement.vue"
+import StudentMangement from "@/views/Admin/StudentMangement.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -58,6 +59,11 @@ const router = createRouter({
                     name: "classManagement",
                     path: "classManagement",
                     component: ClassManagement,
+                },
+                {
+                    name: "studentManagement",
+                    path: "studentManagement",
+                    component: StudentMangement,
                 },
             ],
         },

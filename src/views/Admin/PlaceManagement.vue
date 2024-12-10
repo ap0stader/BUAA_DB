@@ -72,28 +72,28 @@
         </v-card>
     </v-dialog>
 
-    <v-dialog max-width="500px" v-model="modifyialogActive">
+    <v-dialog max-width="500px" v-model="modifyDialogActive">
         <v-card>
             <v-toolbar>
-                <v-btn icon="mdi-close" @click="modifyialogActive = false" />
+                <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
                 <v-toolbar-title>修改场地</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 场地原名称：{{ modifyialogItem.place_name }} </v-card-item>
+            <v-card-item> 场地原名称：{{ modifyDialogItem.place_name }} </v-card-item>
 
             <v-text-field
-                v-model="modifyialogPlaceName"
+                v-model="modifyDialogPlaceName"
                 :rules="[(v) => !!v || '请输入新的场地名称']"
                 label="新场地名称"
                 variant="outlined"
                 class="ma-2" />
 
             <template v-slot:actions>
-                <v-btn @click="modifyialogActive = false">取消</v-btn>
+                <v-btn @click="modifyDialogActive = false">取消</v-btn>
                 <v-btn
                     color="red"
-                    :loading="modifyialogSubmitLoading"
-                    :disabled="modifyialogPlaceName == ''"
-                    @click="onModifyialogSubmitClick">
+                    :loading="modifyDialogSubmitLoading"
+                    :disabled="modifyDialogPlaceName == ''"
+                    @click="onModifyDialogSubmitClick">
                     修改
                 </v-btn>
             </template>
@@ -191,42 +191,42 @@
     }
 
     // ===== Modify Dialog =====
-    let modifyialogActive = ref(false)
-    let modifyialogItem = ref({} as placeInfo)
-    let modifyialogPlaceName = ref("")
+    let modifyDialogActive = ref(false)
+    let modifyDialogItem = ref({} as placeInfo)
+    let modifyDialogPlaceName = ref("")
 
     function openModifyDialog(item: placeInfo) {
-        modifyialogItem.value = item
-        modifyialogPlaceName.value = item.place_name
-        modifyialogActive.value = true
+        modifyDialogItem.value = item
+        modifyDialogPlaceName.value = item.place_name
+        modifyDialogActive.value = true
     }
 
-    watch(modifyialogActive, (newValue, oldValue) => {
+    watch(modifyDialogActive, (newValue, oldValue) => {
         if (oldValue && !newValue) {
             envManager.updatePlace()
         }
     })
 
-    let modifyialogSubmitLoading = ref(false)
+    let modifyDialogSubmitLoading = ref(false)
 
-    function onModifyialogSubmitClick() {
-        modifyialogSubmitLoading.value = true
+    function onModifyDialogSubmitClick() {
+        modifyDialogSubmitLoading.value = true
         callapi.post(
             "json",
             "Admin",
             "updatePlace",
             {
-                place_id: modifyialogItem.value.place_id,
-                place_name: modifyialogPlaceName.value,
-                place_is_enable: modifyialogItem.value.place_is_enable,
+                place_id: modifyDialogItem.value.place_id,
+                place_name: modifyDialogPlaceName.value,
+                place_is_enable: modifyDialogItem.value.place_is_enable,
             },
             (data) => {
                 emitter.emit("success_snackbar", "场地修改成功")
-                modifyialogSubmitLoading.value = false
-                modifyialogActive.value = false
+                modifyDialogSubmitLoading.value = false
+                modifyDialogActive.value = false
             },
             (errCode) => {
-                modifyialogSubmitLoading.value = false
+                modifyDialogSubmitLoading.value = false
             }
         )
     }

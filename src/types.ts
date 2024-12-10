@@ -94,3 +94,56 @@ export interface semesterInfo {
 export interface querySemesterResponse {
     semesters: semesterInfo[]
 }
+
+export interface studentInfo {
+    student_id: string
+    student_name: string
+    student_gender: string | null
+    student_phone: string | null
+    student_class_id: number
+    student_major_id: number
+    student_department_id: number
+    login_is_enable: number
+}
+
+export interface queryStudentResponse {
+    count: number
+    students: studentInfo[]
+}
+
+export interface addStudentBatchFailedInfo {
+    student_id: string
+    reason: number
+}
+
+export interface addStudentBatchResponse {
+    failed_info: addStudentBatchFailedInfo[]
+}
+
+export interface teacherInfo {
+    teacher_id: string
+    teacher_name: string
+    teacher_gender: string | null
+    teacher_phone: string | null
+    teacher_department_id: number
+    login_is_enable: number
+}
+
+export interface queryTeacherResponse {
+    count: number
+    teachers: teacherInfo[]
+}
+
+export interface facultyInfo {
+    faculty_id: string
+    faculty_name: string
+    faculty_gender: string | null
+    faculty_phone: string | null
+    faculty_department_id: number
+    login_is_enable: number
+}
+
+export interface queryFacultyResponse {
+    count: number
+    faculties: facultyInfo[]
+}

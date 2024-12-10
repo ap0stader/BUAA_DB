@@ -27,6 +27,11 @@
                 prepend-icon="mdi-manjaro"
                 title="班级管理"
                 value="classManagement" />
+            <v-list-item
+                v-if="token.isSuperAdmin || token.isFaculty"
+                prepend-icon="mdi-account-group"
+                title="学生管理"
+                value="studentManagement" />
             <v-list-item prepend-icon="mdi-account-circle" title="个人中心" value="userCenter" />
         </v-list>
     </v-navigation-drawer>
@@ -81,6 +86,7 @@
         departmentManagement: "学院管理",
         majorManagement: "专业管理",
         classManagement: "班级管理",
+        studentManagement: "学生管理",
     }
 
     let selected = ref(<string[]>[route.name])
