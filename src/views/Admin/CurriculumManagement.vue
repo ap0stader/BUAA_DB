@@ -142,7 +142,7 @@
                 <v-btn
                     color="green"
                     :loading="addDialogSubmitLoading"
-                    :disabled="addDialogPlaceId == ''"
+                    :disabled="addDialogPlaceId == undefined || addDialogWeekday == undefined"
                     @click="onAddDialogSubmitClick">
                     分配
                 </v-btn>
