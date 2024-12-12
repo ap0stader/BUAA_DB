@@ -295,9 +295,109 @@ selection_audit_table (selection_audit_id, selection_audit_student_id, selection
 
 ## 源程序简要说明  
 
+本系统文件结构：
 
+```
+backend
+├── conf.json # 系统配置文件
+├── conf.py # 配置信息读取子模块
+├── db.json # 数据库配置文件
+├── __init__.py
+├── main.py # 系统主模块
+├── redis.json # redis配置文件
+├── routers # 功能实现子模块
+│   ├── admin.py # 实现管理员相关功能
+│   ├── audit.py # 实现审计信息相关功能
+│   ├── auth.py # 实现身份认证相关功能
+│   ├── choise.py # 实现学生选课相关功能
+│   ├── course.py # 实现课程信息支持相关功能
+│   ├── faculty.py # 实现职工管理相关功能
+│   ├── __init__.py
+│   ├── student.py # 实现学生管理相关功能
+│   └── teacher.py # 实现教师管理相关功能
+└── utils
+    ├── db.py # 数据库连接子模块
+    ├── errno.py # 错误码管理子模块
+    ├── __init__.py
+    ├── rds.py # redis连接子模块
+    ├── resource.py # 课程占用资源转换实现库
+    └── utils.py # 通用函数库
+```
 
-## 收获和体会  
+本系统使用的所有python库：
+
+```
+Package              Version
+-------------------- -----------
+annotated-types      0.7.0
+anyio                4.6.2.post1
+async-timeout        5.0.1
+certifi              2024.8.30
+cffi                 1.17.1
+click                8.1.7
+cryptography         43.0.3
+dnspython            2.7.0
+email_validator      2.2.0
+et_xmlfile           2.0.0
+exceptiongroup       1.2.2
+fastapi              0.115.5
+fastapi-cli          0.0.5
+h11                  0.14.0
+httpcore             1.0.6
+httptools            0.6.4
+httpx                0.27.2
+idna                 3.10
+itsdangerous         2.2.0
+Jinja2               3.1.4
+markdown-it-py       3.0.0
+MarkupSafe           3.0.2
+mdurl                0.1.2
+numpy                2.1.3
+openpyxl             3.1.5
+orjson               3.10.11
+pandas               2.2.3
+pip                  24.3.1
+pycparser            2.22
+pydantic             2.9.2
+pydantic_core        2.23.4
+pydantic-extra-types 2.10.0
+pydantic-settings    2.6.1
+Pygments             2.18.0
+PyJWT                2.9.0
+PyMySQL              1.1.1
+python-dateutil      2.9.0.post0
+python-dotenv        1.0.1
+python-multipart     0.0.17
+pytz                 2024.2
+PyYAML               6.0.2
+redis                5.2.0
+rich                 13.9.4
+setuptools           75.1.0
+shellingham          1.5.4
+six                  1.16.0
+sniffio              1.3.1
+starlette            0.41.2
+typer                0.13.0
+typing_extensions    4.12.2
+tzdata               2024.2
+ujson                5.10.0
+uvicorn              0.32.0
+uvloop               0.21.0
+watchfiles           0.24.0
+websockets           14.0
+wheel                0.44.0
+```
+
+运行系统流程为：
+
+```
+conda create -n backend python=3.12.7
+conda activate backend
+pip install fastapi uvicorn PyJWT PyMySQL redis
+python main.py
+```
+
+## 收获和体会
 
 ### 董和军
 
