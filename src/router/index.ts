@@ -18,8 +18,8 @@ import MyCourse from "@/views/Teacher/MyCourse.vue"
 import CourseManagement from "@/views/Admin/CourseManagement.vue"
 import TeacherCurriculum from "@/views/Teacher/TeacherCurriculum.vue"
 import MyCurriculum from "@/views/Teacher/MyCurriculum.vue"
-import CurriculumChoice from "@/views/Teacher/CurriculumChoice.vue"
-import CurriculumAttendance from "@/views/Teacher/CurriculumAttendance.vue"
+import CurriculumChoice from "@/views/Admin/CurriculumChoice.vue"
+import CurriculumAttendance from "@/views/Admin/CurriculumAttendance.vue"
 import AddCurriculum from "@/views/Teacher/AddCurriculum.vue"
 import CurriculumManagement from "@/views/Admin/CurriculumManagement.vue"
 
@@ -129,18 +129,6 @@ const router = createRouter({
                             path: "",
                             component: MyCurriculum,
                         },
-                        {
-                            name: "curriculumChoice",
-                            path: "choice/:curriculum_id",
-                            component: CurriculumChoice,
-                            props: true,
-                        },
-                        {
-                            name: "curriculumAttendance",
-                            path: "attendance/:curriculum_id",
-                            component: CurriculumAttendance,
-                            props: true,
-                        },
                     ],
                 },
                 {
@@ -152,7 +140,19 @@ const router = createRouter({
                     name: "curriculumManagement",
                     path: "curriculumManagement",
                     component: CurriculumManagement,
-                }
+                },
+                {
+                    name: "curriculumAttendance",
+                    path: "attendance/:curriculum_id",
+                    component: CurriculumAttendance,
+                    props: true,
+                },
+                {
+                    name: "curriculumChoice",
+                    path: "choice/:curriculum_id",
+                    component: CurriculumChoice,
+                    props: true,
+                },
             ],
         },
     ],

@@ -81,7 +81,7 @@
         <template #prepend>
             <!-- 添加需要返回键 -->
             <v-btn
-                v-if="typeof route.name == 'string' && navigateBackPagenName.includes(route.name)"
+                v-if="typeof route.name == 'string' && navigateBackPageName.includes(route.name)"
                 variant="text"
                 icon
                 density="comfortable"
@@ -135,6 +135,8 @@
         myCurriculum: "查看教学班",
         addCurriculum: "开设教学班",
         curriculumManagement: "教学班管理",
+        curriculumAttendance: "查看选课情况",
+        curriculumChoice: "查看预选情况",
         chooseCurriculum: "选课",
         // Insert Befor Here
         envManagement: "系统设置",
@@ -147,7 +149,10 @@
         router.push({ name: newValue[0] })
     })
 
-    const navigateBackPagenName: string[] = []
+    const navigateBackPageName: string[] = [
+        "curriculumAttendance",
+        "curriculumChoice"
+    ]
 
     function navigateBack() {
         router.back()

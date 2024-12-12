@@ -198,6 +198,32 @@ export interface queryCurriculumsResponse {
     curriculums: curriculumInfo[]
 }
 
+// ===== Choice =====
+export interface curriculumChoiceInfo {
+    choice_student_id: string
+    student_name: string
+    student_class_id: number
+    student_major_id: number
+    student_department_id: number
+    choice_order: number
+    choice_introduction: string | null
+}
+
+export interface queryCurriculumChoicesResponse {
+    choices: curriculumChoiceInfo[]
+}
+export interface curriculumAttendanceInfo {
+    attendance_student_id: string
+    student_name: string
+    student_class_id: number
+    student_major_id: number
+    student_department_id: number
+}
+
+export interface queryCurriculumAttendancesResponse {
+    attendances: curriculumAttendanceInfo[]
+}
+
 // ===== Audit =====
 export interface loginAuditInfo {
     login_audit_id: number

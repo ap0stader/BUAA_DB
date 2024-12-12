@@ -53,7 +53,12 @@
                 {{ item.curriculum_utilization_string ? item.curriculum_utilization_string : "暂未分配" }}
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-btn variant="tonal" density="comfortable" color="blue" class="me-1" @click="openModifyDialog(item)">
+                <v-btn
+                    variant="tonal"
+                    density="comfortable"
+                    color="blue"
+                    class="me-1"
+                    @click="gotoCurriculumAttendence(item.curriculum_id)">
                     <v-icon size="default"> mdi-account </v-icon>
                     查看选课情况
                 </v-btn>
@@ -63,7 +68,7 @@
                     density="comfortable"
                     color="teal-lighten-2"
                     class="me-1"
-                    @click="openModifyDialog(item)">
+                    @click="gotoCurriculumChoice(item.curriculum_id)">
                     <v-icon size="default"> mdi-checkbox-marked-circle-plus-outline </v-icon>
                     查看预选情况
                 </v-btn>
@@ -192,6 +197,7 @@
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
     import { onMounted, ref, watch } from "vue"
+    import { useRouter } from "vue-router"
 
     const headers = [
         { title: "开设学期", key: "curriculum_semester_name" },
@@ -207,6 +213,7 @@
     ]
 
     const env = useEnv()
+    const router = useRouter()
     const token = useToken()
 
     let curriculumSemesterName = ref()
@@ -223,6 +230,24 @@
     onMounted(() => {
         queryCurriculums()
     })
+
+    function gotoCurriculumChoice(curriculum_id: number) {
+        router.push({
+            name: "curriculumChoice",
+            params: {
+                curriculum_id: curriculum_id,
+            },
+        })
+    }
+
+    function gotoCurriculumAttendence(curriculum_id: number) {
+        router.push({
+            name: "curriculumAttendance",
+            params: {
+                curriculum_id: curriculum_id,
+            },
+        })
+    }
 
     function onReleaseCurriculumResourceClick(item: curriculumInfo) {
         callapi.post("json", "Course", "releaseCurriculumResource", { curriculum_id: item.curriculum_id }, () => {
