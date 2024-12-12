@@ -1,6 +1,6 @@
 <template>
     <v-container fluid class="pa-6">
-        <p class="text-h4 mt-6 mb-4">查看预选情况</p>
+        <p class="text-h4 mt-6 mb-4">预选情况</p>
         <p class="text-h6 mb-4">教学班编号：{{ curriculum?.curriculum_course_id }}</p>
         <p class="text-h6 mb-4">课程名称：{{ curriculum?.course_name }}</p>
         <p class="text-h6 mb-4">开设老师：{{ curriculum?.curriculum_teacher_name }}</p>

@@ -52,7 +52,7 @@
                         variant="tonal"
                         class="flex-grow-1"
                         :disabled="env.env.now_step < 3"
-                        @click="gotoCurriculumAttendence(curriculum.curriculum_id)"
+                        @click="gotoCurriculumScore(curriculum.curriculum_id)"
                         >查看选课与成绩情况</v-btn
                     >
                 </v-card-actions>
@@ -95,9 +95,9 @@
         })
     }
 
-    function gotoCurriculumAttendence(curriculum_id: number) {
+    function gotoCurriculumScore(curriculum_id: number) {
         router.push({
-            name: "curriculumAttendance",
+            name: "curriculumScore",
             params: {
                 curriculum_id: curriculum_id,
             },

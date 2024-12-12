@@ -224,6 +224,15 @@ export interface queryCurriculumAttendancesResponse {
     attendances: curriculumAttendanceInfo[]
 }
 
+// ===== Teacher =====
+export interface curriculumScoreInfo extends curriculumAttendanceInfo {
+    score: number
+}
+
+export interface queryCurriculumScoresResponse {
+    scores: curriculumScoreInfo[]
+}
+
 // ===== Audit =====
 export interface loginAuditInfo {
     login_audit_id: number

@@ -135,8 +135,9 @@
         teacherCurriculum: "查看教学班",
         addCurriculum: "开设教学班",
         curriculumManagement: "教学班管理",
-        curriculumAttendance: "查看选课情况",
-        curriculumChoice: "查看预选情况",
+        curriculumAttendance: "选课情况",
+        curriculumChoice: "预选情况",
+        curriculumScore: "选课与成绩情况",
         chooseCurriculum: "选课",
         // Insert Befor Here
         envManagement: "系统设置",
@@ -149,7 +150,7 @@
         router.push({ name: newValue[0] })
     })
 
-    const navigateBackPageName: string[] = ["curriculumAttendance", "curriculumChoice"]
+    const navigateBackPageName: string[] = ["curriculumAttendance", "curriculumChoice", "curriculumScore"]
 
     function navigateBack() {
         router.back()
