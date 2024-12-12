@@ -119,4 +119,4 @@ const callapi = {
     },
 }
 
-export { callapi }
+export { baseURL, callapi }

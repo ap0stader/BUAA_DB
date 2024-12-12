@@ -111,15 +111,6 @@ export interface queryStudentResponse {
     students: studentInfo[]
 }
 
-export interface addStudentBatchFailedInfo {
-    student_id: string
-    reason: number
-}
-
-export interface addStudentBatchResponse {
-    failed_info: addStudentBatchFailedInfo[]
-}
-
 export interface teacherInfo {
     teacher_id: string
     teacher_name: string
@@ -149,6 +140,15 @@ export interface queryFacultyResponse {
 }
 
 // ===== Public =====
+export interface batchFailedInfo {
+    student_id: string
+    reason: number
+}
+
+export interface batchResponse {
+    failed_info: batchFailedInfo[]
+}
+
 export interface courseInfo {
     course_id: number
     course_name: string
@@ -225,7 +225,12 @@ export interface queryCurriculumAttendancesResponse {
 }
 
 // ===== Teacher =====
-export interface curriculumScoreInfo extends curriculumAttendanceInfo {
+export interface curriculumScoreInfo {
+    student_id: string
+    student_name: string
+    student_class_id: number
+    student_major_id: number
+    student_department_id: number
     score: number
 }
 

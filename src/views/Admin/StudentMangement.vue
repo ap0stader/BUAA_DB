@@ -252,7 +252,7 @@
 <script lang="ts" setup name="StudentManagement">
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
-    import type { addStudentBatchFailedInfo, addStudentBatchResponse, queryStudentResponse, studentInfo } from "@/types"
+    import type { batchFailedInfo, batchResponse, queryStudentResponse, studentInfo } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
     import { onMounted, ref, watch } from "vue"
@@ -352,7 +352,7 @@
     }
 
     let addBatchDialogSubmitLoading = ref(false)
-    let addBatchDialogFailedInfo = ref([] as addStudentBatchFailedInfo[])
+    let addBatchDialogFailedInfo = ref([] as batchFailedInfo[])
 
     function onAddBatchDialogSubmitClick() {
         addBatchDialogSubmitLoading.value = true
@@ -365,7 +365,7 @@
                 file: addBatchDialogFile.value,
             },
             (data) => {
-                const result = <addStudentBatchResponse>data
+                const result = <batchResponse>data
                 addBatchDialogFailedInfo.value = result.failed_info
                 if (result.failed_info.length > 0) {
                     emitter.emit("normalerror", "学生批量添加失败")
