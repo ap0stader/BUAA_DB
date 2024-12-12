@@ -140,13 +140,13 @@ export interface queryFacultyResponse {
 }
 
 // ===== Public =====
-export interface batchFailedInfo {
+export interface addStudentBatchFailedInfo {
     student_id: string
     reason: number
 }
 
-export interface batchResponse {
-    failed_info: batchFailedInfo[]
+export interface addStudentBatchResponse {
+    failed_info: addStudentBatchFailedInfo[]
 }
 
 export interface courseInfo {

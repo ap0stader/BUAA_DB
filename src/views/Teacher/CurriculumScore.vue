@@ -73,15 +73,6 @@
                 clearable
                 class="ma-2 mb-1" />
 
-            <v-list v-if="updateBatchDialogFailedInfo.length > 0" lines="two" density="compact" slim class="ma-2 mt-0">
-                <v-list-subheader color="red">以下学生的数据存在问题：</v-list-subheader>
-                <v-list-item
-                    v-for="item in updateBatchDialogFailedInfo"
-                    :key="item.student_id"
-                    :title="item.student_id"
-                    :subtitle="item.reason === 1 ? '该学号的学生不在该教学班中' : '未知原因'" />
-            </v-list>
-
             <template v-slot:actions>
                 <v-btn @click="updateBatchDialogActive = false">取消</v-btn>
                 <v-btn
@@ -130,8 +121,8 @@
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
     import type {
-        batchFailedInfo,
-        batchResponse,
+        addStudentBatchFailedInfo,
+        addStudentBatchResponse,
         curriculumInfo,
         curriculumScoreInfo,
         queryCurriculumScoresResponse,
@@ -196,28 +187,21 @@
     }
 
     let updateBatchDialogSubmitLoading = ref(false)
-    let updateBatchDialogFailedInfo = ref([] as batchFailedInfo[])
 
     function onUpdateBatchDialogSubmitClick() {
         updateBatchDialogSubmitLoading.value = true
-        updateBatchDialogFailedInfo.value = []
         callapi.post(
             "form-data",
-            "Admin",
+            "Teacher",
             "updateScoreBatch",
             {
+                curriculum_id: curriculum.value?.curriculum_id,
                 file: updateBatchDialogFile.value,
             },
             (data) => {
-                const result = <batchResponse>data
-                updateBatchDialogFailedInfo.value = result.failed_info
-                if (result.failed_info.length > 0) {
-                    emitter.emit("normalerror", "成绩批量修改失败")
-                } else {
-                    emitter.emit("success_snackbar", "成绩批量修改成功")
-                    updateBatchDialogActive.value = false
-                }
+                emitter.emit("success_snackbar", "成绩批量修改成功")
                 updateBatchDialogSubmitLoading.value = false
+                updateBatchDialogActive.value = false
             },
             (errCode) => {
                 updateBatchDialogSubmitLoading.value = false
