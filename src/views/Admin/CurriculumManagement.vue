@@ -60,7 +60,7 @@
                     class="me-1"
                     @click="gotoCurriculumAttendence(item.curriculum_id)">
                     <v-icon size="default"> mdi-account </v-icon>
-                    查看选课情况
+                    选课情况
                 </v-btn>
                 <v-btn
                     v-if="env.env.now_step <= 2"
@@ -70,7 +70,7 @@
                     class="me-1"
                     @click="gotoCurriculumChoice(item.curriculum_id)">
                     <v-icon size="default"> mdi-checkbox-marked-circle-plus-outline </v-icon>
-                    查看预选情况
+                    预选情况
                 </v-btn>
                 <v-btn
                     variant="tonal"
@@ -204,7 +204,7 @@
         { title: "教学班编号", key: "curriculum_id" },
         { title: "课程编号", key: "curriculum_course_id" },
         { title: "课程名称", key: "course_name" },
-        { title: "课程类型", key: "course_type_string" },
+        { title: "类型", key: "course_type_string" },
         { title: "开设老师", key: "curriculum_teacher_name" },
         { title: "预选/选课/容量", key: "curriculum_person" },
         { title: "说明", key: "curriculum_info" },

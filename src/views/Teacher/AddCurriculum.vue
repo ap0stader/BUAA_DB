@@ -92,10 +92,11 @@
 
     const headers = [
         { title: "课程编号", key: "course_id" },
-        { title: "课程名称", key: "course_name" },
+        { title: "名称", key: "course_name" },
+        { title: "类型", key: "course_type_string" },
         { title: "学分", key: "course_credit" },
         { title: "学时", key: "course_hours" },
-        { title: "课程类型", key: "course_type_string" },
+        
         { title: "操作", key: "actions", sortable: false },
     ]
 

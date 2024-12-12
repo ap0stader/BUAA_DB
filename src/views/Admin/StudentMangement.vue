@@ -119,7 +119,7 @@
                 v-model="addBatchDialogFile"
                 :rules="[(v) => !!v.length || '请选择文件']"
                 accept=".xlsx"
-                label="请选择填写后的批量添加学生模板文件"
+                label="请上传填写后的批量添加学生模板文件"
                 variant="outlined"
                 clearable
                 class="ma-2 mb-1" />

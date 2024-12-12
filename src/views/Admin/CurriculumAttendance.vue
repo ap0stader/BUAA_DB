@@ -4,6 +4,10 @@
         <p class="text-h6 mb-4">教学班编号：{{ curriculum?.curriculum_course_id }}</p>
         <p class="text-h6 mb-4">课程名称：{{ curriculum?.course_name }}</p>
         <p class="text-h6 mb-4">开设老师：{{ curriculum?.curriculum_teacher_name }}</p>
+        <p class="text-h6 mb-4">
+            上课时间与地点：
+            {{ curriculum?.curriculum_utilization_string ? curriculum?.curriculum_utilization_string : "暂未分配" }}
+        </p>
 
         <v-data-table :headers="headers" :items="attendances" disable-sort sticky items-per-page="50">
             <template v-slot:item.student_major_name="{ item }">

@@ -43,7 +43,7 @@
                 prepend-icon="mdi-calendar"
                 title="学期管理"
                 value="semesterManagement" />
-            <v-list-item v-if="token.isTeacher" prepend-icon="mdi-book-open" title="申报课程" value="myCourse" />
+            <v-list-item v-if="token.isTeacher" prepend-icon="mdi-book-open" title="申报课程" value="teacherCourse" />
             <v-list-item
                 v-if="token.isSuperAdmin"
                 prepend-icon="mdi-book-open"
@@ -53,7 +53,7 @@
                 v-if="token.isTeacher"
                 prepend-icon="mdi-human-male-board-poll"
                 title="查看教学班"
-                value="myCurriculum" />
+                value="teacherCurriculum" />
             <v-list-item
                 v-if="token.isTeacher && env.env.now_step === 0"
                 prepend-icon="mdi-domain-plus"
@@ -130,9 +130,9 @@
         teacherManagement: "教师管理",
         facultyManagement: "学院教务管理",
         semesterManagement: "学期管理",
-        myCourse: "申报课程",
+        teacherCourse: "申报课程",
         courseManagement: "课程管理",
-        myCurriculum: "查看教学班",
+        teacherCurriculum: "查看教学班",
         addCurriculum: "开设教学班",
         curriculumManagement: "教学班管理",
         curriculumAttendance: "查看选课情况",
@@ -149,10 +149,7 @@
         router.push({ name: newValue[0] })
     })
 
-    const navigateBackPageName: string[] = [
-        "curriculumAttendance",
-        "curriculumChoice"
-    ]
+    const navigateBackPageName: string[] = ["curriculumAttendance", "curriculumChoice"]
 
     function navigateBack() {
         router.back()
