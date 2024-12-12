@@ -238,6 +238,22 @@ export interface queryCurriculumScoresResponse {
     scores: curriculumScoreInfo[]
 }
 
+// ===== Faculty =====
+export interface scoreStatisticsInfo {
+    student_id: string
+    student_name: string
+    student_class_id: number
+    student_major_id: number
+    student_department_id: number
+    gpa: number
+    average: number
+    weighted_average: number
+}
+
+export interface queryScoreStatisticsResponse {
+    statistics: scoreStatisticsInfo[]
+}
+
 // ===== Audit =====
 export interface loginAuditInfo {
     login_audit_id: number

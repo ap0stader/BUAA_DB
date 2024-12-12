@@ -65,6 +65,11 @@
                 title="教学班管理"
                 value="curriculumManagement" />
             <v-list-item
+                v-if="token.isFaculty"
+                prepend-icon="mdi-medal"
+                title="成绩查看"
+                value="facultyScore" />
+            <v-list-item
                 v-if="token.isStudent"
                 prepend-icon="mdi-human-male-board-poll"
                 title="选课"
@@ -138,6 +143,7 @@
         curriculumAttendance: "选课情况",
         curriculumChoice: "预选情况",
         curriculumScore: "选课与成绩情况",
+        facultyScore: "成绩查看",
         chooseCurriculum: "选课",
         // Insert Befor Here
         envManagement: "系统设置",

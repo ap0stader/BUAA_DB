@@ -21,6 +21,7 @@ import CurriculumAttendance from "@/views/Admin/CurriculumAttendance.vue"
 import AddCurriculum from "@/views/Teacher/AddCurriculum.vue"
 import CurriculumManagement from "@/views/Admin/CurriculumManagement.vue"
 import CurriculumScore from "@/views/Teacher/CurriculumScore.vue"
+import FacultyScore from "@/views/Faculty.vue/FacultyScore.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -145,6 +146,12 @@ const router = createRouter({
                     path: "score/:curriculum_id",
                     component: CurriculumScore,
                     props: true,
+                },
+                {
+                    name: "facultyScore",
+                    path: "facultyScore",
+                    component: FacultyScore,
+                },
             ],
         },
     ],
