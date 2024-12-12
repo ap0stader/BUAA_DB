@@ -57,15 +57,20 @@
 
             <v-text-field
                 v-model="modifyDialogHeadmasterId"
+                :rules="[(v) => !!v || '请输入新班主任工号']"
                 placeholder="无"
                 persistent-placeholder
-                label="新的班主任工号"
+                label="新班主任工号"
                 variant="outlined"
                 class="ma-2 mb-1" />
 
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
-                <v-btn color="red" :loading="modifyDialogSubmitLoading" @click="onModifyDialogSubmitClick">
+                <v-btn
+                    color="blue"
+                    :loading="modifyDialogSubmitLoading"
+                    :disabled="modifyDialogHeadmasterId == ''"
+                    @click="onModifyDialogSubmitClick">
                     修改
                 </v-btn>
             </template>
@@ -81,8 +86,8 @@
 
             <v-text-field
                 v-model="addDialogClassId"
-                :rules="[(v) => !!v || '请输入新班级班级号', (v) => parseInt(v) > 0 || '班级班级号必须为非负整数']"
-                label="新班级班级号"
+                :rules="[(v) => !!v || '请输入班级号', (v) => parseInt(v) > 0 || '班级号必须为非负整数']"
+                label="班级号"
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
@@ -90,7 +95,7 @@
 
             <v-select
                 v-model="addDialogMajorId"
-                :rules="[(v) => !!v || '请选择新班级所属专业']"
+                :rules="[(v) => !!v || '请选择所属专业']"
                 :items="
                     token.isFaculty
                         ? env.major.filter((item) => item.major_department_id == token.getDepartmentId)
@@ -98,7 +103,7 @@
                 "
                 item-title="major_name"
                 item-value="major_id"
-                label="新班级所属专业"
+                label="所属专业"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />

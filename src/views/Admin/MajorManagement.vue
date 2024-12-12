@@ -31,8 +31,8 @@
 
             <v-text-field
                 v-model="addDialogMajorId"
-                :rules="[(v) => !!v || '请输入新专业专业号', (v) => parseInt(v) > 0 || '专业专业号必须为非负整数']"
-                label="新专业专业号"
+                :rules="[(v) => !!v || '请输入专业号', (v) => parseInt(v) > 0 || '专业号必须为非负整数']"
+                label="专业号"
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
@@ -40,18 +40,18 @@
 
             <v-text-field
                 v-model="addDialogMajorName"
-                :rules="[(v) => !!v || '请输入新专业名称']"
-                label="新专业名称"
+                :rules="[(v) => !!v || '请输入专业名称']"
+                label="专业名称"
                 variant="outlined"
                 class="mx-2 mb-1" />
 
             <v-select
                 v-model="addDialogDepartmentId"
-                :rules="[(v) => !!v || '请选择新专业所属学院']"
+                :rules="[(v) => !!v || '请选择所属学院']"
                 :items="env.department"
                 item-title="department_name"
                 item-value="department_id"
-                label="新专业所属学院"
+                label="所属学院"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />
@@ -84,7 +84,7 @@
 
     const headers = [
         { title: "专业号", key: "major_id" },
-        { title: "专业名称", key: "major_name" },
+        { title: "名称", key: "major_name" },
         { title: "所属学院", key: "major_department_name" },
     ]
 

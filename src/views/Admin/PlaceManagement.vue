@@ -73,7 +73,7 @@
                 <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
                 <v-toolbar-title>修改场地</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 场地原名称：{{ modifyDialogItem.place_name }} </v-card-item>
+            <v-card-item> 原场地名称：{{ modifyDialogItem.place_name }} </v-card-item>
 
             <v-text-field
                 v-model="modifyDialogPlaceName"
@@ -85,7 +85,7 @@
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
                 <v-btn
-                    color="red"
+                    color="blue"
                     :loading="modifyDialogSubmitLoading"
                     :disabled="modifyDialogPlaceName == ''"
                     @click="onModifyDialogSubmitClick">
@@ -104,8 +104,8 @@
 
             <v-text-field
                 v-model="addDialogPlaceName"
-                :rules="[(v) => !!v || '请输入新场地名称']"
-                label="新场地名称"
+                :rules="[(v) => !!v || '请输入场地名称']"
+                label="场地名称"
                 variant="outlined"
                 class="ma-2 mb-1" />
 
@@ -133,7 +133,7 @@
 
     const headers = [
         { title: "场地编号", key: "place_id" },
-        { title: "场地名称", key: "place_name" },
+        { title: "名称", key: "place_name" },
         { title: "操作", key: "actions", sortable: false },
     ]
 

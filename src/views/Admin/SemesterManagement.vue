@@ -27,8 +27,8 @@
 
             <v-text-field
                 v-model="addDialogSemesterName"
-                :rules="[(v) => !!v || '请输入新学期名称']"
-                label="新学期名称"
+                :rules="[(v) => !!v || '请输入学期名称']"
+                label="学期名称"
                 variant="outlined"
                 class="ma-2 mb-1" />
 
@@ -54,8 +54,8 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "学期编号  ", key: "semester_id" },
-        { title: "学期名称", key: "semester_name" },
+        { title: "学期编号", key: "semester_id" },
+        { title: "名称", key: "semester_name" },
     ]
 
     const env = useEnv()

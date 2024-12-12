@@ -188,6 +188,8 @@ export interface curriculumInfo extends curriculumPublicInfo {
     course_hours: number
     curriculum_teacher_department_id: number
     curriculum_capacity: number
+    curriculum_choice_number: number
+    curriculum_attendance_number: number
     curriculum_info: number
     curriculum_utilization_resources: number[]
 }

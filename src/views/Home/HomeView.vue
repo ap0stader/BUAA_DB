@@ -60,10 +60,15 @@
                 title="开设教学班"
                 value="addCurriculum" />
             <v-list-item
-                v-if="token.isSuperAdmin"
+                v-if="token.isSuperAdmin || token.isFaculty"
                 prepend-icon="mdi-domain"
                 title="教学班管理"
                 value="curriculumManagement" />
+            <v-list-item
+                v-if="token.isStudent"
+                prepend-icon="mdi-human-male-board-poll"
+                title="选课"
+                value="chooseCurriculum" />
             <!-- Insert Befor Here -->
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-cogs" title="系统设置" value="envManagement" />
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-list-box" title="审计信息" value="auditCenter" />
@@ -76,7 +81,7 @@
         <template #prepend>
             <!-- 添加需要返回键 -->
             <v-btn
-                v-if="typeof $route.name == 'string' && navigateBackPagenName.includes($route.name)"
+                v-if="typeof route.name == 'string' && navigateBackPagenName.includes(route.name)"
                 variant="text"
                 icon
                 density="comfortable"
@@ -85,7 +90,7 @@
                 <v-icon size="default"> mdi-arrow-left </v-icon>
             </v-btn>
         </template>
-        <v-app-bar-title>{{ titleDict[<string>$route.name] }}</v-app-bar-title>
+        <v-app-bar-title>{{ titleDict[<string>route.name] }}</v-app-bar-title>
         <v-spacer />
         <p>当前选课阶段：{{ env.getStepString }}</p>
         <span class="mx-3"></span>
@@ -130,6 +135,7 @@
         myCurriculum: "查看教学班",
         addCurriculum: "开设教学班",
         curriculumManagement: "教学班管理",
+        chooseCurriculum: "选课",
         // Insert Befor Here
         envManagement: "系统设置",
         auditCenter: "审计信息",

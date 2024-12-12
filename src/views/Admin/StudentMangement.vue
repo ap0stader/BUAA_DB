@@ -154,27 +154,23 @@
                 <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
                 <v-toolbar-title>修改学生信息</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 学生学号：{{ modifyDialogItem.student_id }} </v-card-item>
+            <v-card-item> 学号：{{ modifyDialogItem.student_id }} </v-card-item>
             <v-text-field
                 v-model="modifyDialogStudentName"
-                :rules="[(v) => !!v || '请输入修改后的学生姓名']"
-                label="修改后的学生姓名"
+                :rules="[(v) => !!v || '请输入姓名']"
+                label="姓名"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
                 v-model="modifyDialogStudentGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男或女']"
-                label="修改后的学生性别"
+                label="性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
-            <v-text-field
-                v-model="modifyDialogStudentPhone"
-                label="修改后的学生联系方式"
-                variant="outlined"
-                class="mx-2 mb-1" />
+            <v-text-field v-model="modifyDialogStudentPhone" label="联系方式" variant="outlined" class="mx-2 mb-1" />
             <v-select
                 v-model="modifyDialogStudentClassId"
-                :rules="[(v) => !!v || '请选择修改后的学生所属班级']"
+                :rules="[(v) => !!v || '请选择所属班级']"
                 :items="
                     token.isFaculty
                         ? env.class.filter((item) => item.class_department_id == token.getDepartmentId)
@@ -182,7 +178,7 @@
                 "
                 item-title="class_id"
                 item-value="class_id"
-                label="修改后的学生所属班级"
+                label="所属班级"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />
@@ -190,7 +186,7 @@
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
                 <v-btn
-                    color="red"
+                    color="blue"
                     :loading="modifyDialogSubmitLoading"
                     :disabled="modifyDialogStudentName == '' || modifyDialogStudentClassId == undefined"
                     @click="onModifyialogSubmitClick">
@@ -209,30 +205,30 @@
 
             <v-text-field
                 v-model="addDialogStudentId"
-                :rules="[(v) => !!v || '请输入新学生学号']"
-                label="新学生学号"
+                :rules="[(v) => !!v || '请输入学号']"
+                label="学号"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
                 v-model="addDialogStudentName"
-                :rules="[(v) => !!v || '请输入新学生姓名']"
-                label="新学生姓名"
+                :rules="[(v) => !!v || '请输入姓名']"
+                label="姓名"
                 variant="outlined"
                 class="mx-2 mb-1" />
             <v-text-field
                 v-model="addDialogStudentGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男，或女']"
-                label="新学生性别"
+                label="性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
-            <v-text-field v-model="addDialogStudentPhone" label="新学生联系方式" variant="outlined" class="mx-2 mb-1" />
+            <v-text-field v-model="addDialogStudentPhone" label="联系方式" variant="outlined" class="mx-2 mb-1" />
             <v-select
                 v-model="addDialogStudentClassId"
-                :rules="[(v) => !!v || '请选择新学生所属班级']"
+                :rules="[(v) => !!v || '请选择所属班级']"
                 :items="env.class"
                 item-title="class_id"
                 item-value="class_id"
-                label="新学生所属班级"
+                label="所属班级"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />

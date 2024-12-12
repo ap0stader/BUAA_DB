@@ -3,6 +3,21 @@
         <p class="text-h4 mt-6 mb-4">教学班管理</p>
         <p class="text-subtitle-2 mb-4">查看、管理教学班</p>
 
+        <!-- 使用name是因为只能用字符串匹配 -->
+        <v-select
+            v-model="curriculumSemesterName"
+            :items="env.semester"
+            item-title="semester_name"
+            item-value="semester_name"
+            placeholder="全部"
+            persistent-placeholder
+            label="开设学期"
+            variant="outlined"
+            max-width="500px"
+            clearable
+            class="mt-8" />
+
+        <!-- 在这里筛选是因为pinia的异步特性 -->
         <v-data-table
             :headers="headers"
             :items="
@@ -10,6 +25,8 @@
                     ? curriculums.filter((item) => item.curriculum_teacher_department_id == token.getDepartmentId)
                     : curriculums
             "
+            :search="curriculumSemesterName"
+            :filter-keys="['curriculum_semester_name']"
             disable-sort
             sticky
             items-per-page="50">
@@ -28,11 +45,28 @@
                         : "其他课"
                 }}
             </template>
-
+            <template v-slot:item.curriculum_person="{ item }">
+                {{ item.curriculum_choice_number }} / {{ item.curriculum_attendance_number }} /
+                {{ item.curriculum_capacity }}
+            </template>
             <template v-slot:item.curriculum_utilization_string="{ item }">
                 {{ item.curriculum_utilization_string ? item.curriculum_utilization_string : "暂未分配" }}
             </template>
             <template v-slot:item.actions="{ item }">
+                <v-btn variant="tonal" density="comfortable" color="blue" class="me-1" @click="openModifyDialog(item)">
+                    <v-icon size="default"> mdi-account </v-icon>
+                    查看选课情况
+                </v-btn>
+                <v-btn
+                    v-if="env.env.now_step <= 2"
+                    variant="tonal"
+                    density="comfortable"
+                    color="teal-lighten-2"
+                    class="me-1"
+                    @click="openModifyDialog(item)">
+                    <v-icon size="default"> mdi-checkbox-marked-circle-plus-outline </v-icon>
+                    查看预选情况
+                </v-btn>
                 <v-btn
                     variant="tonal"
                     density="comfortable"
@@ -40,11 +74,11 @@
                     class="me-1"
                     @click="openModifyDialog(item)">
                     <v-icon size="default"> mdi-pencil </v-icon>
-                    修改教学班容量
+                    修改容量
                 </v-btn>
                 <v-btn variant="tonal" density="comfortable" color="green" class="me-1" @click="openAddDialog(item)">
                     <v-icon size="default"> mdi-check </v-icon>
-                    分配场地资源
+                    分配场地
                 </v-btn>
                 <v-btn
                     v-if="item.curriculum_utilization_resources.length > 0"
@@ -54,7 +88,7 @@
                     class="me-1"
                     @click="onReleaseCurriculumResourceClick(item)">
                     <v-icon size="default"> mdi-close </v-icon>
-                    收回场地资源
+                    收回场地
                 </v-btn>
             </template>
         </v-data-table>
@@ -70,8 +104,8 @@
 
             <v-text-field
                 v-model="modifyDialogCurriculumCapacity"
-                :rules="[(v) => !!v || '请输入新的教学班容量', (v) => parseInt(v) > 0 || '教学班容量必须为非负整数']"
-                label="新的教学班容量"
+                :rules="[(v) => !!v || '请输入教学班容量', (v) => parseInt(v) > 0 || '教学班容量必须为非负整数']"
+                label="教学班容量"
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
@@ -160,19 +194,22 @@
     import { onMounted, ref, watch } from "vue"
 
     const headers = [
-        { title: "教学班编号", key: "curriculum_id" },
         { title: "开设学期", key: "curriculum_semester_name" },
-        { title: "开设老师", key: "curriculum_teacher_name" },
+        { title: "教学班编号", key: "curriculum_id" },
+        { title: "课程编号", key: "curriculum_course_id" },
         { title: "课程名称", key: "course_name" },
         { title: "课程类型", key: "course_type_string" },
-        { title: "教学班容量", key: "curriculum_capacity" },
-        { title: "教学班说明", key: "curriculum_info" },
+        { title: "开设老师", key: "curriculum_teacher_name" },
+        { title: "预选/选课/容量", key: "curriculum_person" },
+        { title: "说明", key: "curriculum_info" },
         { title: "上课时间与地点", key: "curriculum_utilization_string" },
         { title: "操作", key: "actions", sortable: false },
     ]
 
     const env = useEnv()
     const token = useToken()
+
+    let curriculumSemesterName = ref()
 
     let curriculums = ref([] as curriculumInfo[])
 

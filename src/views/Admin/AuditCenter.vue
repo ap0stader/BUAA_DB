@@ -66,7 +66,7 @@
 
     const loginHeaders = [
         { title: "审计信息编号", key: "login_audit_id" },
-        { title: "尝试登录的用户", key: "login_audit_claim" },
+        { title: "尝试登录的用户名", key: "login_audit_claim" },
         { title: "登录时间", key: "login_audit_time" },
         { title: "登录结果", key: "login_audit_result_string" },
     ]
@@ -94,9 +94,9 @@
     const selectionHeaders = [
         { title: "审计信息编号", key: "selection_audit_id" },
         { title: "学生学号", key: "selection_audit_operator_id" },
-        { title: "学期", key: "curriculum_semester_name" },
         { title: "教学班编号", key: "selection_audit_curriculum_id" },
-        { title: "课程编号", key: "course_name" },
+        { title: "课程编号", key: "curriculum_course_id" },
+        { title: "课程名称", key: "course_name"},
         { title: "教学班老师", key: "curriculum_teacher_name" },
         { title: "操作", key: "selection_audit_type_string" },
         { title: "操作时间", key: "selection_audit_time" },

@@ -28,7 +28,7 @@
             <template v-slot:actions>
                 <v-btn @click="isDialogActive = false">取消</v-btn>
                 <v-btn
-                    color="primary"
+                    color="red"
                     :disabled="oldPassword == '' || newPassword == ''"
                     :loading="submitLoading"
                     @click="onChangePasswordClick"

@@ -98,31 +98,27 @@
                 <v-btn icon="mdi-close" @click="modifyDialogActive = false" />
                 <v-toolbar-title>修改教师信息</v-toolbar-title>
             </v-toolbar>
-            <v-card-item> 教师工号：{{ modifyDialogItem.teacher_id }} </v-card-item>
+            <v-card-item> 工号：{{ modifyDialogItem.teacher_id }} </v-card-item>
             <v-text-field
                 v-model="modifyDialogTeacherName"
-                :rules="[(v) => !!v || '请输入修改后的教师姓名']"
-                label="修改后的教师姓名"
+                :rules="[(v) => !!v || '请输入姓名']"
+                label="姓名"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
                 v-model="modifyDialogTeacherGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男或女']"
-                label="修改后的教师性别"
+                label="性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
-            <v-text-field
-                v-model="modifyDialogTeacherPhone"
-                label="修改后的教师联系方式"
-                variant="outlined"
-                class="mx-2 mb-1" />
+            <v-text-field v-model="modifyDialogTeacherPhone" label="联系方式" variant="outlined" class="mx-2 mb-1" />
             <v-select
                 v-model="modifyDialogTeacherDepartmentId"
-                :rules="[(v) => !!v || '请选择修改后的教师所属学院']"
+                :rules="[(v) => !!v || '请选择所属学院']"
                 :items="env.department"
                 item-title="department_name"
                 item-value="department_id"
-                label="修改后的教师所属学院"
+                label="所属学院"
                 variant="outlined"
                 clearable
                 :disabled="!token.isSuperAdmin"
@@ -131,7 +127,7 @@
             <template v-slot:actions>
                 <v-btn @click="modifyDialogActive = false">取消</v-btn>
                 <v-btn
-                    color="red"
+                    color="blue"
                     :loading="modifyDialogSubmitLoading"
                     :disabled="modifyDialogTeacherName == '' || modifyDialogTeacherDepartmentId == undefined"
                     @click="onModifyialogSubmitClick">
@@ -150,30 +146,30 @@
 
             <v-text-field
                 v-model="addDialogTeacherId"
-                :rules="[(v) => !!v || '请输入新教师工号']"
-                label="新教师工号"
+                :rules="[(v) => !!v || '请输入工号']"
+                label="工号"
                 variant="outlined"
                 class="ma-2 mb-1" />
             <v-text-field
                 v-model="addDialogTeacherName"
-                :rules="[(v) => !!v || '请输入新教师姓名']"
-                label="新教师姓名"
+                :rules="[(v) => !!v || '请输入姓名']"
+                label="姓名"
                 variant="outlined"
                 class="mx-2 mb-1" />
             <v-text-field
                 v-model="addDialogTeacherGender"
                 :rules="[(v) => !v || ['男', '女'].includes(v) || '性别必须为男，或女']"
-                label="新教师性别"
+                label="性别"
                 variant="outlined"
                 class="mx-2 mb-1" />
-            <v-text-field v-model="addDialogTeacherPhone" label="新教师联系方式" variant="outlined" class="mx-2 mb-1" />
+            <v-text-field v-model="addDialogTeacherPhone" label="联系方式" variant="outlined" class="mx-2 mb-1" />
             <v-select
                 v-model="addDialogTeacherDepartmentId"
-                :rules="[(v) => !!v || '请选择新教师所属专业']"
+                :rules="[(v) => !!v || '请选择所属专业']"
                 :items="env.department"
                 item-title="department_name"
                 item-value="department_id"
-                label="新教师所属专业"
+                label="所属专业"
                 variant="outlined"
                 clearable
                 class="mx-2 mb-1" />

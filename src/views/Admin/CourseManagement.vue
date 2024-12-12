@@ -19,6 +19,9 @@
                         : "其他课"
                 }}
             </template>
+            <template v-slot:item.course_teacher_name="{ item }">
+                {{ item.course_teacher_name ? item.course_teacher_name : "系统内置" }}
+            </template>
 
             <template v-slot:item.actions="{ item }">
                 <v-btn
@@ -92,10 +95,11 @@
 
     const headers = [
         { title: "课程编号", key: "course_id" },
-        { title: "课程名称", key: "course_name" },
+        { title: "名称", key: "course_name" },
+        { title: "课程类型", key: "course_type_string" },
         { title: "学分", key: "course_credit" },
         { title: "学时", key: "course_hours" },
-        { title: "课程类型", key: "course_type_string" },
+        { title: "申报教师", key: "course_teacher_name" },
         { title: "操作", key: "actions", sortable: false },
     ]
 
@@ -154,7 +158,7 @@
                 accept_course_id: acceptDialogCourseId.value,
             },
             () => {
-                emitter.emit("success_snackbar", "通过审核成功")
+                emitter.emit("success_snackbar", "课程通过审核")
                 acceptDialogSubmitLoading.value = false
                 acceptDialogActive.value = false
             },

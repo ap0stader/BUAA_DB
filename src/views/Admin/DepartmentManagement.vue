@@ -27,8 +27,8 @@
 
             <v-text-field
                 v-model="addDialogDepartmentId"
-                :rules="[(v) => !!v || '请输入新学院系号', (v) => parseInt(v) > 0 || '学院系号必须为非负整数']"
-                label="新学院系号"
+                :rules="[(v) => !!v || '请输入院系号', (v) => parseInt(v) > 0 || '院系号必须为非负整数']"
+                label="院系号"
                 type="number"
                 hide-spin-buttons
                 variant="outlined"
@@ -36,8 +36,8 @@
 
             <v-text-field
                 v-model="addDialogDepartmentName"
-                :rules="[(v) => !!v || '请输入新学院名称']"
-                label="新学院名称"
+                :rules="[(v) => !!v || '请输入学院名称']"
+                label="学院名称"
                 variant="outlined"
                 class="mx-2 mb-1" />
 
@@ -68,7 +68,7 @@
 
     const headers = [
         { title: "院系号", key: "department_id" },
-        { title: "学院名称", key: "department_name" },
+        { title: "名称", key: "department_name" },
     ]
 
     const env = useEnv()
