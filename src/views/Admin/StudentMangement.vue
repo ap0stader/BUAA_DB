@@ -115,11 +115,16 @@
                 <v-btn icon="mdi-close" @click="addBatchDialogActive = false" />
                 <v-toolbar-title>批量添加学生</v-toolbar-title>
             </v-toolbar>
+
+            <v-btn color="primary" variant="tonal" @click="downloadAddBatchFile" class="ma-2 mb-1">
+                下载批量添加学生模板文件
+            </v-btn>
+
             <v-file-input
                 v-model="addBatchDialogFile"
-                :rules="[(v) => !!v.length || '请选择文件']"
+                :rules="[(v) => !!v.length || '请选择填写后的批量添加学生文件']"
                 accept=".xlsx"
-                label="请上传填写后的批量添加学生模板文件"
+                label="批量添加学生文件"
                 variant="outlined"
                 clearable
                 class="ma-2 mb-1" />
@@ -349,6 +354,10 @@
     function openAddBatchDialog() {
         addBatchDialogFile.value = undefined
         addBatchDialogActive.value = true
+    }
+
+    function downloadAddBatchFile() {
+        window.open("/static/upload/批量添加学生模板.xlsx")
     }
 
     let addBatchDialogSubmitLoading = ref(false)

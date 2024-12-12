@@ -19,7 +19,13 @@
                 {{ item.score ? item.score : "未录入" }}
             </template>
             <template v-slot:item.actions="{ item }">
-                <v-btn variant="tonal" density="comfortable" color="red" class="me-1" @click="openModifyDialog(item)">
+                <v-btn
+                    :disabled="curriculum?.curriculum_semester_id != env.env.now_semester_id || env.env.now_step < 6"
+                    variant="tonal"
+                    density="comfortable"
+                    color="red"
+                    class="me-1"
+                    @click="openModifyDialog(item)">
                     <v-icon size="default"> mdi-pencil </v-icon>
                     修改成绩
                 </v-btn>
@@ -28,6 +34,7 @@
     </v-container>
 
     <v-fab
+        :disabled="curriculum?.curriculum_semester_id != env.env.now_semester_id || env.env.now_step < 6"
         color="purple"
         prepend-icon="mdi-plus-box-multiple-outline"
         location="top end"
