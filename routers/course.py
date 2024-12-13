@@ -234,25 +234,20 @@ async def add_curriculum(req: add_curriculum_req):
         'data': {}
     }
 
-@router.get("/querySemesterCurriculums")
-async def query_semester_curriculums(semester_id: int):
-    if not check_semester_id_exist(semester_id):
-        return {
-            'success': False,
-            'errCode': 300701,
-            'data': {}
-        }
+@router.get("/queryCurriculums")
+async def query_curriculums():
     conn, cursor = get_cursor('root')
     cursor.execute("""
-        SELECT * FROM querySemesterCurriculums qsc 
-        WHERE qsc.curriculum_semester_id = %s
+        SELECT * FROM queryCurriculums qsc 
         ORDER BY qsc.curriculum_id;
-        """, (semester_id,))
+        """)
     result = cursor.fetchall()
     curriculums = []
     for row in result:
         curriculums.append({
             **row,
+            'curriculum_choice_number': get_curriculum_choice_count(row['curriculum_id']),
+            'curriculum_attendance_number': get_curriculum_attendance_count(row['curriculum_id']),
             'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_string']).list
         })
     return {
@@ -318,7 +313,6 @@ async def release_curriculum_resource(req: release_curriculum_resource_req):
             'data': {}
         }
     conn, cursor = get_cursor('root')
-    cursor.execute("DELETE FROM curriculum_resource_table WHERE curriculum_id=%s", (curriculum_id,))
     cursor.execute("DELETE FROM curriculum_utilization_string_table WHERE curriculum_id=%s", (curriculum_id,))
     conn.commit()
     return {

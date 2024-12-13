@@ -47,7 +47,7 @@ def check_class_id_exist(class_id: int):
 
 def check_teacher_is_master(teacher_id: str):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM class_table WHERE class_teacher_id=%s", (teacher_id,))
+    cursor.execute("SELECT * FROM class_table WHERE class_headmaster_id=%s", (teacher_id,))
     return cursor.fetchone() is not None
 
 def check_teacher_id_exist(teacher_id: str):
@@ -129,7 +129,7 @@ def get_curriculum_course_id(curriculum_id: int):
         SELECT curriculum_course_id FROM curriculum_view
         WHERE curriculum_id=%s;
         """, (curriculum_id,))
-    return cursor.fetchone()
+    return cursor.fetchone()['curriculum_course_id']
 
 def get_curriculum_course_type(curriculum_id: int):
     conn, cursor = get_cursor('root')
@@ -137,7 +137,7 @@ def get_curriculum_course_type(curriculum_id: int):
         SELECT course_type FROM curriculum_view
         WHERE curriculum_id=%s;
         """, (curriculum_id,))
-    return cursor.fetchone()
+    return cursor.fetchone()['course_type']
 
 def get_curriculum_capacity(curriculum_id: int):
     conn, cursor = get_cursor('root')
@@ -145,7 +145,7 @@ def get_curriculum_capacity(curriculum_id: int):
         SELECT curriculum_capacity FROM curriculum_table
         WHERE curriculum_id=%s;
         """, (curriculum_id,))
-    return cursor.fetchone()
+    return cursor.fetchone()['curriculum_capacity']
 
 def check_is_student_in_curriculum(student_id: str, curriculum_id: int):
     conn, cursor = get_cursor('root')
@@ -171,34 +171,14 @@ def check_choice_order_is_exist(student_id: str, curriculum_id: int, order: int)
     conn, cursor = get_cursor('root')
     if course_type in [0, 1]:
         cursor.execute("""
-            SELECT
-                *
-            FROM
-                choice_table cht
-            JOIN
-                curriculum_table ct
-            ON
-                cht.choice_curriculum_id = ct.curriculum_id
-            WHERE
-                cht.choice_student_id=%s AND ct.curriculum_course_id=%s AND cht.choice_order=%s;
+            SELECT * FROM choice_view
+            WHERE choice_student_id=%s AND curriculum_course_id=%s AND choice_order=%s;
             """, (student_id, course_id, order))
         return cursor.fetchone() is not None
     else:
         cursor.execute("""
-            SELECT
-                *
-            FROM
-                choice_table cht
-            JOIN
-                curriculum_table ct
-            ON
-                cht.choice_curriculum_id = ct.curriculum_id
-            JOIN
-                course_table cot
-            ON
-                ct.curriculum_course_id = cot.course_id`
-            WHERE
-                cht.choice_student_id=%s AND cot.course_type=%s AND cht.choice_order=%s;
+            SELECT * FROM choice_view
+            WHERE choice_student_id=%s AND course_type=%s AND choice_order=%s;
             """, (student_id, course_type, order))
         return cursor.fetchone() is not None
 
@@ -216,7 +196,7 @@ def check_attendance_course_is_chosen(student_id: str, course_id: str):
     cursor.execute("""
         SELECT * FROM attendance_view
         WHERE attendance_student_id=%s 
-            AND attendance_course_id=%s;
+            AND curriculum_course_id=%s;
         """, (student_id, course_id))
     return cursor.fetchone() is not None
 
@@ -226,5 +206,29 @@ def get_attendance_curriculum_chosen_count(curriculum_id: int):
         SELECT COUNT(*) AS count FROM attendance_view
         WHERE attendance_curriculum_id=%s;
         """, (curriculum_id,))
-    return cursor.fetchone()
+    return cursor.fetchone()['count']
 
+def add_selection_audit(student_id: str, curriculum_id: int, audit_type: int, operator_id: str):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        INSERT INTO selection_audit_table
+        (selection_audit_student_id, selection_audit_curriculum_id, selection_audit_type, selection_audit_operator_id)
+        VALUES (%s, %s, %s, %s);
+        """, (student_id, curriculum_id, audit_type, operator_id))
+    conn.commit()
+
+def get_curriculum_choice_count(curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT COUNT(*) AS count FROM choice_table
+        WHERE choice_curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()['count']
+
+def get_curriculum_attendance_count(curriculum_id: int):
+    conn, cursor = get_cursor('root')
+    cursor.execute("""
+        SELECT COUNT(*) AS count FROM attendance_view
+        WHERE attendance_curriculum_id=%s;
+        """, (curriculum_id,))
+    return cursor.fetchone()['count']

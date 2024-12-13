@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status, APIRouter, File, UploadFile
+from fastapi import FastAPI, Depends, HTTPException, status, APIRouter, File, UploadFile, Form
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
@@ -20,6 +20,7 @@ import tempfile
 import random, string
 from typing import List
 from utils.resource import ResourceManager
+from urllib.parse import quote
 
 router = APIRouter(
     prefix="/Teacher",
@@ -50,7 +51,7 @@ async def query_curriculum_scores(curriculum_id: int):
         }
     }
 
-@router.get("downloadCurriculumScores")
+@router.get("/downloadCurriculumScores")
 async def download_curriculum_scores(curriculum_id: int):
     if not check_curriculum_id_exist(curriculum_id):
         return {
@@ -60,7 +61,7 @@ async def download_curriculum_scores(curriculum_id: int):
         }
     conn, cursor = get_cursor('root')
     cursor.execute("""
-        SELECT course_name, curriculum_id, semester_name, curriculum_teacher_name AS teacher_name
+        SELECT course_name, curriculum_id, curriculum_semester_name, curriculum_teacher_name AS teacher_name
         FROM curriculum_view
         WHERE curriculum_id=%s;
         """, (curriculum_id,))
@@ -70,14 +71,14 @@ async def download_curriculum_scores(curriculum_id: int):
         WHERE qcs.attendance_curriculum_id=%s;
         """, (curriculum_id,))
     scores = cursor.fetchall()
-    wb = openpyxl.Workbook()
+    xlsx_template = os.path.join("~", "static", "scores.xlsx")
+    xlsx_template = os.path.expanduser(xlsx_template)
+    wb = openpyxl.load_workbook(xlsx_template)
     ws = wb.active
-    ws.title = "Sheet1"
-    ws["A1"], ws["B1"] = "课程名", curriculum_info['course_name']
-    ws["A2"], ws["B2"] = "教学班编号", curriculum_info['curriculum_id']
-    ws["A3"], ws["B3"] = "学期", curriculum_info['semester_name']
-    ws["A4"], ws["B4"] = "教师姓名", curriculum_info['teacher_name']
-    ws["A5"], ws["B5"], ws["C5"] = "学号", "学生姓名", "成绩"
+    ws["B1"] = curriculum_info['course_name']
+    ws["B2"] = curriculum_info['curriculum_id']
+    ws["B3"] = curriculum_info['curriculum_semester_name']
+    ws["B4"] = curriculum_info['teacher_name']
     for i, score in enumerate(scores):
         ws[f"A{i+6}"], ws[f"B{i+6}"], ws[f"C{i+6}"] = score['student_id'], score['student_name'], score['score']
     temp_file = tempfile.NamedTemporaryFile(suffix=".xlsx")
@@ -86,8 +87,10 @@ async def download_curriculum_scores(curriculum_id: int):
     wb.save(output)
     output.seek(0)
     
+    filename = f"{curriculum_info['course_name']}_{curriculum_info['teacher_name']}_汇总表.xlsx"
+
     headers = {
-        'Content-Disposition': 'attachment; filename="scores.xlsx"'
+        'Content-Disposition': f"attachment; filename*=UTF-8''{quote(filename)}"
     }
     return StreamingResponse(output, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", headers=headers)
 
@@ -114,8 +117,8 @@ async def update_score(req: update_score_req):
     conn, cursor = get_cursor('root')
     cursor.execute("""
         UPDATE attendance_table
-        SET score=%s
-        WHERE curriculum_id=%s AND student_id=%s;
+        SET attendance_score=%s
+        WHERE attendance_curriculum_id=%s AND attendance_student_id=%s;
         """, (score, curriculum_id, student_id))
     return {
         'success': True,
@@ -123,21 +126,11 @@ async def update_score(req: update_score_req):
         'data': {}
     }
 
-'''
-接受.xlsx文件，格式如下
-	A	B	C
-1	课程名	{course_name}	
-2	教学班编号	{curriculum_id}	
-3	学期	{semester_name}	
-4	教师姓名	{teacher_name}	
-5	学号	学生姓名	成绩
-6	{student_id}	{student_name}	{score} | 空单元格
-...	......	......	......
-修改对应学生成绩
-'''
-
 @router.post("/updateScoreBatch")
-async def update_score_batch(curriculum_id: int, file: UploadFile = File(...)):
+async def update_score_batch(
+    curriculum_id: int = Form(...), 
+    file: UploadFile = File(...)
+):
     if not check_curriculum_id_exist(curriculum_id):
         return {
             'success': False,

@@ -106,12 +106,12 @@ async def verify(token: str):
 
 class update_password_req(BaseModel):
     username: str
-    oldPassword: str
-    newPassword: str
+    old_password: str
+    new_password: str
 
 @router.post("/updatePassword")
 async def updatePassword(req: update_password_req):
-    username, oldPassword, newPassword = req.username, req.oldPassword, req.newPassword
+    username, old_password, new_password = req.username, req.old_password, req.new_password
     user = get_user(username)
     if user is None:
         return {
@@ -119,14 +119,14 @@ async def updatePassword(req: update_password_req):
             'errCode': 100301,
             'data': {}
         }
-    if user['login_password'] != oldPassword:
+    if user['login_password'] != old_password:
         return {
             'success': False,
             'errCode': 100302,
             'data': {}
         }
     conn, cursor = get_cursor('root')
-    cursor.execute("UPDATE login_table SET login_password=%s WHERE login_id=%s", (newPassword, username))
+    cursor.execute("UPDATE login_table SET login_password=%s WHERE login_id=%s", (new_password, username))
     conn.commit()
     return {
         'success': True,

@@ -64,7 +64,7 @@ async def add_choice(req: add_choice_req):
             'data': {}
         }
     course_type = get_curriculum_course_type(curriculum_id)
-    if order >= order_limit[course_type]:
+    if order > order_limit[course_type]:
         return {
             'success': False,
             'errCode': 400105,
@@ -73,6 +73,7 @@ async def add_choice(req: add_choice_req):
     conn, cursor = get_cursor('root')
     cursor.execute("INSERT INTO choice_table (choice_student_id, choice_curriculum_id, choice_order, choice_introduction) VALUES (%s, %s, %s, %s)", (student_id, curriculum_id, order, introduction))
     conn.commit()
+    add_selection_audit(student_id, curriculum_id, 0, student_id)
     return {
         'success': True,
         'errCode': OK,
@@ -101,38 +102,33 @@ async def delete_choice(req: delete_choice_req):
     conn, cursor = get_cursor('root')
     cursor.execute("DELETE FROM choice_table WHERE choice_student_id=%s AND choice_curriculum_id=%s", (student_id, curriculum_id))
     conn.commit()
+    add_selection_audit(student_id, curriculum_id, 1, student_id)
     return {
         'success': True,
         'errCode': OK,
         'data': {}
     }
 
-@router.get("/queryStudentChoice")
-async def query_student_choice(student_id: str, semester_id: int):
+@router.get("/queryStudentChoices")
+async def query_student_choices(student_id: str):
     if not check_student_id_exist(student_id):
         return {
             'success': False,
             'errCode': 400301,
             'data': {}
         }
-    if not check_semester_id_exist(semester_id):
-        return {
-            'success': False,
-            'errCode': 400302,
-            'data': {}
-        }
     conn, cursor = get_cursor('root')
     cursor.execute("""
-        SELECT * FROM queryStudentChoices qsc
-        WHERE qsc.choice_student_id=%s
-            AND qsc.curriculum_semester_id=%s;
-        """, (student_id, semester_id))
+        SELECT * FROM queryStudentChoices 
+        WHERE choice_student_id=%s;
+        """, (student_id,))
     result = cursor.fetchall()
     choices = []
     for row in result:
         choices.append({
             **row,
-            'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_resources']).list
+            'curriculum_choice_number': get_curriculum_choice_count(row['choice_curriculum_id']),
+            'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_string']).list
         })
     return {
         'success': True,
@@ -143,11 +139,32 @@ async def query_student_choice(student_id: str, semester_id: int):
     }
 
 class drawing_course_req(BaseModel):
+    course_id: str
     semester_id: int
 
 @router.post("/drawingCourse")
 async def drawing_course(req: drawing_course_req):
-    pass
+    course_id, semester_id = req.course_id, req.semester_id
+    if not check_course_id_exist(course_id):
+        return {
+            'success': False,
+            'errCode': 400401,
+            'data': {}
+        }
+    if not check_course_id_exist(course_id):
+        return {
+            'success': False,
+            'errCode': 400402,
+            'data': {}
+        }
+    conn, cursor = get_cursor('root')
+    cursor.execute("CALL drawingCourse(%s, %s)", (course_id, semester_id))
+    conn.commit()
+    return {
+        'success': True,
+        'errCode': OK,
+        'data': {}
+    }
 
 class add_attendance_req(BaseModel):
     student_id: str
@@ -186,7 +203,9 @@ async def add_attendance(req: add_attendance_req):
         }
     conn, cursor = get_cursor('root')
     cursor.execute("INSERT INTO attendance_table (attendance_student_id, attendance_curriculum_id) VALUES (%s, %s)", (student_id, curriculum_id))
+    cursor.execute("DELETE FROM choice_table WHERE choice_student_id=%s AND choice_curriculum_id=%s", (student_id, curriculum_id))
     conn.commit()
+    add_selection_audit(student_id, curriculum_id, 4, operator_id)
     return {
         'success': True,
         'errCode': OK,
@@ -216,6 +235,7 @@ async def delete_attendance(req: delete_attendance_req):
     conn, cursor = get_cursor('root')
     cursor.execute("DELETE FROM attendance_table WHERE attendance_student_id=%s AND attendance_curriculum_id=%s", (student_id, curriculum_id))
     conn.commit()
+    add_selection_audit(student_id, curriculum_id, 5, operator_id)
     return {
         'success': True,
         'errCode': OK,
@@ -223,31 +243,25 @@ async def delete_attendance(req: delete_attendance_req):
     }
 
 @router.get("/queryStudentAttendances")
-async def query_student_attendances(student_id: str, semester_id: int):
+async def query_student_attendances(student_id: str):
     if not check_student_id_exist(student_id):
         return {
             'success': False,
             'errCode': 400701,
             'data': {}
         }
-    if not check_semester_id_exist(semester_id):
-        return {
-            'success': False,
-            'errCode': 400702,
-            'data': {}
-        }
     conn, cursor = get_cursor('root')
     cursor.execute("""
         SELECT * FROM queryStudentAttendances qsa
-        WHERE qsa.attendance_student_id=%s
-            AND qsa.curriculum_semester_id=%s;
-        """, (student_id, semester_id))
+        WHERE qsa.attendance_student_id=%s;
+        """, (student_id,))
     result = cursor.fetchall()
     attendances = []
     for row in result:
         attendances.append({
             **row,
-            'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_resources']).list
+            'curriculum_attendance_number': get_curriculum_attendance_count(row['attendance_curriculum_id']),
+            'curriculum_utilization_resources': ResourceManager(row['curriculum_utilization_string']).list
         })
     return {
         'success': True,

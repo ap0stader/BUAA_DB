@@ -24,9 +24,10 @@ class ResourceManager:
                 self._str = self.from_list(data)
 
     def from_str(self, data: str):
+        # print(f'parsing: {data}')
         result = []
         for i in data.split(';'):
-            week, day, ti, name = i.split(' ')
+            week, day, ti, name = i.strip().split(' ')
             week, day, ti = week[1:-2], day[2], ti[1:-1]
             weeks = week.split(',')
             resource_id = self.table[name]

@@ -28,14 +28,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def query_place():
     conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM place_table")
-    result = cursor.fetchall()
-    places = []
-    for row in result:
-        places.append({
-            'place_id': row['place_id'],
-            'place_name': row['place_name'],
-            'is_enable': row['place_is_enable']
-        })
+    places = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -71,11 +64,11 @@ async def add_place(req: add_place_req):
 class update_place_req(BaseModel):
     place_id: int
     place_name: str
-    is_enable: int
+    place_is_enable: int
  
 @router.post("/updatePlace")
 async def update_place(req: update_place_req):
-    place_id, place_name, is_enable = req.place_id, req.place_name, req.is_enable
+    place_id, place_name, place_is_enable = req.place_id, req.place_name, req.place_is_enable
     if not check_place_id_exist(place_id):
         return {
             'success': False,
@@ -90,7 +83,7 @@ async def update_place(req: update_place_req):
         }
     conn, cursor = get_cursor('root')
     cursor.execute("UPDATE place_table SET place_name=%s, place_is_enable=%s WHERE place_id=%s",
-                        (place_name, is_enable, place_id))
+                        (place_name, place_is_enable, place_id))
     conn.commit()
     return {
         'success': True,
@@ -106,13 +99,7 @@ async def update_place(req: update_place_req):
 async def query_department():
     conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM department_table")
-    result = cursor.fetchall()
-    departments = []
-    for row in result:
-        departments.append({
-            'department_id': row['department_id'],
-            'department_name': row['department_name']
-        })
+    departments = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -151,14 +138,7 @@ async def add_department(req: add_department_req):
 async def query_major():
     conn, cursor = get_cursor('root')
     cursor.execute("SELECT * FROM major_table")
-    result = cursor.fetchall()
-    majors = []
-    for row in result:
-        majors.append({
-            'major_id': row['major_id'],
-            'major_name': row['major_name'],
-            'major_department_id': row['major_department_id']
-        })
+    majors = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -204,36 +184,9 @@ async def add_major(req: add_major_req):
 @router.get("/queryClass")
 async def query_class():
     conn, cursor = get_cursor('root')
-    cursor.execute(
-"""SELECT
-    ct.class_id,
-    ct.class_major_id,
-    mt.major_department_id AS class_department_id,
-    ct.class_teacher_id,
-    tt.teacher_name AS class_teacher_name
-FROM 
-    class_table ct
-LEFT JOIN 
-    major_table mt
-ON 
-    ct.class_major_id = mt.major_id
-LEFT JOIN 
-    teacher_table tt
-ON 
-    ct.class_teacher_id = tt.teacher_id;
-""")
-    result = cursor.fetchall()
-    classes = []
-    for row in result:
-        classes.append({
-            'class_id': row['class_id'],
-            'class_major_id': row['class_major_id'],
-            'class_department_id': row['class_department_id'],
-            'class_teacher_id': row['class_teacher_id'],
-            'class_teacher_name': row['class_teacher_name'],
-        })
+    cursor.execute("SELECT * FROM queryClass")
+    classes = cursor.fetchall()
     # replace None in classes with null
-    print(classes)
     return {
         'success': True,
         'errCode': OK,
@@ -270,33 +223,33 @@ async def add_class(req: add_class_req):
         'data': {}
     }
 
-class update_class_teacher_req(BaseModel):
+class update_class_headmaster_req(BaseModel):
     class_id: int
-    class_teacher_id: int
+    class_headmaster_id: str | None
 
-@router.post("/updateClassTeacher")
-async def update_class_teacher(req: update_class_teacher_req):
-    class_id, class_teacher_id = req.class_id, req.class_teacher_id
+@router.post("/updateClassHeadmaster")
+async def update_class_headmaster(req: update_class_headmaster_req):
+    class_id, class_headmaster_id = req.class_id, req.class_headmaster_id
     if not check_class_id_exist(class_id):
         return {
             'success': False,
             'errCode': ERR_CLASS__CLASS_ID_NOT_FOUND,
             'data': {}
         }
-    if not check_teacher_id_exist(class_teacher_id):
+    if class_headmaster_id is not None and not check_teacher_id_exist(class_headmaster_id):
         return {
             'success': False,
             'errCode': ERR_CLASS__TEACHER_ID_NOT_FOUND,
             'data': {}
         }
-    if check_teacher_is_master(class_teacher_id):
+    if check_teacher_is_master(class_headmaster_id):
         return {
             'success': False,
             'errCode': ERR_CLASS__TEACHER_IS_CLASS_MASTER,
             'data': {}
         }
     conn, cursor = get_cursor('root')
-    cursor.execute("UPDATE class_table SET class_teacher_id=%s WHERE class_id=%s", (class_teacher_id, class_id))
+    cursor.execute("UPDATE class_table SET class_headmaster_id=%s WHERE class_id=%s", (class_headmaster_id, class_id))
     conn.commit()
     return {
         'success': True,
@@ -309,46 +262,19 @@ async def update_class_teacher(req: update_class_teacher_req):
 ###############################################################
 
 @router.get("/queryStudent")
-async def query_student(page: int):
+async def query_student(page: int, department_id: int):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM student_table")
+    if department_id < 0:
+        cursor.execute("SELECT * FROM queryStudent")
+    else:
+        cursor.execute("SELECT * FROM queryStudent WHERE student_department_id = %s", (department_id,))
     count = len(cursor.fetchall())
     offset = (page - 1) * 50
-    cursor.execute(
-"""SELECT 
-    st.student_id AS "student_id", 
-    st.student_name AS "student_name", 
-    st.student_gender AS "student_gender", 
-    st.student_phone AS "student_phone", 
-    st.student_class_id AS "student_class_id", 
-    cl.class_major_id AS "student_major_id", 
-    ma.major_department_id AS "student_department_id", 
-    lt.login_is_enable AS "login_is_enable"
-FROM 
-    student_table st
-JOIN 
-    class_table cl ON st.student_class_id = cl.class_id
-JOIN 
-    major_table ma ON cl.class_major_id = ma.major_id
-JOIN 
-    login_table lt ON st.student_id = lt.login_id
-ORDER BY
-    st.student_id
-LIMIT 50 OFFSET %s;
-""", (offset,))
-    result = cursor.fetchall()
-    students = []
-    for row in result:
-        students.append({
-            'student_id': row['student_id'],
-            'student_name': row['student_name'],
-            'student_gender': row['student_gender'],
-            'student_phone': row['student_phone'],
-            'student_class_id': row['student_class_id'],
-            'student_major_id': row['student_major_id'],
-            'student_department_id': row['student_department_id'],
-            'login_is_enable': row['login_is_enable']
-        })
+    if department_id < 0:
+        cursor.execute("SELECT * FROM queryStudent ORDER BY student_id LIMIT 50 OFFSET %s;", (offset,))
+    else:
+        cursor.execute("SELECT * FROM queryStudent WHERE student_department_id = %s ORDER BY student_id LIMIT 50 OFFSET %s;", (department_id, offset))
+    students = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -407,16 +333,20 @@ async def add_student_batch(file: UploadFile = File(...)):
         if not file.filename.endswith('.xlsx'):
             raise Exception
         content = await file.read()
-        df = pd.read_excel(BytesIO(content), skiprows=1, header=None)
+        df = pd.read_excel(BytesIO(content), header=None)
         if len(df.columns) != 5:
             raise Exception
         failed_info = []
         for index, row in df.iterrows():
+            if index == 0:
+                continue
             student_id, student_name, student_gender, student_phone, student_class_id = row
             if pd.isnull(student_id) or pd.isnull(student_name) or pd.isnull(student_class_id):
                 raise Exception
         conn, cursor = get_cursor('root')
         for index, row in df.iterrows():
+            if index == 0:
+                continue
             student_id, student_name, student_gender, student_phone, student_class_id = row
             if pd.isnull(student_gender):
                 student_gender = None
@@ -425,13 +355,13 @@ async def add_student_batch(file: UploadFile = File(...)):
             if check_login_id_exist(student_id):
                 failed_info.append({
                     'student_id': student_id,
-                    'errCode': DUPLICATE_LOGIN_ID
+                    'reason': DUPLICATE_LOGIN_ID
                 })
                 continue
             if not check_class_id_exist(student_class_id):
                 failed_info.append({
                     'student_id': student_id,
-                    'errCode': CLASSID_NOT_FOUND
+                    'reason': CLASSID_NOT_FOUND
                 })
                 continue
             try:
@@ -440,7 +370,7 @@ async def add_student_batch(file: UploadFile = File(...)):
             except Exception as e:
                 failed_info.append({
                     'student_id': student_id,
-                    'errCode': UNKNOWN
+                    'reason': UNKNOWN
                 })
                 continue
         if len(failed_info) > 0:
@@ -506,40 +436,19 @@ async def update_student(req: update_student_req):
 ###############################################################
 
 @router.get("/queryTeacher")
-async def query_teacher(page: int):
+async def query_teacher(page: int, department_id: int):
     conn, cursor = get_cursor('root')
-    cursor.execute("SELECT * FROM teacher_table")
+    if department_id < 0:
+        cursor.execute("SELECT * FROM teacher_table")
+    else:
+        cursor.execute("SELECT * FROM teacher_table WHERE teacher_department_id = %s", (department_id,))
     count = len(cursor.fetchall())
     offset = (page - 1) * 50
-    cursor.execute(
-"""SELECT
-    tt.teacher_id AS "teacher_id",
-    tt.teacher_name AS "teacher_name",
-    tt.teacher_gender AS "teacher_gender",
-    tt.teacher_phone AS "teacher_phone",
-    tt.teacher_department_id AS "teacher_department_id",
-    lt.login_is_enable AS "login_is_enable"
-FROM
-    teacher_table tt
-JOIN
-    login_table lt
-ON
-    tt.teacher_id = lt.login_id
-ORDER BY
-    tt.teacher_id
-LIMIT 50 OFFSET %s;
-""", (offset,))
-    result = cursor.fetchall()
-    teachers = []
-    for row in result:
-        teachers.append({
-            'teacher_id': row['teacher_id'],
-            'teacher_name': row['teacher_name'],
-            'teacher_gender': row['teacher_gender'],
-            'teacher_phone': row['teacher_phone'],
-            'teacher_department_id': row['teacher_department_id'],
-            'login_is_enable': row['login_is_enable']
-        })
+    if department_id < 0:
+        cursor.execute("SELECT * FROM queryTeacher ORDER BY teacher_id LIMIT 50 OFFSET %s;", (offset,))
+    else:
+        cursor.execute("SELECT * FROM queryTeacher WHERE teacher_department_id = %s ORDER BY teacher_id LIMIT 50 OFFSET %s;", (department_id, offset))
+    teachers = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -638,35 +547,8 @@ async def query_faculty(page: int):
     cursor.execute("SELECT * FROM faculty_table")
     count = len(cursor.fetchall())
     offset = (page - 1) * 50
-    cursor.execute(
-"""SELECT
-    ft.faculty_id AS "faculty_id",
-    ft.faculty_name AS "faculty_name",
-    ft.faculty_gender AS "faculty_gender",
-    ft.faculty_phone AS "faculty_phone",
-    ft.faculty_department_id AS "faculty_department_id",
-    lt.login_is_enable AS "login_is_enable"
-FROM
-    faculty_table ft
-JOIN
-    login_table lt
-ON
-    ft.faculty_id = lt.login_id
-ORDER BY
-    ft.faculty_id
-LIMIT 50 OFFSET %s;
-""", (offset,))
-    result = cursor.fetchall()
-    faculties = []
-    for row in result:
-        faculties.append({
-            'faculty_id': row['faculty_id'],
-            'faculty_name': row['faculty_name'],
-            'faculty_gender': row['faculty_gender'],
-            'faculty_phone': row['faculty_phone'],
-            'faculty_department_id': row['faculty_department_id'],
-            'login_is_enable': row['login_is_enable']
-        })
+    cursor.execute("SELECT * FROM queryFaculty ORDER BY faculty_id LIMIT 50 OFFSET %s;", (offset,))
+    faculties = cursor.fetchall()
     return {
         'success': True,
         'errCode': OK,
@@ -759,11 +641,11 @@ async def update_faculty(req: update_faculty_req):
 #####################    Login    #############################
 ###############################################################
 
-class disable_login_req(BaseModel):
+class toggle_login_enable_req(BaseModel):
     username: str
 
-@router.post("/disableLogin")
-async def disable_login(req: disable_login_req):
+@router.post("/toggleLoginEnable")
+async def toggle_login_enable(req: toggle_login_enable_req):
     username = req.username
     if not check_login_id_exist(username):
         return {
@@ -772,7 +654,9 @@ async def disable_login(req: disable_login_req):
             'data': {}
         }
     conn, cursor = get_cursor('root')
-    cursor.execute("UPDATE login_table SET login_is_enable=0 WHERE login_id=%s", (username,))
+    cursor.execute("SELECT login_is_enable FROM login_table WHERE login_id=%s", (username))
+    status = cursor.fetchone()['login_is_enable']
+    cursor.execute("UPDATE login_table SET login_is_enable=%s WHERE login_id=%s", (0 if status else 1, username))
     conn.commit()
     return {
         'success': True,
