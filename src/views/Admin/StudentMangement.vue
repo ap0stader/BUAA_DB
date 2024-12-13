@@ -357,7 +357,7 @@
     }
 
     function downloadAddBatchFile() {
-        window.open("/static/upload/批量添加学生模板.xlsx")
+        window.open("/static/批量添加学生模板.xlsx")
     }
 
     let addBatchDialogSubmitLoading = ref(false)
