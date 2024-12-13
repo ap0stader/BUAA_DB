@@ -199,6 +199,38 @@ export interface queryCurriculumsResponse {
 }
 
 // ===== Choice =====
+export interface choiceInfo extends curriculumPublicInfo {
+    choice_curriculum_id: number
+    course_credit: number
+    course_hours: number
+    curriculum_teacher_department_id: number
+    curriculum_capacity: number
+    curriculum_choice_number: number
+    curriculum_info: number
+    curriculum_utilization_resources: number[]
+    choice_order: number
+    choice_introduction: string | null
+}
+
+export interface queryStudentChoicesResponse {
+    choices: choiceInfo[]
+}
+
+export interface attendanceInfo extends curriculumPublicInfo {
+    attendance_curriculum_id: number
+    course_credit: number
+    course_hours: number
+    curriculum_teacher_department_id: number
+    curriculum_capacity: number
+    curriculum_attendance_number: number
+    curriculum_info: number
+    curriculum_utilization_resources: number[]
+}
+
+export interface queryStudentAttendancesResponse {
+    attendances: attendanceInfo[]
+}
+
 export interface curriculumChoiceInfo {
     choice_student_id: string
     student_name: string

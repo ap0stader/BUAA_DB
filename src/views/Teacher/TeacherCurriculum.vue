@@ -14,16 +14,16 @@
                         类型：
                         {{
                             curriculum.course_type === 0
-                                ? "必修课"
+                                ? "必修"
                                 : curriculum.course_type === 1
-                                ? "选修课"
+                                ? "选修"
                                 : curriculum.course_type === 2
-                                ? "通识课"
+                                ? "通识"
                                 : curriculum.course_type === 3
-                                ? "体育课"
+                                ? "体育"
                                 : curriculum.course_type === 4
-                                ? "科研课"
-                                : "其他课"
+                                ? "科研"
+                                : "其他"
                         }}
                     </p>
                     <p class="mb-3">容量： {{ curriculum.curriculum_capacity }}</p>

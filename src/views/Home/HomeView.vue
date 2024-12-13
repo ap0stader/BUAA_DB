@@ -70,7 +70,7 @@
                 title="成绩查看"
                 value="facultyScore" />
             <v-list-item
-                v-if="token.isStudent"
+                v-if="token.isStudent && [0, 1, 3, 4].includes(env.env.now_step)"
                 prepend-icon="mdi-human-male-board-poll"
                 title="选课"
                 value="chooseCurriculum" />

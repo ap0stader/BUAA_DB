@@ -12,16 +12,16 @@
                         课程分类：
                         {{
                             course.course_type === 0
-                                ? "必修课"
+                                ? "必修"
                                 : course.course_type === 1
-                                ? "选修课"
+                                ? "选修"
                                 : course.course_type === 2
-                                ? "通识课"
+                                ? "通识"
                                 : course.course_type === 3
-                                ? "体育课"
+                                ? "体育"
                                 : course.course_type === 4
-                                ? "科研课"
-                                : "其他课"
+                                ? "科研"
+                                : "其他"
                         }}
                     </p>
                     <p class="mb-3">学分： {{ course.course_credit }}</p>
@@ -177,11 +177,11 @@
         type_id: number
         type_name: string
     }[] = [
-        { type_id: 0, type_name: "必修课" },
-        { type_id: 1, type_name: "选修课" },
-        { type_id: 2, type_name: "通识课" },
-        { type_id: 3, type_name: "体育课" },
-        { type_id: 4, type_name: "科研课" },
+        { type_id: 0, type_name: "必修" },
+        { type_id: 1, type_name: "选修" },
+        { type_id: 2, type_name: "通识" },
+        { type_id: 3, type_name: "体育" },
+        { type_id: 4, type_name: "科研" },
     ]
 
     let addDialogActive = ref(false)

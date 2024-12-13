@@ -76,7 +76,6 @@
     import { useToken } from "@/stores/token"
     import type { queryScoreStatisticsResponse, scoreStatisticsInfo } from "@/types"
     import { callapi } from "@/utils/callapi"
-    import { s } from "node_modules/vite/dist/node/types.d-aGj9QkWt"
     import { ref, watch } from "vue"
 
     const extent: {

@@ -33,16 +33,16 @@
             <template v-slot:item.course_type_string="{ item }">
                 {{
                     item.course_type === 0
-                        ? "必修课"
+                        ? "必修"
                         : item.course_type === 1
-                        ? "选修课"
+                        ? "选修"
                         : item.course_type === 2
-                        ? "通识课"
+                        ? "通识"
                         : item.course_type === 3
-                        ? "体育课"
+                        ? "体育"
                         : item.course_type === 4
-                        ? "科研课"
-                        : "其他课"
+                        ? "科研"
+                        : "其他"
                 }}
             </template>
             <template v-slot:item.curriculum_person="{ item }">
