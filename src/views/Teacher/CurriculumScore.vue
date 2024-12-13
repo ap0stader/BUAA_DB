@@ -119,10 +119,7 @@
 
 <script lang="ts" setup name="CurriculumAttendance">
     import { useEnv } from "@/stores/env"
-    import { useToken } from "@/stores/token"
     import type {
-        addStudentBatchFailedInfo,
-        addStudentBatchResponse,
         curriculumInfo,
         curriculumScoreInfo,
         queryCurriculumScoresResponse,
@@ -145,7 +142,6 @@
     ]
 
     const env = useEnv()
-    const token = useToken()
 
     let curriculum = ref<curriculumInfo>()
     let scores = ref([] as curriculumScoreInfo[])

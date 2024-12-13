@@ -87,7 +87,6 @@
 </template>
 
 <script lang="ts" setup name="CourseManagement">
-    import { useEnv } from "@/stores/env"
     import type { courseInfo, queryCoursesResponse } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
@@ -102,8 +101,6 @@
         { title: "申报教师", key: "course_teacher_name" },
         { title: "操作", key: "actions", sortable: false },
     ]
-
-    const env = useEnv()
 
     let courses = ref([] as courseInfo[])
 

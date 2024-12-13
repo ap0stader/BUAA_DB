@@ -21,7 +21,7 @@
             </v-card-actions>
         </v-card>
 
-        <v-card prepend-icon="mdi-cogs" title="选课阶段设置" max-width="600px" location="bottom">
+        <v-card prepend-icon="mdi-cogs" title="选课阶段设置" max-width="600px" location="bottom" class="mb-10">
             <v-divider />
             <v-select
                 v-model="nowStep"
@@ -46,14 +46,33 @@
                 >
             </v-card-actions>
         </v-card>
+
+        <v-card
+            v-if="env.env.now_step === 2"
+            prepend-icon="mdi-cogs"
+            title="课程抽签"
+            max-width="600px"
+            location="bottom">
+            <v-divider />
+            <v-card-actions>
+                <v-btn color="primary" block variant="tonal" @click="onDrawingCourseClick">全部课程抽签</v-btn>
+            </v-card-actions>
+            <v-card-item v-if="drawingProgressShow">
+                <p class="mb-2">抽签进度</p>
+                <p class="mb-2">已抽签/全部课程：{{ drawingFinished }} / {{ courses.length }}</p>
+                <v-progress-linear v-model="drawingProgress" color="primary" rounded height="15" />
+            </v-card-item>
+        </v-card>
     </v-container>
 </template>
 
 <script lang="ts" setup name="EnvManagement">
     import { useEnv } from "@/stores/env"
+    import type { courseInfo, queryCoursesResponse } from "@/types"
     import { callapi } from "@/utils/callapi"
+    import emitter from "@/utils/emitter"
     import { envManager } from "@/utils/envManager"
-    import { ref } from "vue"
+    import { computed, onMounted, ref } from "vue"
 
     const env = useEnv()
 
@@ -100,6 +119,58 @@
             (data) => {
                 nowStep.value = undefined
                 envManager.updateEnv()
+            }
+        )
+    }
+
+    let courses = ref([] as courseInfo[])
+
+    function queryCourses() {
+        callapi.get("Course", "queryCourses", {}, (data) => {
+            const result = <queryCoursesResponse>data
+            courses.value = result.courses
+        })
+    }
+
+    onMounted(() => {
+        queryCourses()
+    })
+
+    let drawingProgressShow = ref(false)
+    let drawingFinished = ref(0)
+    let drawingProgress = ref(0.0)
+
+    function onDrawingCourseClick() {
+        if (courses.value.length === 0) {
+            emitter.emit("normalerror", "没有课程可以抽签")
+        } else {
+            drawingFinished.value = 0
+            drawingProgress.value = 0.0
+            drawingProgressShow.value = true
+            setTimeout(() => {
+                callDrawingCourse()
+            }, 1000)
+        }
+    }
+
+    function callDrawingCourse() {
+        callapi.post(
+            "json",
+            "Choice",
+            "drawingCourse",
+            {
+                semester_id: env.env.now_semester_id,
+                course_id: courses.value[drawingFinished.value].course_id,
+            },
+            (data) => {
+                drawingFinished.value++
+                drawingProgress.value = (drawingFinished.value / courses.value.length) * 100
+                if (drawingFinished.value < courses.value.length) {
+                    callDrawingCourse()
+                } else {
+                    emitter.emit("success_snackbar", "课程抽签完成")
+                    queryCourses()
+                }
             }
         )
     }

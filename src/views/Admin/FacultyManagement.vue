@@ -195,7 +195,6 @@
 
 <script lang="ts" setup name="FacultyManagement">
     import { useEnv } from "@/stores/env"
-    import { useToken } from "@/stores/token"
     import type { queryFacultyResponse, facultyInfo } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
@@ -211,7 +210,6 @@
     ]
 
     const env = useEnv()
-    const token = useToken()
 
     let faculties = ref([] as facultyInfo[])
     let tableLoading = ref(false)
