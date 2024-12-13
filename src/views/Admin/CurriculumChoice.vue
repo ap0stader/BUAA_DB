@@ -24,12 +24,20 @@
             <template v-slot:item.choice_introduction="{ item }">
                 {{ item.choice_introduction ? item.choice_introduction : "无" }}
             </template>
+
+            <template v-slot:item.actions="{ item }">
+                <v-btn variant="tonal" density="comfortable" color="green" class="me-1" @click="addAttendance(item)">
+                    <v-icon size="default"> mdi-check </v-icon>
+                    中选
+                </v-btn>
+            </template>
         </v-data-table>
     </v-container>
 </template>
 
 <script lang="ts" setup name="CurriculumChoice">
     import { useEnv } from "@/stores/env"
+    import { useToken } from "@/stores/token"
     import type {
         curriculumChoiceInfo,
         curriculumInfo,
@@ -37,6 +45,7 @@
         queryCurriculumsResponse,
     } from "@/types"
     import { callapi } from "@/utils/callapi"
+    import emitter from "@/utils/emitter"
     import { onMounted, ref } from "vue"
 
     const props = defineProps<{ curriculum_id: string }>()
@@ -48,6 +57,7 @@
         { title: "专业", key: "student_major_name" },
         { title: "学院", key: "student_department_name" },
         { title: "志愿顺序", key: "choice_order" },
+        { title: "操作", key: "actions", sortable: false },
     ]
 
     const headers_4 = [
@@ -57,9 +67,11 @@
         { title: "专业", key: "student_major_name" },
         { title: "学院", key: "student_department_name" },
         { title: "自我介绍", key: "choice_introduction" },
+        { title: "操作", key: "actions", sortable: false },
     ]
 
     const env = useEnv()
+    const token = useToken()
 
     let curriculum = ref<curriculumInfo>()
     let choices = ref([] as curriculumChoiceInfo[])
@@ -85,6 +97,23 @@
     onMounted(() => {
         queryChoices()
     })
+
+    function addAttendance(item: curriculumChoiceInfo) {
+        callapi.post(
+            "json",
+            "Choice",
+            "addAttendance",
+            {
+                student_id: item.choice_student_id,
+                curriculum_id: curriculum.value?.curriculum_id,
+                operator_id: token.id,
+            },
+            () => {
+                emitter.emit("success_snackbar", "已确认中选")
+                queryChoices()
+            }
+        )
+    }
 </script>
 
 <style scoped></style>

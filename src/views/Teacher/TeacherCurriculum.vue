@@ -51,7 +51,7 @@
                         color="primary"
                         variant="tonal"
                         class="flex-grow-1"
-                        :disabled="env.env.now_step < 3"
+                        :disabled="env.env.now_step < 2"
                         @click="gotoCurriculumScore(curriculum.curriculum_id)"
                         >查看选课与成绩情况</v-btn
                     >
