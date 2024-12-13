@@ -41,6 +41,17 @@ async def query_score(student_id: str):
     scores = cursor.fetchall()
     cursor.execute("SELECT gpa, average, weighted_average FROM student_score_stat WHERE student_id=%s;", (student_id,))
     stat = cursor.fetchone()
+    if not stat:
+        return {
+            'success': True,
+            'errCode': OK,
+            'data': {
+                'scores': [],
+                'gpa': None,
+                'average': None,
+                'weighted_average': None
+            }
+        }
     return {
         'success': True,
         'errCode': OK,
