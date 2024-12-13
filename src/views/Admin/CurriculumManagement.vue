@@ -73,6 +73,16 @@
                     预选情况
                 </v-btn>
                 <v-btn
+                    v-if="env.env.now_step >= 6"
+                    variant="tonal"
+                    density="comfortable"
+                    color="teal-lighten-2"
+                    class="me-1"
+                    @click="openEvaluationDialog(item)">
+                    <v-icon size="default"> mdi-checkbox-marked-circle-plus-outline </v-icon>
+                    评教情况
+                </v-btn>
+                <v-btn
                     variant="tonal"
                     density="comfortable"
                     color="deep-purple-lighten-2"
@@ -188,16 +198,47 @@
             </template>
         </v-card>
     </v-dialog>
+
+    <v-dialog max-width="800px" v-model="evaluationDialogActive">
+        <v-card>
+            <v-toolbar>
+                <v-btn icon="mdi-close" @click="evaluationDialogActive = false" />
+                <v-toolbar-title>评教情况</v-toolbar-title>
+            </v-toolbar>
+            <v-card-item>
+                <p>教学班编号：{{ evaluationDialogItem.curriculum_id }}</p>
+                <p>应评教人数：{{ evaluationDialogShouldPeople }} 实际评教人数：{{ evaluationDialogDonePeople }}</p>
+                <p>评教平均分：{{ evaluationDialogAverage }}</p>
+            </v-card-item>
+
+            <Bar id="my-chart-id" :data="chartData" class="ma-3" />
+        </v-card>
+    </v-dialog>
 </template>
 
 <script lang="ts" setup name="CurriculumManagement">
     import { useEnv } from "@/stores/env"
     import { useToken } from "@/stores/token"
-    import type { curriculumInfo, queryCurriculumsResponse } from "@/types"
+    import type { curriculumInfo, queryCurriculumEvaluationsResponse, queryCurriculumsResponse } from "@/types"
     import { callapi } from "@/utils/callapi"
     import emitter from "@/utils/emitter"
     import { onMounted, ref, watch } from "vue"
     import { useRouter } from "vue-router"
+
+    import { Bar } from "vue-chartjs"
+    import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js"
+    ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+
+    const chartData = {
+        labels: ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60-70", "70-80", "80-90", "90-100"],
+        datasets: [
+            {
+                label: "区间人数",
+                backgroundColor: "#0277BD",
+                data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
+        ],
+    }
 
     const headers = [
         { title: "开设学期", key: "curriculum_semester_name" },
@@ -254,6 +295,44 @@
             emitter.emit("success_snackbar", "收回场地资源成功")
             queryCurriculums()
         })
+    }
+
+    // ===== Evaluation Dialog =====
+    let evaluationDialogActive = ref(false)
+    let evaluationDialogItem = ref()
+    let evaluationDialogAverage = ref(0)
+    let evaluationDialogDonePeople = ref()
+    let evaluationDialogShouldPeople = ref()
+
+    function openEvaluationDialog(item: curriculumInfo) {
+        evaluationDialogItem.value = item
+        callapi.get(
+            "Faculty",
+            "queryCurriculumEvaluations",
+            {
+                curriculum_id: item.curriculum_id,
+            },
+            (data) => {
+                const result = <queryCurriculumEvaluationsResponse>data
+                evaluationDialogShouldPeople.value = result.evaluations.length
+                const validEvaluations = result.evaluations
+                    .map((evaluation) => evaluation.attendance_evaluation)
+                    .filter((evaluation) => evaluation != null)
+                evaluationDialogDonePeople.value = validEvaluations.length
+                if (validEvaluations.length === 0) {
+                    emitter.emit("normalerror", "暂无评教数据")
+                } else {
+                    // 计算统计数据
+                    let statistics = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                    validEvaluations.forEach((score) => {
+                        statistics[Math.floor(score / 10)]++
+                    })
+                    chartData.datasets[0].data = statistics
+                    evaluationDialogAverage.value = validEvaluations.reduce((a, b) => a + b) / validEvaluations.length
+                    evaluationDialogActive.value = true
+                }
+            }
+        )
     }
 
     // ===== Modify Dialog =====

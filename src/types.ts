@@ -328,6 +328,12 @@ export interface queryScoreStatisticsResponse {
     statistics: scoreStatisticsInfo[]
 }
 
+export interface queryCurriculumEvaluationsResponse {
+    evaluations: {
+        attendance_evaluation: number
+    }[]
+}
+
 // ===== Audit =====
 export interface loginAuditInfo {
     login_audit_id: number
