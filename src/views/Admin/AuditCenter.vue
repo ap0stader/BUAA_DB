@@ -37,9 +37,9 @@
                         ? "抽签中选"
                         : item.selection_audit_type === 3
                         ? "抽签落选"
-                        : item.selection_audit_type === 2
-                        ? "退改阶段选课"
-                        : item.selection_audit_type === 3
+                        : item.selection_audit_type === 4
+                        ? "退改阶段选课或被选中"
+                        : item.selection_audit_type === 5
                         ? "退改阶段退课"
                         : "其他操作"
                 }}
