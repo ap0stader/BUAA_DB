@@ -270,6 +270,48 @@ export interface queryCurriculumScoresResponse {
     scores: curriculumScoreInfo[]
 }
 
+// ===== Student =====
+export interface studentScoreInfo {
+    curriculum_id: number
+    curriculum_semester_id: number
+    curriculum_semester_name: string
+    curriculum_course_id: string
+    course_name: string
+    course_type: number
+    course_credit: number
+    course_hours: number
+    curriculum_teacher_id: string
+    curriculum_teacher_name: string
+    curriculum_info: string
+    score: number | null
+}
+
+export interface queryStudentScoresResponse {
+    scores: studentScoreInfo[]
+    gpa: number
+    average: number
+    weighted_average: number
+}
+
+export interface studentEvaluationInfo {
+    curriculum_id: number
+    curriculum_semester_id: number
+    curriculum_semester_name: string
+    curriculum_course_id: string
+    course_name: string
+    course_type: number
+    course_credit: number
+    course_hours: number
+    curriculum_teacher_id: string
+    curriculum_teacher_name: string
+    curriculum_info: string
+    evaluation: number | null
+}
+
+export interface queryStudentEvaluationsResponse {
+    evaluations: studentEvaluationInfo[]
+}
+
 // ===== Faculty =====
 export interface scoreStatisticsInfo {
     student_id: string

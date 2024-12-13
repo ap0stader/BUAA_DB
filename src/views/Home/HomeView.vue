@@ -80,6 +80,16 @@
                 prepend-icon="mdi-list-box"
                 title="查看选课情况"
                 value="studentAttendance" />
+            <v-list-item
+                v-if="token.isStudent"
+                prepend-icon="mdi-medal"
+                title="查看个人成绩"
+                value="studentScore" />
+            <v-list-item
+                v-if="token.isStudent && env.env.now_step >= 6"
+                prepend-icon="mdi-chat-outline"
+                title="评教"
+                value="studentEvaluation" />
             <!-- Insert Befor Here -->
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-cogs" title="系统设置" value="envManagement" />
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-list-box" title="审计信息" value="auditCenter" />
@@ -153,6 +163,8 @@
         chooseCurriculum: "选课",
         studentChoice: "查看预选情况",
         studentAttendance: "查看选课情况",
+        studentScore: "查看个人成绩",
+        studentEvaluation: "评教",
         // Insert Befor Here
         envManagement: "系统设置",
         auditCenter: "审计信息",

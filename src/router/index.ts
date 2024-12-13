@@ -25,6 +25,8 @@ import FacultyScore from "@/views/Faculty.vue/FacultyScore.vue"
 import ChooseCurriculum from "@/views/Student/ChooseCurriculum.vue"
 import StudentChoice from "@/views/Student/StudentChoice.vue"
 import StudentAttendance from "@/views/Student/StudentAttendance.vue"
+import StudentScore from "@/views/Student/StudentScore.vue"
+import StudentEvaluation from "@/views/Student/StudentEvaluation.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -169,6 +171,16 @@ const router = createRouter({
                     name: "studentAttendance",
                     path: "studentAttendance",
                     component: StudentAttendance,
+                },
+                {
+                    name: "studentScore",
+                    path: "studentScore",
+                    component: StudentScore,
+                },
+                {
+                    name: "studentEvaluation",
+                    path: "studentEvaluation",
+                    component: StudentEvaluation,
                 },
             ],
         },
