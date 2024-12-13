@@ -282,7 +282,9 @@
         result =
             result &&
             !studentAttendance.value.some((attendance) => attendance.curriculum_course_id === item.curriculum_course_id)
-        // 其次该教学班不能与已预选的且非同课程编号的课程的教学班冲突
+        // 其次该课程还有充足的名额
+        result = result && item.curriculum_attendance_number < item.curriculum_capacity
+        // 再次该教学班不能与已预选的且非同课程编号的课程的教学班冲突
         result =
             result &&
             !studentAttendance.value.some(

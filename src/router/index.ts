@@ -23,6 +23,8 @@ import CurriculumManagement from "@/views/Admin/CurriculumManagement.vue"
 import CurriculumScore from "@/views/Teacher/CurriculumScore.vue"
 import FacultyScore from "@/views/Faculty.vue/FacultyScore.vue"
 import ChooseCurriculum from "@/views/Student/ChooseCurriculum.vue"
+import StudentChoice from "@/views/Student/StudentChoice.vue"
+import StudentAttendance from "@/views/Student/StudentAttendance.vue"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -157,6 +159,16 @@ const router = createRouter({
                     name: "chooseCurriculum",
                     path: "chooseCurriculum",
                     component: ChooseCurriculum,
+                },
+                {
+                    name: "studentChoice",
+                    path: "studentChoice",
+                    component: StudentChoice,
+                },
+                {
+                    name: "studentAttendance",
+                    path: "studentAttendance",
+                    component: StudentAttendance,
                 },
             ],
         },

@@ -52,7 +52,7 @@
         location="bottom end"
         size="x-large"
         position="sticky"
-        text="下载点名册"
+        text="下载汇总表"
         extended
         app
         @click="downloadCurriculumScores"
@@ -68,7 +68,7 @@
                 v-model="updateBatchDialogFile"
                 :rules="[(v) => !!v.length || '请选择文件']"
                 accept=".xlsx"
-                label="请上传填写后的点名册文件"
+                label="请上传填写后的汇总表文件"
                 variant="outlined"
                 clearable
                 class="ma-2 mb-1" />

@@ -64,16 +64,22 @@
                 prepend-icon="mdi-domain"
                 title="教学班管理"
                 value="curriculumManagement" />
-            <v-list-item
-                v-if="token.isFaculty"
-                prepend-icon="mdi-medal"
-                title="成绩查看"
-                value="facultyScore" />
+            <v-list-item v-if="token.isFaculty" prepend-icon="mdi-medal" title="成绩查看" value="facultyScore" />
             <v-list-item
                 v-if="token.isStudent && [0, 1, 3, 4].includes(env.env.now_step)"
                 prepend-icon="mdi-human-male-board-poll"
                 title="选课"
                 value="chooseCurriculum" />
+            <v-list-item
+                v-if="token.isStudent && [1, 2].includes(env.env.now_step)"
+                prepend-icon="mdi-list-box-outline"
+                title="查看预选情况"
+                value="studentChoice" />
+            <v-list-item
+                v-if="token.isStudent && env.env.now_step >= 2"
+                prepend-icon="mdi-list-box"
+                title="查看选课情况"
+                value="studentAttendance" />
             <!-- Insert Befor Here -->
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-cogs" title="系统设置" value="envManagement" />
             <v-list-item v-if="token.isSuperAdmin" prepend-icon="mdi-list-box" title="审计信息" value="auditCenter" />
@@ -145,6 +151,8 @@
         curriculumScore: "选课与成绩情况",
         facultyScore: "成绩查看",
         chooseCurriculum: "选课",
+        studentChoice: "查看预选情况",
+        studentAttendance: "查看选课情况",
         // Insert Befor Here
         envManagement: "系统设置",
         auditCenter: "审计信息",
