@@ -3,8 +3,25 @@
         <p class="text-h4 mt-6 mb-4">选课</p>
         <p class="text-subtitle-2 mb-4">查看、选择课程</p>
 
+        <v-text-field
+            v-model="searchText"
+            label="全局搜索"
+            variant="outlined"
+            max-width="500px"
+            clearable
+            class="mt-4" />
+
         <v-data-table
             :headers="[0, 1].includes(env.env.now_step) ? header_choice : header_attendence"
+            :search="searchText"
+            :filter-keys="[
+                'curriculum_course_id',
+                'course_name',
+                'course_type_string',
+                'curriculum_teacher_name',
+                'curriculum_utilization_string',
+                'curriculum_info',
+            ]"
             :items="
                 curriculums.filter(
                     // 筛选能够显示的课程
@@ -216,6 +233,7 @@
     const env = useEnv()
     const token = useToken()
 
+    let searchText = ref()
     let curriculums = ref([] as curriculumInfo[])
     let studentCurriculums = ref([] as choiceInfo[])
     let studentAttendance = ref([] as attendanceInfo[])
