@@ -1,6 +1,6 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/25.0.2 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="25.0.2">
   <diagram name="第 1 页" id="H5dtmXWZoMsReJI-5aGR">
-    <mxGraphModel dx="2074" dy="1214" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="543" dy="375" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -18,7 +18,7 @@
         <mxCell id="3X6fE_jZLqDqJ0oudUKl-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;curved=1;fontFamily=宋体-简;" parent="1" source="3X6fE_jZLqDqJ0oudUKl-8" target="3X6fE_jZLqDqJ0oudUKl-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="3X6fE_jZLqDqJ0oudUKl-5" value="可选课程&lt;div&gt;成绩&lt;/div&gt;&lt;div&gt;课表&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=宋体-简;" parent="3X6fE_jZLqDqJ0oudUKl-4" vertex="1" connectable="0">
+        <mxCell id="3X6fE_jZLqDqJ0oudUKl-5" value="可选课程&lt;div&gt;成绩&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontFamily=宋体-简;" parent="3X6fE_jZLqDqJ0oudUKl-4" vertex="1" connectable="0">
           <mxGeometry x="0.1158" y="-1" relative="1" as="geometry">
             <mxPoint x="9" y="-29" as="offset" />
           </mxGeometry>
