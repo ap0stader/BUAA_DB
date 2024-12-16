@@ -58,7 +58,7 @@ teacher_table (teacher_id, teacher_name, teacher_gender, teacher_phone, teacher_
   - `teacher_id` 依赖于 `login_table` 的 `login_id`
   - `teacher_department_id` 依赖于 `department_table` 的 `department_id`
 
-#### (4) 学院教务信息表
+#### （4）学院教务信息表
 
 ```
 faculty_table (faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_department_id)
@@ -235,17 +235,149 @@ selection_audit_table (selection_audit_id, selection_audit_student_id, selection
   - `selection_audit_curriculum_id` 依赖于 `curriculum_table` 的 `curriculum_id`
   - `selection_audit_operator_id` 依赖于 `login_table` 的 `login_id`
 
-
-
 ## 系统的安全性设计，不同人员的外模式及相关权限
 
+数据库系统根据使用者的角色，分为了**admin**、**faculty**、**teacher**、**student**四种用户
+
+### admin 用户
+
+代表系统管理员，拥有所有表的查询和修改权限
+
+### faculty 用户
+
+代表学院教务，拥有登录信息表、用户信息系列表、课程信息系列表、选课信息系列表、审计信息系列表的查询和修改权限，组织信息系列表的查询权限
+
+### teacher 用户
+
+代表教师，拥有登录信息表、教师信息表、课程信息表、教学班信息表、选课信息表、审计信息系列表的查询和修改权限，学生信息表、组织信息系列表、学期信息表、场地信息表、场地资源信息表、场地资源使用信息表、预选信息表的查询权限
+
+### student 用户
+
+代表学生，拥有登录信息表、学生信息表、选课信息系列表、审计信息系列表的查询和修改权限，组织信息系列表、课程信息系列表、审计信息系列表的查询权限
+
+## 存储过程、触发器和函数的代码说明
+
+### 存储过程
+
+#### 选课抽签的存储过程 —— drawingCourse
+
+定义了drawingCourse存储过程，来完成整个选课的抽签的全部过程，抽签的逻辑为对于某一课程在某一学期的所有教学班，对学生的预选，根据学生预选的志愿顺序，进行抽签，参数为p_course_id（抽签的课程）和p_semester_id（抽签的学期）
+
+在存储过程的代码中，通过定义**游标`CURSOR`**来实现对待抽签的教学班`curriculum`和预选信息`choice`进行遍历，并且通过在定义遍历预选信息`choice`的游标的时候引入`ORDER BY RAND()`来实现随机，实现随机抽签选课
+
+```sql
+CREATE DEFINER=`root`@`%` PROCEDURE `drawingCourse`(IN p_course_id CHAR(24), IN p_semester_id INT)
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE current_order INT DEFAULT 1;
+    DECLARE current_curriculum_id INT;
+    DECLARE current_capacity INT;
+    DECLARE current_selected INT;
+    DECLARE current_student_id INT;
+    DECLARE delete_num INT;
+
+    DECLARE curriculum_cursor CURSOR FOR 
+    SELECT curriculum_id, curriculum_capacity
+    FROM curriculum_table
+    WHERE curriculum_course_id = p_course_id AND curriculum_semester_id = p_semester_id;
 
 
-## 存储过程、触发器和函数的代码说明  
+    DECLARE delete_cursor CURSOR FOR
+    SELECT choice_student_id
+    FROM choice_table
+    WHERE choice_curriculum_id = current_curriculum_id AND choice_order = current_order
+    ORDER BY RAND()
+    LIMIT delete_num;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+ 
+    loop_order: LOOP
+      
+   
+      OPEN curriculum_cursor;
+      loop_curriculum: LOOP
+        FETCH curriculum_cursor INTO current_curriculum_id, current_capacity;
+
+        IF done THEN
+          SET done = 0;
+          CLOSE curriculum_cursor;
+          LEAVE loop_curriculum;
+        END IF; 
+
+        SELECT COUNT(*) INTO current_selected
+        FROM attendance_table
+        WHERE attendance_curriculum_id = current_curriculum_id;
+
+        SET delete_num = current_capacity - current_selected;
 
 
+        OPEN delete_cursor;
+        loop_delete: LOOP
+          FETCH delete_cursor INTO current_student_id;
 
-## 实现过程中主要技术和主要模块的论述  
+          IF done THEN
+            SET done = 0;
+            CLOSE delete_cursor;
+            LEAVE loop_delete;
+          END IF;
+
+          INSERT INTO attendance_table (attendance_student_id, attendance_curriculum_id)
+          VALUES (current_student_id, current_curriculum_id);
+
+          INSERT INTO selection_audit_table (selection_audit_student_id, selection_audit_curriculum_id, selection_audit_type, selection_audit_operator_id)
+          VALUES (current_student_id, current_curriculum_id, 2, "superadmin");
+
+          DELETE FROM choice_table
+          WHERE choice_student_id = current_student_id AND choice_curriculum_id = current_curriculum_id; 
+
+
+        END LOOP loop_delete;
+
+      END LOOP loop_curriculum;
+
+      IF current_order >= 5 THEN
+        LEAVE loop_order; 
+      END IF;
+      
+      SET current_order = current_order + 1;
+
+    END LOOP loop_order;
+
+
+END
+```
+
+### 触发器
+
+#### 触发器 —— generate
+
+定义在`place_table`中，定义语句为
+
+```sql
+CREATE DEFINER = `root`@`%` TRIGGER `data`.`generate` AFTER INSERT ON `Untitled` FOR EACH ROW CALL GenerateResource(NEW.place_id);
+```
+
+含义即，当`place_table`又insert之后，则对每一行调用存储过程`GenerateResource`，给该`place_id`增加对应的`resource_table`里对应的resource
+
+### 函数
+
+#### 获得 GPA 的函数 —— get_gpa
+
+定义`get_gpa`函数，输入`score`，采用北航的GPA算法，针对60以下和以上进行分段，代入对应的GPA算法，得到该课程的GPA
+
+```sql
+CREATE DEFINER=`root`@`%` FUNCTION `get_gpa`( score float) RETURNS float
+    DETERMINISTIC
+BEGIN
+  IF score < 60 THEN
+    RETURN 0.0;
+  ELSE
+    RETURN 4.0 - POW(100 - score, 2) * 3 / 1600;
+  END IF;
+END
+```
+
+## 实现过程中主要技术和主要模块的论述
 
 ### 后端
 
@@ -413,3 +545,14 @@ python main.py
 
 ### 曾文轩
 
+在本地数据库大作业中，我主要负责了后端数据库侧相关的工作，包括数据库表的设计与构造，视图、存储过程、函数、触发器等的构造等，并完成了部分后端代码的编写。
+
+通过这次项目，我在数据库设计方面得到了更加深入的理解。在设计数据库表时，我充分考虑了数据的冗余和规范化问题，力求通过合理的表结构设计和索引策略，确保系统数据的高效存储和查询性能。通过实际的建模过程，我更加清晰地认识到**数据库范式**的重要性，尤其是在复杂的数据关系中，如何合理拆分表结构、减少冗余数据，从而提高数据一致性和操作效率。
+
+此外，构建**视图**、**存储过程**和**触发器**等数据库对象时，我进一步体会到它们在提高数据库性能和简化操作方面的巨大作用。视图让我能够将复杂的查询逻辑封装起来，减少了后端代码中的冗余逻辑，并提高了代码的可维护性。而存储过程和触发器则让我认识到数据库内部的逻辑封装与自动化执行的强大功能，特别是在数据完整性与业务逻辑的自动化处理上，存储过程可以有效减少客户端与数据库之间的通信次数，提升整体系统的性能。
+
+在实现存储过程与触发器时，我深入理解了数据库事务的管理，确保了数据操作的**原子性、一致性、隔离性和持久性（ACID原则）**。尤其是在复杂业务流程中，使用触发器自动触发相关操作，能有效保证数据的一致性与完整性，避免人为错误和数据丢失的问题。
+
+在优化数据库性能方面，我通过**索引**优化了查询性能，尤其是在对大数据量表的查询时，索引的应用显著降低了查询的时间复杂度。此外，我还学到了如何进行查询优化，通过分析执行计划，识别并优化慢查询，进一步提高了系统的响应速度和整体性能。
+
+总的来说，本次大作业让我不仅加深了对关系型数据库的理论知识的理解，也提升了自己在实际开发中的操作能力。从数据库表设计到高级功能的实现，每一步都让我对数据库的内部机制和优化策略有了更为深入的认识。今后，我将在进一步提升后端数据库开发能力的同时，继续学习更复杂的数据库优化技巧，以及分布式数据库等相关领域的知识，为自己成为一名更加优秀的后端开发工程师奠定基础。
