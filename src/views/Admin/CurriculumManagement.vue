@@ -205,13 +205,18 @@
                 <v-btn icon="mdi-close" @click="evaluationDialogActive = false" />
                 <v-toolbar-title>评教情况</v-toolbar-title>
             </v-toolbar>
+
+            <v-btn color="primary" variant="tonal" @click="downloadEvaluationCanvas" class="ma-2 mb-1">
+                下载图表
+            </v-btn>
+
             <v-card-item>
                 <p>教学班编号：{{ evaluationDialogItem.curriculum_id }}</p>
                 <p>应评教人数：{{ evaluationDialogShouldPeople }} 实际评教人数：{{ evaluationDialogDonePeople }}</p>
                 <p>评教平均分：{{ evaluationDialogAverage }}</p>
             </v-card-item>
 
-            <Bar id="my-chart-id" :data="chartData" class="ma-3" />
+            <Bar id="my-chart-id" :data="chartData" class="ma-3" ref="evaluationCanvas" />
         </v-card>
     </v-dialog>
 </template>
@@ -325,7 +330,11 @@
                     // 计算统计数据
                     let statistics = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                     validEvaluations.forEach((score) => {
-                        statistics[Math.floor(score / 10)]++
+                        if (score === 100) {
+                            statistics[9]++
+                        } else {
+                            statistics[Math.floor(score / 10)]++
+                        }
                     })
                     chartData.datasets[0].data = statistics
                     evaluationDialogAverage.value = validEvaluations.reduce((a, b) => a + b) / validEvaluations.length
@@ -333,6 +342,15 @@
                 }
             }
         )
+    }
+
+    let evaluationCanvas = ref()
+
+    function downloadEvaluationCanvas() {
+        const link = document.createElement("a")
+        link.download = "evaluation.png"
+        link.href = evaluationCanvas.value.chart.toBase64Image()
+        link.click()
     }
 
     // ===== Modify Dialog =====

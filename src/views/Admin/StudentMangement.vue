@@ -360,6 +360,12 @@
         window.open("/static/批量添加学生模板.xlsx")
     }
 
+    watch(addBatchDialogActive, (newValue, oldValue) => {
+        if (oldValue && !newValue) {
+            queryStudent()
+        }
+    })
+
     let addBatchDialogSubmitLoading = ref(false)
     let addBatchDialogFailedInfo = ref([] as addStudentBatchFailedInfo[])
 
