@@ -404,13 +404,35 @@ END
 
 #### 主要技术
 
+前端在实现过程中主要使用了以下技术：
 
++ 使用Vue.js作为整体的框架
++ 使用Vue Router作为前端单页面应用路由管理框架
++ 使用Pinia作为前端状态存储框架
++ 使用Vuetify作为前端的用户界面框架
++ 使用Axios作为前端的API请求框架
 
 #### 主要模块
 
+**前端界面模板文件**
 
+包括了学生、教师、学院教务、学院管理员的各个管理界面的模板文件，用于经过Vuetify、Vue Router和Vue.js渲染得到用户界面。
 
+**API请求模块**
 
+封装Axios，提供面对其他的模块的API请求方法。
+
+**路由模块**
+
+定义Vue Router使用的各项路由以实现前端的单页面应用功能。
+
+**状态存储模块**
+
+定义Pinia使用的各存储的状态，主要是系统环境和登录信息。
+
+**类型定义**
+
+定义项目使用到的所有Typescript类型。
 
 ### 2. 后端
 
@@ -586,7 +608,7 @@ END
 │   └── index.ts # Vue Router配置文件
 ├── stores
 │   ├── env.ts # 系统环境Pinia配置文件
-│   └── token.ts # 登录信息Pinia配置未见
+│   └── token.ts # 登录信息Pinia配置文件
 ├── types.ts # Typescript类型定义文件
 ├── utils # 工具脚本
 │   ├── callapi.ts # API调用脚本
