@@ -1,27 +1,48 @@
 # 系统实现报告
 
+**22371345贾博驿†、22373333董和军†, 22373305曾文轩†**
+
 [TOC]
 
-## 实现环境
+**本项目已经实现在线部署，可通过下方链接访问**
 
-使用阿里云ECS，具体环境参数如下
+https://ecs.1230123.xyz:20080/
 
-| 系统版本   | Ubuntu 22.04                                                 |
-| ---------- | ------------------------------------------------------------ |
-| MySQl版本  | mysql  Ver 8.0.40-0ubuntu0.22.04.1 for Linux on x86_64 ((Ubuntu)) |
-| conda版本  | pconda 24.9.2                                                |
-| Python版本 | Python 3.10.15                                               |
-| redis版本  | 6.0.16                                                       |
+## 一、实现环境
 
-## 系统功能结构图
+前端使用Vue.js、Vue Router、Pinia和Vuetify作为主要框架。
+
+| 名称       | 版本   |
+| ---------- | ------ |
+| Vue.js     | 3.5.11 |
+| Vue Router | 4.4.5  |
+| Pinia      | 2.2.6  |
+| Vuetify    | 3.7.4  |
+
+后端使用Python和FastAPI，并部署至阿里云ECS
+
+| 名称    | 版本    |
+| ------- | ------- |
+| Conda   | 24.9.2  |
+| Python  | 3.10.15 |
+| FastAPI | 0.115.5 |
+| Nginx   | 1.18.0  |
+| Ubuntu  | 22.04   |
+
+数据库使用MySQL和Redis
+
+| 名称  | 版本   |
+| ----- | ------ |
+| MySQL | 8.0.40 |
+| Redis | 6.0.16 |
+
+## 二、系统功能结构图
 
 
 
-## 基本表的定义，主外码等完整性约束定义，索引的定义
+## 三、基本表的定义，主外码等完整性约束定义，索引的定义
 
-## 基本表
-
-### 1.登录信息
+### 1. 登录信息
 
 #### （1）登录信息表
 
@@ -32,7 +53,7 @@ login_table (login_id, login_password, login_role, login_is_enable)
 - 主键
   - `login_id`
 
-### 2.用户信息
+### 2. 用户信息
 
 #### （2）学生信息表
 
@@ -70,7 +91,7 @@ faculty_table (faculty_id, faculty_name, faculty_gender, faculty_phone, faculty_
   - `faculty_id` 依赖于 `login_table` 的 `login_id`
   - `faculty_department_id` 依赖于 `department_table` 的 `department_id`
 
-### 3.组织信息
+### 3. 组织信息
 
 #### （5）院系信息表
 
@@ -104,7 +125,7 @@ class_table (class_id, class_major_id, class_headmaster_id)
   - `class_major_id` 依赖于 `major_table` 的 `major_id`
   - `class_headmaster_id` 依赖于 `teacher_table` 的 `teacher_id`
 
-### 4.课程信息
+### 4. 课程信息
 
 #### （8）课程信息表
 
@@ -183,7 +204,7 @@ curriculum_utilization_string_table (curriculum_id, curriculum_utilization_strin
 - 外键
   - `curriculum_id` 依赖于 `curriculum_table` 的 `curriculum_id`
 
-### 5.选课信息
+### 5. 选课信息
 
 #### （15）选课信息表
 
@@ -211,7 +232,7 @@ choice_table (choice_student_id, choice_curriculum_id, choice_order, choice_intr
   - `choice_student_id` 依赖于 `student_table` 的 `student_id`
   - `choice_curriculum_id` 依赖于 `curriculum_table` 的 `curriculum_id`
 
-### 6.审计信息
+### 6. 审计信息
 
 #### （17）登录审计信息表
 
@@ -235,29 +256,29 @@ selection_audit_table (selection_audit_id, selection_audit_student_id, selection
   - `selection_audit_curriculum_id` 依赖于 `curriculum_table` 的 `curriculum_id`
   - `selection_audit_operator_id` 依赖于 `login_table` 的 `login_id`
 
-## 系统的安全性设计，不同人员的外模式及相关权限
+## 四、系统的安全性设计，不同人员的外模式及相关权限
 
 数据库系统根据使用者的角色，分为了**admin**、**faculty**、**teacher**、**student**四种用户
 
-### admin 用户
+### 1. admin 用户
 
 代表系统管理员，拥有所有表的查询和修改权限
 
-### faculty 用户
+### 2. faculty 用户
 
 代表学院教务，拥有登录信息表、用户信息系列表、课程信息系列表、选课信息系列表、审计信息系列表的查询和修改权限，组织信息系列表的查询权限
 
-### teacher 用户
+### 3. teacher 用户
 
 代表教师，拥有登录信息表、教师信息表、课程信息表、教学班信息表、选课信息表、审计信息系列表的查询和修改权限，学生信息表、组织信息系列表、学期信息表、场地信息表、场地资源信息表、场地资源使用信息表、预选信息表的查询权限
 
-### student 用户
+### 4. student 用户
 
 代表学生，拥有登录信息表、学生信息表、选课信息系列表、审计信息系列表的查询和修改权限，组织信息系列表、课程信息系列表、审计信息系列表的查询权限
 
-## 存储过程、触发器和函数的代码说明
+## 五、存储过程、触发器和函数的代码说明
 
-### 存储过程
+### 1. 存储过程
 
 #### 选课抽签的存储过程 —— drawingCourse
 
@@ -347,7 +368,7 @@ BEGIN
 END
 ```
 
-### 触发器
+### 2. 触发器
 
 #### 触发器 —— generate
 
@@ -359,7 +380,7 @@ CREATE DEFINER = `root`@`%` TRIGGER `data`.`generate` AFTER INSERT ON `Untitled`
 
 含义即，当`place_table`又insert之后，则对每一行调用存储过程`GenerateResource`，给该`place_id`增加对应的`resource_table`里对应的resource
 
-### 函数
+### 3. 函数
 
 #### 获得 GPA 的函数 —— get_gpa
 
@@ -377,9 +398,23 @@ BEGIN
 END
 ```
 
-## 实现过程中主要技术和主要模块的论述
+## 六、实现过程中主要技术和主要模块的论述
 
-### 后端
+### 1. 前端
+
+#### 主要技术
+
+
+
+#### 主要模块
+
+
+
+
+
+### 2. 后端
+
+#### 主要技术
 
 后端在实现过程中主要使用了以下技术：
 
@@ -421,11 +456,114 @@ END
 
 负责读取配置信息
 
-## 若干展示系统功能的运行实例  
+## 七、若干展示系统功能的运行实例
 
 
 
-## 源程序简要说明  
+## 八、源程序简要说明
+
+### 1. 前端
+
+本系统文件结构：
+
+```
+├── App.vue # 前端入口模板文件
+├── components # 小组件
+│   ├── ErrorSnackbars.vue # 错误提示条
+│   ├── SuccessSnackbars.vue # 正确提示条
+│   └── UserCenter # 个人中心相关组建
+│       └── ChangePassword.vue # 密码修改框
+├── main.ts # 前端入口脚脚本文件
+├── router
+│   └── index.ts # Vue Router配置文件
+├── stores
+│   ├── env.ts # 系统环境Pinia配置文件
+│   └── token.ts # 登录信息Pinia配置未见
+├── types.ts # Typescript类型定义文件
+├── utils # 工具脚本
+│   ├── callapi.ts # API调用脚本
+│   ├── emitter.ts # 全局通信脚本
+│   └── envManager.ts # 系统环境管理脚本
+└── views # 各模板文件
+    ├── Admin # 管理员模块
+    │   ├── AuditCenter.vue # 审计信息
+    │   ├── ClassManagement.vue # 班级管理
+    │   ├── CourseManagement.vue # 课程管理
+    │   ├── CurriculumAttendance.vue # 选课情况
+    │   ├── CurriculumChoice.vue # 预选情况
+    │   ├── CurriculumManagement.vue # 教学班管理
+    │   ├── DepartmentManagement.vue # 学院管理
+    │   ├── EnvManagement.vue # 系统设置
+    │   ├── FacultyManagement.vue # 学院教务管理
+    │   ├── MajorManagement.vue # 专业管理
+    │   ├── PlaceManagement.vue # 场地管理
+    │   ├── SemesterManagement.vue # 学期管理
+    │   ├── StudentMangement.vue # 学生管理
+    │   └── TeacherManagement.vue # 教师管理
+    ├── Auth # 登录模块
+    │   ├── AuthView.vue # 登录模块入口
+    │   └── Login.vue # 登录
+    ├── Faculty # 学院教务模块
+    │   └── FacultyScore.vue # 成绩查看
+    ├── Home # 前端主体框架模块
+    │   ├── HomeView.vue # 前端主体框架
+    │   └── UserCenter.vue # 个人中心
+    ├── Student # 学生模块
+    │   ├── ChooseCurriculum.vue # 选课
+    │   ├── StudentAttendance.vue # 查看选课情况
+    │   ├── StudentChoice.vue # 查看预选情况
+    │   ├── StudentEvaluation.vue # 评教
+    │   └── StudentScore.vue # 查看个人成绩
+    └── Teacher # 教师模块
+        ├── AddCurriculum.vue # 开设教学班
+        ├── CurriculumScore.vue # 选课与成绩情况
+        ├── TeacherCourse.vue # 申报课程
+        └── TeacherCurriculum.vue # 查看教学班
+```
+
+本系统使用的主要npm包：
+
+```json
+"dependencies": {
+  "axios": "^1.7.7",
+  "chart.js": "^4.4.7",
+  "crypto-js": "^4.2.0",
+  "mitt": "^3.0.1",
+  "moment": "^2.30.1",
+  "pinia": "^2.2.6",
+  "pinia-plugin-persistedstate": "^4.1.3",
+  "vue": "^3.5.11",
+  "vue-chartjs": "^5.3.2",
+  "vue-router": "^4.4.5",
+  "vuetify": "^3.7.4"
+}
+```
+
+```json
+"devDependencies": {
+  "@mdi/font": "^7.4.47",
+  "@mdi/js": "^7.4.47",
+  "@tsconfig/node20": "^20.1.4",
+  "@types/crypto-js": "^4.2.2",
+  "@types/node": "^20.16.11",
+  "@vitejs/plugin-vue": "^5.1.4",
+  "@vue/tsconfig": "^0.5.1",
+  "npm-run-all2": "^6.2.3",
+  "typescript": "~5.5.4",
+  "vite": "^5.4.8",
+  "vite-plugin-vue-setup-extend": "^0.4.0",
+  "vue-tsc": "^2.1.6"
+}
+```
+
+运行系统命令为：
+
+```bash
+npm i
+npm run dev
+```
+
+### 2. 后端
 
 本系统文件结构：
 
@@ -520,18 +658,22 @@ websockets           14.0
 wheel                0.44.0
 ```
 
-运行系统流程为：
+运行系统命令为：
 
-```
+```bash
 conda create -n backend python=3.12.7
 conda activate backend
 pip install fastapi uvicorn PyJWT PyMySQL redis
 python main.py
 ```
 
-## 收获和体会
+## 九、收获和体会
 
-### 董和军
+### 1. 贾博驿
+
+
+
+### 2. 董和军
 
 在本次数据库课程的小组大作业中，我主要负责了后端代码的编写工作。在编写后端代码的过程中，我不仅深入理解了关系型数据库的理论知识，还通过实际操作加深了对数据库各类技术的认识与掌握。
 
@@ -543,7 +685,7 @@ python main.py
 
 通过本次项目实践，我深刻体会到关系型数据库作为后端数据支撑的重要性。理论与实践的结合不仅帮助我掌握了数据库的基础与核心技术，还锻炼了我分析问题和解决问题的能力。在今后的学习和开发中，我将进一步深入研究数据库的优化技术，提升自己的技术水平，为成为一名合格的后端开发工程师打下坚实基础。
 
-### 曾文轩
+### 3. 曾文轩
 
 在本地数据库大作业中，我主要负责了后端数据库侧相关的工作，包括数据库表的设计与构造，视图、存储过程、函数、触发器等的构造等，并完成了部分后端代码的编写。
 
