@@ -1,4 +1,4 @@
-# BUAA_Database_2024
+# BUAA_DB
 
 ## Authors
 - [@ap0stader](https://github.com/ap0stader)
